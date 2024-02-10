@@ -17,7 +17,7 @@ def Inicio():
         Titulo = LibDM_2023.Menu().Get_Titulo(Activo)
         Contenido = """
         <div class='row h-100 me-1'>
-            <div class='col border Completar p-0' id='ToDo' completo=0></div>
+            <div class='col border Completar p-0' id='ToDo' completo=1></div>
             <div class='col-2 border Completar p-0' id='News' style='box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;' completo=1></div>
         </div>
         <script>
