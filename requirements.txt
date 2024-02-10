@@ -1,2 +1,6 @@
 Flask
 Gunicorn
+psycopg2
+cryptography
+qrcode
+openpyxl
