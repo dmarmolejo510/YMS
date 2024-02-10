@@ -11,7 +11,16 @@ import sys
 app = Flask(__name__)
 import Inicio
 from ToDo import Inicio as TODO
+
+app.secret_key = LibDM_2023.Compartido().Dame_K()
+fernet = Fernet(LibDM_2023.Compartido().Dame_K2())
+
 PATH_DIR = str(pathlib.Path(__file__).parent.resolve()).replace("\\","/")
+UPLOAD_FOLDER = PATH_DIR+'/Files/'
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 @app.route('/recurso/<path:path>')
 def recurso(path):
     if ".js" in path:
