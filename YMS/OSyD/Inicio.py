@@ -1589,7 +1589,7 @@ def Cargar_Liberados(Datos):
 
         Tabla_Datos_Liberados = []
         for PakingSplip in DB.Get_Dato("""
-        SELECT MASTER.*,MAX(HISTORICO.cosyd_fecha) "Fecha_Ultimo",string_agg(DISTINCT(PARTES.cosyd_p_destino),',') "Destinos",MASTER.cosyd_packingslip  FROM """+str(BD_Nombre)+""".cosyd  MASTER
+        SELECT MASTER.*,MAX(HISTORICO.cosyd_fecha) "Fecha_Ultimo",string_agg(DISTINCT(PARTES.cosyd_p_destino),',') "Destinos"  FROM """+str(BD_Nombre)+""".cosyd  MASTER
         inner join """+str(BD_Nombre)+""".cosyd_historico HISTORICO on MASTER.cosyd_id = HISTORICO.cosyd_master 
         left join """+str(BD_Nombre)+""".cosyd_partes PARTES ON PARTES.cosyd_master = MASTER.cosyd_id
         WHERE MASTER.cosyd_estado IN (1,2)
@@ -1663,7 +1663,7 @@ def Cargar_Liberados(Datos):
             Aux_Datos["Fecha Alta"] = str(PakingSplip["cosyd_alta"])
             Aux_Datos["Fecha de envío del proveedor"] = ""
             Aux_Datos["Proveedor"] = PakingSplip["cosyd_proveedor"]
-            Aux_Datos["Packing Slip"] = str(PakingSplip["cosyd_pakingslip"])
+            Aux_Datos["Packing Slip"] = str(PakingSplip["cosyd_packingslip"])
             Aux_Datos["Destino"] = PakingSplip["Destinos"]
             Aux_Datos["Contenedor"] = PakingSplip["cosyd_caja"]
             Aux_Datos["SCAC"] = PakingSplip["cosyd_scac"]
