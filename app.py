@@ -12,6 +12,7 @@ app = Flask(__name__)
 import Inicio
 from ToDo import Inicio as TODO
 from YMS import Inicio as YMS
+from YMS.Contenedores import Contenedores as YMS_Contenedores, Contenedores_M as YMS_Contenedores_M
 
 app.secret_key = LibDM_2023.Compartido().Dame_K()
 fernet = Fernet(LibDM_2023.Compartido().Dame_K2())
@@ -72,3 +73,15 @@ def YMS_root():
             for K in request.form.keys():
                 Datos[K] = escape(request.form[K]).striptags()
             return render_template_string(YMS.Direccionar(Datos))
+@app.route("/YMS/Container_Control",methods=['GET','POST'])
+def YMS_root():
+    if "IDu" not in session:
+        return render_template_string("<script>window.location= '"+str(request.url_root)+"';</script>")
+    else:
+        if request.method == "GET":
+            return render_template_string(YMS_Contenedores.Inicio())
+        else:
+            Datos = {}
+            for K in request.form.keys():
+                Datos[K] = escape(request.form[K]).striptags()
+            return render_template_string(YMS_Contenedores.Direccionar(Datos))
