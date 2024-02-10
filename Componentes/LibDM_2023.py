@@ -166,12 +166,12 @@ class DataBase:
             return "Error : [ " + str(sys.exc_info()) + "]"
     def Dame_Nombre_IDEmpleado(self,idEmpleado):
         Res = "-"
-        for Emp in self.Get_Dato("SELECT Nombre FROM linc.empleados where IDEmpleado = '"+str(idEmpleado)+"'"):
+        for Emp in self.Get_Dato("ELECT \"Nombre\" FROM public.cuser where cusrid = '"+str(IDUsuario)+"'"):
             Res = str(Emp["Nombre"])
         return (Res)
     def Dame_Nombre_IDUsuario(self,IDUsuario):
         Res = "-"
-        for Emp in self.Get_Dato("SELECT EMP.Nombre FROM linc.empleados EMP inner join portal.cuser USR on USR.cusidempleado = EMP.IDEmpleado where USR.cusrid = '"+str(IDUsuario)+"'"):
+        for Emp in self.Get_Dato("SELECT \"Nombre\" FROM public.cuser where cusrid = '"+str(IDUsuario)+"'"):
             Res = str(Emp["Nombre"])
         return (Res)
     def Dame_Hora(self):
