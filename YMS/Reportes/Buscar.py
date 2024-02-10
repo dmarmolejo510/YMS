@@ -14,11 +14,11 @@ def Inicio():
     Cur = ""
     try:
         Cur += "Hola"
-        # Activo = "YMS"
-        # Compartido = LibDM_2023.Compartido()
-        # Menu = LibDM_2023.Menu().Menu(Activo,request.url_root,session["IDu"])
-        # Titulo = LibDM_2023.Menu().Get_Titulo(Activo)
-        # Contenido = ""
+        Activo = "YMS"
+        Compartido = LibDM_2023.Compartido()
+        Menu = LibDM_2023.Menu().Menu(Activo,request.url_root,session["IDu"])
+        Titulo = LibDM_2023.Menu().Get_Titulo(Activo)
+        Contenido = ""
         # Contenido += "<div class='h2 fw-lighter mt-1 mb-1 text-center border-bottom'><i class='mdi mdi-feature-search'></i> Container Search</div>"
         # Formulario = {"Col":"12", "Campos": [],"Clase": "Buscar" }
         # Formulario["Campos"].append({"tipo":"texto","campo":"Container","titulo":"Container","Requerido":1,"min":1,"max":150,"valor":"","Col":4})
@@ -78,7 +78,7 @@ def Inicio():
         #     }
         # </script>
         # """
-        # Cur += render_template("general.html",Contenido=Contenido,Componentes=Compartido.Complementos(None),Menu=Menu,Titulo=Titulo)
+        Cur += render_template("general.html",Contenido=Contenido,Componentes=Compartido.Complementos(None),Menu=Menu,Titulo=Titulo)
     except:
         Cur += str(sys.exc_info())
     return Cur
