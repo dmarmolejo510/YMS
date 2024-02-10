@@ -1,4 +1,4 @@
-from flask import request
+from flask import request,current_app
 #import MySQLdb
 import sys
 from datetime import datetime
@@ -161,7 +161,7 @@ class Compartido:
     def Complementos(self,Adicinal):
         Url_root = request.url_root
         Url = str(request.url_root)+"/recurso"
-        Path_Componentes = "D:\\YMS"
+        Path_Componentes = str(current_app.root_path).replace("\\","/")
         #Normal
         Colores = "#EF2D35,#191919"
         if int(datetime.now().strftime("%m")) == 12:
@@ -184,7 +184,7 @@ class Compartido:
         Compl = ""
         Compl += "<link rel='icon' href=\""+str(Url_root)+"/Portal_File/static/UniversalLogo2.png\" type='image/icon type'>"
         Compl += "<title>Portal MX</title>"
-        contenido = os.listdir(str(Path_Componentes)+'\\static\\Default')
+        contenido = os.listdir(str(Path_Componentes)+'/static/Default')
         for Arch in contenido:
             if ".js" in str(Arch):
                 Compl += """<script type="text/javascript" src=\""""+str(Url)+"""/Default/"""+str(Arch)+""""></script>"""
@@ -192,7 +192,7 @@ class Compartido:
                 Compl += """<link rel="stylesheet" type="text/css" href=\""""+str(Url)+"""/Default/"""+str(Arch)+"""">"""
         Compl += """<link rel="stylesheet" type="text/css" href=\""""+str(Url)+"""/Default/MaterialDesign/css/materialdesignicons.min.css">"""
         if Adicinal is not None:
-            Adicional_Dir = os.listdir(str(Path_Componentes)+'\\static\\Adicional')
+            Adicional_Dir = os.listdir(str(Path_Componentes)+'/static/Adicional')
             for Arch in Adicional_Dir:
                 for Add in Adicinal:
                     if Arch[0:2] == Add:
