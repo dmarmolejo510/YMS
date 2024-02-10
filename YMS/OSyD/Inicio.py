@@ -176,7 +176,7 @@ def Cargar_Abiertos(Datos):
         Tabla_Datos_Porduccion = []
         Tabla_Datos_Cerrados = []
         for PakingSplip in DB.Get_Dato("""
-        select MASTER.*,PARTES.*,
+        select MASTER.*,
         (select HIS.cosyd_fecha from """+str(BD_Nombre)+""".cosyd_historico as HIS where HIS.cosyd_master = MASTER.cosyd_id  order by cosyd_fecha desc limit 1) as Fecha_Ultimo,
         (select HIS.cosyd_usuario  from """+str(BD_Nombre)+""".cosyd_historico as HIS where HIS.cosyd_master = MASTER.cosyd_id  order by cosyd_fecha desc limit 1) as Usuario,
         (select HIS.cosyd_movimiento from """+str(BD_Nombre)+""".cosyd_historico as HIS where HIS.cosyd_master = MASTER.cosyd_id  order by cosyd_fecha desc limit 1) as Tipo,
