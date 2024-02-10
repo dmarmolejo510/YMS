@@ -30,13 +30,13 @@ def Inicio():
 
 
             Opciones += "<button class='btn btn-sm btn-primary p-0 ps-1 pe-1' onclick='Ver_Historico("+str(Contenedor["cc_id"])+",\""+str(Contenedor["cc_contenedor"])+"\")'><i class='mdi mdi-history'></i></button>"
-            if Contenedor["cc_bloquear"] == 0:
-                Opciones += "<button class='btn btn-sm btn-warning p-0 ps-1 pe-1' onclick='Modificar("+str(Contenedor["cc_id"])+",\""+str(Contenedor["cc_contenedor"])+"\")'><i class='mdi mdi-pencil'></i></button>"
-                Opciones += "<button class='btn btn-sm btn-danger p-0 ps-1 pe-1' onclick='Eliminar_Caja("+str(Contenedor["cc_id"])+",\""+str(Contenedor["cc_contenedor"])+"\")'><i class='mdi mdi-trash-can'></i></button>"
-            if Contenedor["cc_qr_salida"] is None:
-                Opciones += "<button class='btn btn-sm btn-info p-0 ps-1 pe-1' onclick='Regresar("+str(Contenedor["cc_id"])+",\""+str(Contenedor["cc_contenedor"])+"\")'><i class='mdi mdi-cursor-move'></i></button>"
-            if Contenedor["cc_bloquear"] == 1:
-                Opciones += "<span class='ms-1 me-1'><i class='mdi mdi-lock'></i></span>"
+            #if Contenedor["cc_bloquear"] == 0:
+                #Opciones += "<button class='btn btn-sm btn-warning p-0 ps-1 pe-1' onclick='Modificar("+str(Contenedor["cc_id"])+",\""+str(Contenedor["cc_contenedor"])+"\")'><i class='mdi mdi-pencil'></i></button>"
+            Opciones += "<button class='btn btn-sm btn-danger p-0 ps-1 pe-1' onclick='Eliminar_Caja("+str(Contenedor["cc_id"])+",\""+str(Contenedor["cc_contenedor"])+"\")'><i class='mdi mdi-trash-can'></i></button>"
+            #if Contenedor["cc_qr_salida"] is None:
+            Opciones += "<button class='btn btn-sm btn-info p-0 ps-1 pe-1' onclick='Regresar("+str(Contenedor["cc_id"])+",\""+str(Contenedor["cc_contenedor"])+"\")'><i class='mdi mdi-cursor-move'></i></button>"
+            #if Contenedor["cc_bloquear"] == 1:
+            #    Opciones += "<span class='ms-1 me-1'><i class='mdi mdi-lock'></i></span>"
 
             Sello = ""
             if "Sello Proveedor" in Info_Actual.keys():
