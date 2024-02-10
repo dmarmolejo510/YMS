@@ -1,14 +1,17 @@
-from flask import request,session,render_template
+from flask import request,session,render_template,current_app
 from cryptography.fernet import Fernet
 from datetime import datetime,date,timedelta
 import sys
 import json
 import os
 from Componentes import LibDM_2023
+import csv
 Url = ""
 BD_Nombre = "public"
 Bandera_Dock = "YMS"
 fernet = Fernet(LibDM_2023.Compartido().Dame_K2())
+
+
 def Inicio():
     if "K" in session.keys():
         fernet = Fernet(session["K"])
@@ -495,6 +498,403 @@ def Cargar_Abiertos(Datos):
         """
 
         
+    except:
+        Resultado["Contenido"] = str(sys.exc_info())
+    Cur += json.dumps(Resultado)
+    print(Cur)
+def Nueva_Ruteo(Datos):
+    if "K" in session.keys():
+        fernet = Fernet(session["K"])
+    DB = LibDM_2023.DataBase()
+    Compartido_2023 = LibDM_2023.Compartido()
+    Cur = ""
+    Resultado = {"Estado":0,"Contenido":""}
+    try:
+        Resultado["Contenido"] += "<div class='row'><div class='col'>"
+        Formulario = {"Col":"", "Campos": [],"Clase": "Formato" }
+        Formulario["Campos"].append({"tipo":"texto","campo":"Packing Slip","id":"PS","titulo":"Packing Slip","editable":True,"Requerido":1,"min":1,"max":20,"valor":"","Col":12})
+        Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
+        Resultado["Contenido"] += "</div><div class='col-auto pt-4' onclick='Cargar_Tally()'> <button class='btn btn-primary mt-3'><i class='mdi mdi-upload'></i> Cargar Tally</button>"
+        
+        Resultado["Contenido"] += "</div>"
+        Resultado["Contenido"] += "</div>"
+        Resultado["Contenido"] += """
+        <div class='mb-1'>
+            <button id="reactivity-add" class='btn btn-success btn-sm'><i class='mdi mdi-plus'></i> Add New Number Part</button>
+            <button id="reactivity-delete" class='btn btn-danger btn-sm'><i class='mdi mdi-close'></i> Remove Last Number Part</button>
+        </div>
+        <div id="example-table" class='border border-dark bg-dark-subtle'></div>
+        <hr>
+        """
+
+        Formulario = {"Col":"", "Campos": [],"Clase": "Formato" }
+        Formulario["Campos"].append({"tipo":"texto","campo":"Ruta","titulo":"Ruta","editable":True,"Requerido":1,"min":1,"max":20,"valor":"","Col":6})
+        Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha de Rura","titulo":"Fecha de Ruta","Requerido":1,"Col":6,"valor":"","editable":True})
+        Formulario["Campos"].append({"tipo":"seleccion","campo":"SCAC","titulo":"SCAC","Tipo_Opciones":"Query","Opciones":"SELECT cca_nombre as Valor, cca_nombre as Texto FROM "+str(BD_Nombre)+".ccarrier WHERE cca_activo = 1","Requerido":1,"Col":6,"valor":"","editable":True})
+        Formulario["Campos"].append({"tipo":"texto","campo":"Contenedor-Caja","titulo":"Contenedor-Caja","editable":True,"Requerido":1,"min":1,"max":100,"valor":"","Col":6})
+        Formulario["Campos"].append({"tipo":"texto","campo":"Destino","titulo":"Destino","editable":True,"Requerido":1,"min":1,"max":50,"valor":"","Col":6})
+        Formulario["Campos"].append({"tipo":"seleccion","campo":"Proveedor","id":"Proveedor_Nuevo","titulo":"Proveedor","Tipo_Opciones":"Query","Opciones":"SELECT crilcpr_codigo as Valor, CONCAT(crilcpr_codigo,' - ',crilcpr_nombre) AS Texto FROM "+str(BD_Nombre)+".cproveedores WHERE crilcpr_activo = '1' ORDER BY crilcpr_codigo","Requerido":1,"Col":6,"valor":"","editable":True})
+        Formulario["Campos"].append({"tipo":"multitexto","campo":"Comentario","titulo":"Comentario","editable":True,"Requerido":1,"min":1,"max":1500,"valor":"","Col":12})
+        Formulario["Campos"].append({"tipo":"multitexto","campo":"Lista_distribucion","id":"Lista_distribucion_Nuevo","titulo":"Lista de distribución (Correos) separado por ´;´","editable":True,"Requerido":0,"min":0,"max":1500,"valor":"","Col":12})
+        Formulario["Campos"].append({"tipo":"archivo","campo":"Archivos","titulo":"Archivo(s)","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["application/pdf","image/png","image/jpeg","image/gif"],"valor":"","editable":True})
+        #Resultado["Contenido"] += "<div class='text-end mb-1'><button onclick='Nuevo_Proveedor()' class='btn btn-sm btn-success'><i class='mdi mdi-plus'></i> Agregar nuevo proveedor</button></div>"
+        Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
+        Resultado["Contenido"] += """
+        <script>
+            delete table;
+            var tabledata = [];
+            var table = new Tabulator("#example-table", {
+                height:"311px",
+                layout:"fitColumns",
+                reactiveData:true, //turn on data reactivity
+                data:tabledata,
+                columns:[
+                    {title:"Numero de Parte", field:"Numero de Parte", editor:"input"},
+                    {title:"Cantidad de ASN", field:"Cantidad de ASN", sorter:"number", editor:"input"},
+                    {title:"Cantidad Real", field:"Cantidad Real", sorter:"number", editor:"input"},
+        """
+        for D in ["1 Damage","2 Shortage","3 Surplus","4 ASN Issue","5 Missing doc in Prisma"]:
+            Resultado["Contenido"] += """{title:'"""+str(D)+"""', field:'"""+str(D)+"""', hozAlign:"center", editor:true, formatter:"tickCross",width:100,headerSort:false,headerHozAlign:"center"},"""
+        Resultado["Contenido"] += """
+                   {title:"6 Other (Explain in Comments)", field:"6 Other",editor:"input"}
+                ],
+            });
+            table.on("cellEdited", function(cell){
+
+            });
+            table.on("tableBuilt", function(){
+            """
+        for D in ["1 Damage","2 Shortage","3 Surplus","4 ASN Issue","5 Missing doc in Prisma"]:
+            Resultado["Contenido"] += """
+                $(".tabulator-col[tabulator-field='"""+str(D)+"""']").html('<div class="w-100 h-100"><div class="text-center"><input value=" """+str(D)+""" " onclick="Seleccinar_Todos(this);" class="form-check-input" type="checkbox"></div><small>"""+str(D)+"""</small></div>');
+            """
+        Resultado["Contenido"] += """
+            });
+
+            document.getElementById("reactivity-add").addEventListener("click", function(){
+                tabledata.push({"Numero de Parte":"","Cantidad de ASN":"","Cantidad Real":"","1 Damage":false,"2 Shortage":false,"3 Surplus":false,"4 ASN Issue":false,"5 Missing doc in Prisma":false,"6 Other":""});
+            });
+            document.getElementById("reactivity-delete").addEventListener("click", function(){
+                tabledata.pop();
+            });
+
+            $("#Proveedor_Nuevo").on( "change", function() {
+                Cargar_Lista_distribucion($("#Proveedor_Nuevo").find('option:selected').val());
+            } );
+            
+            function Seleccinar_Todos(Control){
+               if($(Control).is(':checked')){
+                    tabledata.forEach((element) => {
+                        try {
+                            element[$(Control).val().trim()] = 1;
+                        } catch (error) {
+                        }
+                    });
+               }
+                else{
+                    tabledata.forEach((element) => {
+                        try {
+                            element[$(Control).val().trim()] = 0;
+                        } catch (error) {
+                        }
+                    });
+                }
+            }
+
+            function Cargar_Lista_distribucion(Codigo){
+                $("#Lista_distribucion_Nuevo").val("Loading...");
+                var parametros = {"Fun":'"""+str(fernet.encrypt("Cargar_Lista_distribucion".encode()).decode("utf-8"))+"""',"Codigo":Codigo};
+                $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
+                    success:  function (response){
+                        var obj = JSON.parse(response);
+                        if(obj["Estado"] == 1)
+                        {
+                            $("#Lista_distribucion_Nuevo").val(obj["Contenido"]);
+                        }
+                        else
+                        {
+                            $("#Lista_distribucion_Nuevo").val('Process error: '+obj["Contenido"]);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown )
+                    {
+                         $("#Lista_distribucion_Nuevo").val('Process error :'+ textStatus);
+                    }
+                });
+            }
+        </script>
+        <hr>
+        """
+        Resultado["Contenido"] += """
+        <br>
+        <div class='w-100 text-center'><button class='btn btn-success w-50' onclick='Guardar_Nueva_Ruteo()'><i class='mdi mdi-floppy'></i> Save</button></div>
+        <script>
+
+            Actualizar_Cambia_Texto();
+            function Guardar_Nueva_Ruteo()
+            {
+                var Ok = true;
+                tabledata.forEach((element) => {
+                if(element["Numero de Parte"].trim() == "")
+                    Ok = false;
+                if(element["Cantidad de ASN"].trim() == "")
+                    Ok = false;
+                if(element["1 Damage"] == false && element["2 Shortage"] == false && element["3 Surplus"] == false && element["4 ASN Issue"] == false && element["5 Missing doc in Prisma"] == false && element["6 Other"].trim() == "")
+                    Ok = false;
+                });
+                if(tabledata.length == 0)
+                    Ok = false;
+                var Info = Dame_Formulario(".Formato",true);
+                if(Info != null)
+                {
+                    if(Ok == false)
+                    {
+                        Swal.fire({icon: 'warning',position: 'top-end',title: 'Verifique lista de numero de parte, no puede haber campos en blanco y debe de incluir por lo menos un numero de parte',showConfirmButton: false,toast: true,background : "#ffeb96",timer: 1500,timerProgressBar: true});
+                    }
+                    else{
+                        Info["Partes"] = tabledata;
+                        Mostrar_Ventana_Cargando(false);
+                        var parametros = {"Fun":'"""+str(fernet.encrypt("Guardar_Nueva_Ruteo".encode()).decode("utf-8"))+"""',"Info":JSON.stringify(Info)};
+                            $.ajax({
+                                data:  parametros,url:   \""""+str(request.url)+"""\",type:  "post",
+                                success:  function (response){
+                                    var obj = JSON.parse(response);
+                                    if(obj["Estado"] == 1)
+                                    {
+                                        $("#Vent_1").modal("hide");
+                                        Swal.fire({icon: 'success',position: 'top-end',title: '¡Guardado con éxito!',showConfirmButton: false,toast: true,background : "#c9fad7",timer: 1500,timerProgressBar: true});
+                                        Cargar_Abiertos();
+                                    }
+                                    else
+                                    {
+                                        Swal.fire({icon: 'error',position: 'top-end',title: 'Process error ['+ obj["Contenido"] +']',showConfirmButton: false,toast: true,background : "#fac9c9",timer: 3500,timerProgressBar: true});
+                                    }
+                                },
+                                error: function (jqXHR, textStatus, errorThrown )
+                                {
+                                    Swal.fire({icon: 'error',position: 'top-end',title: 'Process error ['+ textStatus +']',showConfirmButton: false,toast: true,background : "#fac9c9",timer: 3500,timerProgressBar: true});
+                                }
+                        });
+                    }
+
+                    
+                }
+
+            }
+            function Nuevo_Proveedor()
+            {
+                Mostrar_Ventana_Cargando(false);
+                $("#Vent_2").modal("show").find(".modal-body").html("<div class='w-100 text-center'><div class='spinner-grow' role='status'></div><b> Loading...</b></div>").parent().find(".modal-title").html("<i class='mdi mdi-plus'></i> New supplier");
+                var parametros = {"Fun":'"""+str(fernet.encrypt("Nuevo_Proveedor".encode()).decode("utf-8"))+"""'};
+                $.ajax({
+                    data:  parametros,
+                    url:   \""""+str(request.url)+"""\",
+                    type:  "post",
+                    success:  function (response){$("#Vent_2").find(".modal-body").html(response);swal.close();},
+                    error: function (jqXHR, textStatus, errorThrown){$("#Vent_2").find(".modal-body").html("<span style='color:red;'><b>ERROR</b></span> <hr>"+textStatus);swal.close();}
+                });
+            }
+            function Cargar_Tally(){
+                if($("#PS").val().trim()==""){
+                    Mensaje(1,"Agrega el número de Packing Slip");
+                }else{
+                    Mostrar_Ventana_Cargando(false);
+                    $("#Vent_2").modal("show").find(".modal-body").html("<div class='w-100 text-center'><div class='spinner-grow' role='status'></div><b> Loading...</b></div>").parent().find(".modal-title").html("<i class='mdi mdi-upload'></i> Cargar Tally");
+                    var parametros = {"Fun":'"""+str(fernet.encrypt("Cargar_Tally".encode()).decode("utf-8"))+"""',"PS":$("#PS").val()};
+                    $.ajax({
+                        data:  parametros,
+                        url:   \""""+str(request.url)+"""\",
+                        type:  "post",
+                        success:  function (response){var obj = JSON.parse(response); $("#Vent_2").find(".modal-body").html(obj["Contenido"]);swal.close();},
+                        error: function (jqXHR, textStatus, errorThrown){$("#Vent_2").find(".modal-body").html("<span style='color:red;'><b>ERROR</b></span> <hr>"+textStatus);swal.close();}
+                    });
+                }
+            }
+        </script>
+        """
+    except:
+        Resultado["Contenido"] += str(sys.exc_info())
+    Cur += json.dumps(Resultado)
+    return Cur
+def Cargar_Tally(Datos):
+    if "K" in session.keys():
+        fernet = Fernet(session["K"])
+    DB = LibDM_2023.DataBase()
+    Compartido_2023 = LibDM_2023.Compartido()
+    Cur = ""
+    Resultado = { "Estado" :0, "Contenido":""}
+    try:
+        Formulario = {"Col":"", "Campos": [],"Clase": "Manifiesto" }
+        Formulario["Campos"].append({"tipo":"archivo","campo":"Tally","titulo":"Tally","editable":True,"Requerido":1,"tipo_archivo":["application/vnd.ms-excel", "text/csv","application/csv"],"min":1,"max":1,"valor":"","Col":12})
+        Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
+        Resultado["Contenido"] += """
+        <script>
+            $('.Archivo-0').on('FilePond:processfile', function (e) {
+                Mostrar_Ventana_Cargando(false);
+                setTimeout(Cargar_Tally_Guardar, 1000);
+            });
+            function Cargar_Tally_Guardar(){
+                var Archivos = [];
+                $('.Archivo-0').find('.filepond--data').children().each(function() {
+                    Archivos.push($(this).attr("archivo"));
+                });
+                if(Archivos.length > 0)
+                    if(Archivos == "")
+                    {
+                        Mensaje(0,"Error al cargar archivo. Favor de valida.");
+                        $("#Vent_2").modal("hide");
+                    }
+                    else{
+                        Mostrar_Ventana_Cargando(false);
+                        var parametros = {"Fun":'"""+str(fernet.encrypt("Cargar_Tally_Guardar".encode()).decode("utf-8"))+"""',"Archivo":Archivos[0],"PS":'"""+str(Datos["PS"])+"""'};
+                        $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
+                            success:  function (response)
+                            {
+                                var Resultado = JSON.parse(response);
+                                if(Resultado["Estado"] == 1){
+                                    $(".Formato[campo='Ruta']").val(Resultado["Ruta"]);
+                                    $(".Formato[campo='Fecha de Rura']").val(Resultado["Fecha"]);
+                                    $(".Formato[campo='Contenedor-Caja']").val(Resultado["Contenedor-Caja"]);
+                                    $(".Formato[campo='Proveedor']").val(Resultado["Proveedor"]);
+                                    $(".Formato[campo='Destino']").val(Resultado["Destino"]);
+                                    Cargar_Lista_distribucion(Resultado["Proveedor"]);
+                                    $("#Vent_2").modal("hide");
+                                    Actualizar_Cambia_Texto();
+
+                                    Resultado["Partes"].forEach((element) => {
+                                        tabledata.push({"Numero de Parte":element[0],"Cantidad de ASN":element[1],"Cantidad Real":element[1],"1 Damage":false,"2 Shortage":false,"3 Surplus":false,"4 ASN Issue":false,"5 Missing doc in Prisma":false,"6 Other":""});
+                                    });
+
+                                    Mensaje(2);
+                                }else{
+                                    Mensaje(0,Resultado["Contenido"]);
+                                    $("#Vent_2").modal("hide");
+                                }
+                                
+                                
+                            },
+                            error: function (jqXHR, textStatus, errorThrown ){Mensaje(0,textStatus);}
+                        });
+                       
+                    }
+                else
+                    setTimeout(Cargar_Tally_Guardar, 500);
+            }
+            </script>
+        """
+    except:
+        Resultado["Contenido"] = str(sys.exc_info())
+    Cur += json.dumps(Resultado)
+    return Cur
+def Cargar_Tally_Guardar(Datos):
+    DB = LibDM_2023.DataBase()
+    Compartido_2023 = LibDM_2023.Compartido()
+    Cur = ""
+    Resultado = {"Contenido":"","Estado":0}
+    try:
+        Resulato = []
+        #Resultado["Contenido"] += str("I:/Portal_File/"+str(Datos["Archivo"]))
+        with open(str(str(current_app.root_path)+"/Files/"+str(Datos["Archivo"])), newline='') as csvfile:
+            spamreader = csv.reader(csvfile, delimiter=',')
+            for row in spamreader:
+                Resulato.append(row)
+        #Resultado["Contenido"] += str(Resulato)
+        Resultado["Ruta"] = str(Resulato[1][2]).split(":")[1].strip()
+        Resultado["Fecha"] = datetime.strptime(str(Resulato[1][4]).split(":")[1].strip(),"%m/%d/%y").strftime("%Y-%m-%d")
+        Resultado["Contenedor-Caja"] = str(Resulato[1][6]).split(":")[1].strip()
+        Resultado["Partes"] = []
+        index = 0
+        for R in Resulato:
+            if index >= 4 and len(R) > 8 :
+                if str(R[3]).strip() == str(Datos["PS"]).strip():
+                    if str(R[1]).strip() != "":
+                        Resultado["Proveedor"] = str(R[1]).strip()
+                    if str(R[2]).strip() != "":
+                        Resultado["Destino"] = str(R[2]).strip().split("-")[0]
+                    Aux = []
+                    Aux.append(str(R[5]).strip())
+                    Aux.append(str(R[7]).replace(",","").strip())
+                    Resultado["Partes"].append(Aux)
+            index += 1
+        os.remove(str(str(current_app.root_path)+"/Files/"+str(Datos["Archivo"])))
+        Resultado["Estado"] = 1
+        # A = []
+        # with open("I:/Portal_File/"+str(Datos["Archivo"]), mode ='r') as file:
+        #     A = csv.reader(file, delimiter=',')
+        # Resultado["Contenido"] += str(A)
+    except:
+        Resultado["Contenido"] = str(sys.exc_info())
+    Cur += json.dumps(Resultado)
+    return Cur
+def Cargar_Lista_distribucion(Datos):
+    DB = LibDM_2023.DataBase()
+    Cur = ""
+    Resultado = { "Estado" :0, "Contenido":""}
+    try:
+        Error = ""
+        Corres = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".cproveedores WHERE crilcpr_codigo = '"+str(Datos["Codigo"])+"' AND crilcpr_activo = '1' ")[0]["crilcpr_email_s"]
+        if Corres is None:
+            Resultado["Contenido"] += ""
+        else:
+            Resultado["Contenido"] += str(Corres)
+        if Error == "":
+            Resultado["Estado"] = 1
+        Resultado["Contenido"] += str(Error)
+    except:
+        Resultado["Contenido"] = str(sys.exc_info())
+    Cur += json.dumps(Resultado)
+    return Cur
+def Guardar_Nueva_Ruteo(Datos):
+    DB = LibDM_2023.DataBase()
+    Cur = ""
+    Resultado = { "Estado" :0, "Contenido":""}
+    try:
+        Info = json.loads(Datos["Info"])
+        Error = ""
+        Error += DB.Instruccion("""
+        INSERT INTO """+str(BD_Nombre)+""".cosyd
+        (cosyd_tipo,cosyd_proveedor,cosyd_usuario,cosyd_alta,cosyd_caja,cosyd_scac,cosyd_comentario,cosyd_correo,cosyd_archivos,cosyd_ruta,cosyd_ruta_fecha_hora)
+        VALUES
+        ('RUTEO','"""+str(Info["Proveedor"])+"""','"""+str(Datos["ID_User"])+"""',NOW(),'"""+str(Info["Contenedor-Caja"])+"""','"""+str(Info["SCAC"])+"""','"""+str(Info["Comentario"])+"""','"""+str(Info["Lista_distribucion"])+"""','"""+str(','.join(Info["Archivos"]))+"""','"""+str(Info["Ruta"])+"""','"""+str(Info["Fecha de Rura"])+"""')
+        """)
+        if Error == "":
+            Error += DB.Instruccion("UPDATE "+str(BD_Nombre)+".cproveedores SET crilcpr_email_s = '"+str(Info["Lista_distribucion"])+"' WHERE crilcpr_codigo = '"+str(Info["Proveedor"])+"'")
+            ID = DB.Get_Dato("SELECT MAX(cosyd_id) as ID FROM "+str(BD_Nombre)+".cosyd WHERE cosyd_tipo = 'RUTEO' AND cosyd_usuario = '"+str(Datos["ID_User"])+"' ")[0]["ID"]
+            Error += DB.Instruccion("""
+            INSERT INTO """+str(BD_Nombre)+""".cosyd_historico
+            (cosyd_master,cosyd_usuario,cosyd_comentario,cosyd_evidencia,cosyd_movimiento,cosyd_fecha)
+            VALUES
+            ('"""+str(ID)+"""','"""+str(Datos["ID_User"])+"""','"""+str(Info["Comentario"])+"""','"""+str(','.join(Info["Archivos"]))+"""','ALTA',NOW())
+            """)
+            if Error == "":
+                for Parte in Info["Partes"]:
+                    cosyd_p_1_Damage = 0
+                    cosyd_p_2_Shortage = 0
+                    cosyd_p_3_Surplus = 0
+                    cosyd_p_4_ASN_Issue = 0
+                    cosyd_p_5_Missing_doc_in_Prisma = 0
+                    cosyd_p_6_Other = "null"
+                    if str(Parte["1 Damage"]) == "True" or str(Parte["1 Damage"]) == "1":
+                        cosyd_p_1_Damage = 1
+                    if str(Parte["2 Shortage"]) == "True" or str(Parte["2 Shortage"]) == "1":
+                        cosyd_p_2_Shortage = 1
+                    if str(Parte["3 Surplus"]) == "True" or str(Parte["3 Surplus"]) == "1":
+                        cosyd_p_3_Surplus = 1
+                    if str(Parte["4 ASN Issue"]) == "True" or str(Parte["4 ASN Issue"]) == "1":
+                        cosyd_p_4_ASN_Issue = 1
+                    if str(Parte["5 Missing doc in Prisma"]) == "True" or str(Parte["5 Missing doc in Prisma"]) == "1":
+                        cosyd_p_5_Missing_doc_in_Prisma = 1
+                    if str(Parte["6 Other"]).strip() != "":
+                        cosyd_p_6_Other = "'"+str(Parte["6 Other"]).strip()+"'"
+                    Error += DB.Instruccion("""
+                    INSERT INTO """+str(BD_Nombre)+""".cosyd_partes
+                    (cosyd_master,cosyd_parte,cosyd_cantidad_asn,cosyd_cantidad_real,cosyd_p_pakingslip,cosyd_p_destino,cosyd_p_1_Damage,cosyd_p_2_Shortage,cosyd_p_3_Surplus,cosyd_p_4_ASN_Issue,cosyd_p_5_Missing_doc_in_Prisma,cosyd_p_6_Other)
+                    VALUES
+                    ('"""+str(ID)+"""','"""+str(Parte["Numero de Parte"])+"""','"""+str(Parte["Cantidad de ASN"])+"""','"""+str(Parte["Cantidad Real"])+"""','"""+str(Info["Packing Slip"])+"""','"""+str(Info["Destino"])+"""',"""+str(cosyd_p_1_Damage)+""","""+str(cosyd_p_2_Shortage)+""","""+str(cosyd_p_3_Surplus)+""","""+str(cosyd_p_4_ASN_Issue)+""","""+str(cosyd_p_5_Missing_doc_in_Prisma)+""","""+str(cosyd_p_6_Other)+""")
+                    """)
+        if Error == "":
+            Resultado["Estado"] = 1
+        Resultado["Contenido"] += str(Error)
     except:
         Resultado["Contenido"] = str(sys.exc_info())
     Cur += json.dumps(Resultado)
