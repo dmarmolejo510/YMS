@@ -1946,30 +1946,30 @@ def Cargar_Reporte(Datos):
             Aux_Datos["Cantidad ASN"] = str(PakingSplip["cosyd_cantidad_asn"])
             Aux_Datos["Cantidad Real"] = str(PakingSplip["cosyd_cantidad_real"])
             Aux_Datos["OS&D"] = str(PakingSplip["cosyd"])
-            Aux_Datos["Comentario Parte"] = str(PakingSplip["comm_Parte"])
+            Aux_Datos["Comentario Parte"] = str(PakingSplip["comm_parte"])
 
             if PakingSplip["cosyd"] != "":
-                PakingSplip["cosyd_p_1_Damage"] = 'X' if str(PakingSplip["cosyd"]) == "1.- Damage" else ""
-                PakingSplip["cosyd_p_2_Shortage"] = 'X' if str(PakingSplip["cosyd"]) == "2.- Surplus" else ""
-                PakingSplip["cosyd_p_3_Surplus"] = 'X' if str(PakingSplip["cosyd"]) == "3.- Surplus" else ""
-                PakingSplip["cosyd_p_4_ASN_Issue"] = 'X' if str(PakingSplip["cosyd"]) == "4.- ASN Issue" else ""
-                PakingSplip["cosyd_p_5_Missing_doc_in_Prisma"] = 'X' if str(PakingSplip["cosyd"]) == "5.- Missing doc. in Prisma" else ""
-                if PakingSplip["cosyd_p_1_Damage"] == "" and PakingSplip["cosyd_p_2_Shortage"] == "" and PakingSplip["cosyd_p_3_Surplus"] == "" and PakingSplip["cosyd_p_4_ASN_Issue"] == "" and PakingSplip["cosyd_p_5_Missing_doc_in_Prisma"] == "":
-                    PakingSplip["cosyd_p_6_Other"] = "["+str(PakingSplip["cosyd"])+"] - " + str(PakingSplip["cosyd_comentario"])
+                PakingSplip["cosyd_p_1_damage"] = 'X' if str(PakingSplip["cosyd"]) == "1.- Damage" else ""
+                PakingSplip["cosyd_p_2_shortage"] = 'X' if str(PakingSplip["cosyd"]) == "2.- Surplus" else ""
+                PakingSplip["cosyd_p_3_surpluse"] = 'X' if str(PakingSplip["cosyd"]) == "3.- Surplus" else ""
+                PakingSplip["cosyd_p_4_asn_issue"] = 'X' if str(PakingSplip["cosyd"]) == "4.- ASN Issue" else ""
+                PakingSplip["cosyd_p_5_missing_doc_in_prisma"] = 'X' if str(PakingSplip["cosyd"]) == "5.- Missing doc. in Prisma" else ""
+                if PakingSplip["cosyd_p_1_damage"] == "" and PakingSplip["cosyd_p_2_Shortage"] == "" and PakingSplip["cosyd_p_3_surpluse"] == "" and PakingSplip["cosyd_p_4_asn_issue"] == "" and PakingSplip["cosyd_p_5_missing_doc_in_prisma"] == "":
+                    PakingSplip["cosyd_p_6_other"] = "["+str(PakingSplip["cosyd"])+"] - " + str(PakingSplip["cosyd_comentario"])
             else:
-                PakingSplip["cosyd_p_1_Damage"] = 'X' if int(PakingSplip["cosyd_p_1_Damage"]) == 1 else ""
-                PakingSplip["cosyd_p_2_Shortage"] = 'X' if int(PakingSplip["cosyd_p_2_Shortage"]) == 1 else ""
-                PakingSplip["cosyd_p_3_Surplus"] = 'X' if int(PakingSplip["cosyd_p_3_Surplus"]) == 1 else ""
-                PakingSplip["cosyd_p_4_ASN_Issue"] = 'X' if int(PakingSplip["cosyd_p_4_ASN_Issue"]) == 1 else ""
-                PakingSplip["cosyd_p_5_Missing_doc_in_Prisma"] = 'X' if int(PakingSplip["cosyd_p_5_Missing_doc_in_Prisma"]) == 1 else ""
-                PakingSplip["cosyd_p_6_Other"] = str(PakingSplip["cosyd_p_6_Other"]) if PakingSplip["cosyd_p_6_Other"] is not None else ""
+                PakingSplip["cosyd_p_1_damage"] = 'X' if int(PakingSplip["cosyd_p_1_damage"]) == 1 else ""
+                PakingSplip["cosyd_p_2_shortage"] = 'X' if int(PakingSplip["cosyd_p_2_shortage"]) == 1 else ""
+                PakingSplip["cosyd_p_3_surpluse"] = 'X' if int(PakingSplip["cosyd_p_3_surpluse"]) == 1 else ""
+                PakingSplip["cosyd_p_4_asn_issue"] = 'X' if int(PakingSplip["cosyd_p_4_asn_issue"]) == 1 else ""
+                PakingSplip["cosyd_p_5_missing_doc_in_prisma"] = 'X' if int(PakingSplip["cosyd_p_5_missing_doc_in_prisma"]) == 1 else ""
+                PakingSplip["cosyd_p_6_other"] = str(PakingSplip["cosyd_p_6_other"]) if PakingSplip["cosyd_p_6_other"] is not None else ""
 
-            Aux_Datos["1 Damage"] = str(PakingSplip["cosyd_p_1_Damage"])
-            Aux_Datos["2 Shortage"] = str(PakingSplip["cosyd_p_2_Shortage"])
-            Aux_Datos["3 Surplus"] = str(PakingSplip["cosyd_p_3_Surplus"])
-            Aux_Datos["4 ASN Issue"] = str(PakingSplip["cosyd_p_4_ASN_Issue"])
-            Aux_Datos["5 Missing doc in Prisma"] = str(PakingSplip["cosyd_p_5_Missing_doc_in_Prisma"])
-            Aux_Datos["6 Other"] = str(PakingSplip["cosyd_p_6_Other"])
+            Aux_Datos["1 Damage"] = str(PakingSplip["cosyd_p_1_damage"])
+            Aux_Datos["2 Shortage"] = str(PakingSplip["cosyd_p_2_shortage"])
+            Aux_Datos["3 Surplus"] = str(PakingSplip["cosyd_p_3_surpluse"])
+            Aux_Datos["4 ASN Issue"] = str(PakingSplip["cosyd_p_4_asn_issue"])
+            Aux_Datos["5 Missing doc in Prisma"] = str(PakingSplip["cosyd_p_5_missing_doc_in_prisma"])
+            Aux_Datos["6 Other"] = str(PakingSplip["cosyd_p_6_other"])
 
             
             if PakingSplip["cosyd_p_destino"] != "" and PakingSplip["cosyd_p_destino"] is not None:
@@ -1984,9 +1984,9 @@ def Cargar_Reporte(Datos):
             for Archivo in str(PakingSplip["cosyd_archivos"]).split(","):
                 if Archivo.strip() != "":
                     if "pdf" in Archivo:
-                        Aux_Datos["Archivos"] += "<a href='http://10.4.7.219:8080/Portal_File/"+str(Archivo)+"' target='_blank' class='mdi mdi-file-pdf-box ms-1'></a>"
+                        Aux_Datos["Archivos"] += "<a href='"+str(request.url_root)+"/Portal_File/"+str(Archivo)+"' target='_blank' class='mdi mdi-file-pdf-box ms-1'></a>"
                     else:
-                        Aux_Datos["Archivos"] += "<a href='http://10.4.7.219:8080/Portal_File/"+str(Archivo)+"' target='_blank' class='mdi mdi-image ms-1'></a>"
+                        Aux_Datos["Archivos"] += "<a href='"+str(request.url_root)+"/Portal_File/"+str(Archivo)+"' target='_blank' class='mdi mdi-image ms-1'></a>"
             
             if PakingSplip["cosyd_baja"] is None or str(PakingSplip["cosyd_baja"]) == "":
                 Aux_Datos["Cerrado"] = ""
