@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html class='h-100 w-100'>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {{ Componentes|safe }}
+    </head>
+    <body style='height:95%;'>
+        {{ Menu|safe }}
+        <div class='w-100 h-100 position-relative'>
+            <div style='color: #ebebeb; text-shadow: -1px 0 #8f8f8f, 0 1px #bbbbbb, 1px 0 #8f8f8f, 0 -1px #bbbbbb;' class="fw-bold position-absolute top-50 start-50 translate-middle display-1 z-n1" id='Titulo'>{{ Titulo|safe }}</div>
+            <div id='Pag' class='container-fluid h-100'>{{ Contenido|safe }}</div>
+        </div>
+    </body>
+</html>

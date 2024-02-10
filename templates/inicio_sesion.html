@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" class='h-100 w-100'>
+<head>
+    {{ Componentes|safe }}
+</head>
+    <style>
+        .A {
+            border: none;
+            cursor: pointer;
+            padding: 15px 40px;
+            border-radius: 2px;
+            box-shadow: 2px 2px 4px rgba(199, 0, 0, 0.4);
+            background: #ffffff;
+          }
+
+          .A{
+            position: relative;
+            overflow: hidden;
+          }
+
+          .A:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(199, 0, 0, 0.4);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+          }
+
+          @keyframes ripple {
+            0% {
+              transform: scale(0, 0);
+              width: 0%;
+              height: 0%;
+              opacity: 1;
+            }
+            20% {
+              transform: scale(25, 25);
+              width: 25%;
+              height: 25%;
+              opacity: 1;
+            }
+            100% {
+              opacity: 0;
+              width: 50%;
+              height: 50%;
+              transform: scale(25, 25);
+            }
+          }
+
+          .A::after {
+            animation: ripple 2s ease-out;
+          }
+          .Img{
+             opacity: 0.5;
+          }
+      </style>
+      <body class="d-flex justify-content-center align-items-center w-100 h-100 A" data-barba="wrapper">
+           <div class='w-25 h-50 position-relative'>
+              <img width='100%' height='auto'  id='Logo_Universal' src='' class='animate__animated animate__fadeIn position-absolute top-50 start-50 translate-middle'></img>
+              
+              <div id='Formulario' style='display:none;' class='position-absolute top-50 start-50 translate-middle w-100'>
+                {{ Test }}
+                <div class='w-100 text-center row' >
+                  <div class='col display-3 fst-italic fw-bold text-nowrap'><i class="mdi mdi-chevron-double-right " style="color:#ED1C24"></i>Portal <span style="color:#ED1C24">MX</span></div>
+                </div>
+
+                <div class='p-3 m-2'>
+                  <div class="mb-3">
+                    <label class="form-label"><i class='mdi mdi-account-circle'></i> User</label>
+                    <input type="text" class="form-control focus-ring focus-ring-danger" id='User'>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label"><i class='mdi mdi-form-textbox-password'></i> Password</label>
+                    <input type="password" class="form-control focus-ring focus-ring-danger" id='Pwr'>
+                  </div>
+
+                  <div id='Error' class='m-1 p-1 bg-danger p-2 text-white text-center fw-bold' style='display:none;'>
+                    Add User,Email / Password. Please.
+                  </div>
+                </div>
+
+                <button class="btn btn-lg btn-dark w-100 fw-bold" type="button" onclick='Entrar()'>Sign In <i class="mdi mdi-chevron-double-right " style="color:#ED1C24"></i></button>
+                <!--<a href='#'>Did you forget your password?</a>-->
+              </div>
+              
+           </div>
+           <script>
+                $('#User').keypress(function(event){
+                    var keycode = (event.keyCode ? event.keyCode : event.which);
+                    if(keycode == '13'){
+                        Entrar();
+                    }
+                });
+                $('#Pwr').keypress(function(event){
+                    var keycode = (event.keyCode ? event.keyCode : event.which);
+                    if(keycode == '13'){
+                        Entrar();
+                    }
+                });
+
+                var Animacion = 1;
+                $("#Logo_Universal").attr('src',Logo_Univerasl);
+                $('#Logo_Universal').on("animationend", function(){
+                    if(Animacion == 1){
+                      setTimeout(formulario,700);
+                      Animacion = 2;
+                    }
+                    
+                });
+                function formulario(){
+                    $("#Logo_Universal").removeClass('animate__animated animate__zoomIn')
+                    $("#Logo_Universal").css("opacity","0.05");
+                    Animacion = 2;
+                    $("#Formulario").addClass('animate__animated animate__zoomIn');
+                    $("#Formulario").show();
+                }
+            </script>
+            {{ Contenido|safe }}
+      </body>
+</html>
