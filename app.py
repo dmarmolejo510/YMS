@@ -15,6 +15,7 @@ from YMS import Inicio as YMS
 from YMS.Contenedores import Contenedores as YMS_Contenedor, Contenedores_M as YMS_Contenedor_M
 from YMS.Salidas import Estado as YMS_Salida_Estado, Reporte as YMS_Salida_Reporte
 from YMS.OSyD import Inicio as YMS_OSyD
+from YMS.Reportes import Buscar as YMS_Reportes_Buscar,Diario as YMS_Reportes_Diario,Tiempo as YMS_Reportes_Tiempo, Carrier as YMS_Reportes_Carrier
 
 app.secret_key = LibDM_2023.Compartido().Dame_K()
 fernet = Fernet(LibDM_2023.Compartido().Dame_K2())
@@ -213,3 +214,52 @@ def YMS_OSyDs():
             for K in request.form.keys():
                 Datos[K] = escape(request.form[K]).striptags()
             return render_template_string(YMS_OSyD.Direccionar(Datos))
+
+@app.route("/YMS/Report/Container",methods=['GET','POST'])
+def YMS_Reporte_Contenedor():
+    if "IDu" not in session:
+        return render_template_string("<script>window.location= '"+str(request.url_root)+"';</script>")
+    else:
+        if request.method == "GET":
+            return render_template_string(YMS_Reportes_Buscar.Inicio())
+        else:
+            Datos = {}
+            for K in request.form.keys():
+                Datos[K] = escape(request.form[K]).striptags()
+            return render_template_string(YMS_Reportes_Buscar.Direccionar(Datos))
+@app.route("/YMS/Report/Daily",methods=['GET','POST'])
+def YMS_Reporte_Daily():
+    if "IDu" not in session:
+        return render_template_string("<script>window.location= '"+str(request.url_root)+"';</script>")
+    else:
+        if request.method == "GET":
+            return render_template_string(YMS_Reportes_Diario.Inicio())
+        else:
+            Datos = {}
+            for K in request.form.keys():
+                Datos[K] = escape(request.form[K]).striptags()
+            return render_template_string(YMS_Reportes_Diario.Direccionar(Datos))
+@app.route("/YMS/Report/Carrier",methods=['GET','POST'])
+def YMS_Reporte_Carrier():
+    if "IDu" not in session:
+        return render_template_string("<script>window.location= '"+str(request.url_root)+"';</script>")
+    else:
+        if request.method == "GET":
+            return render_template_string(YMS_Reportes_Carrier.Inicio())
+        else:
+            Datos = {}
+            for K in request.form.keys():
+                Datos[K] = escape(request.form[K]).striptags()
+            return render_template_string(YMS_Reportes_Carrier.Direccionar(Datos))
+@app.route("/YMS/Report/Aging",methods=['GET','POST'])
+def YMS_Reporte_Aging():
+    if "IDu" not in session:
+        return render_template_string("<script>window.location= '"+str(request.url_root)+"';</script>")
+    else:
+        if request.method == "GET":
+            return render_template_string(YMS_Reportes_Tiempo.Inicio())
+        else:
+            Datos = {}
+            for K in request.form.keys():
+                Datos[K] = escape(request.form[K]).striptags()
+            return render_template_string(YMS_Reportes_Tiempo.Direccionar(Datos))

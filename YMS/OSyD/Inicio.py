@@ -6,6 +6,12 @@ import json
 import os
 from Componentes import LibDM_2023
 import csv
+import openpyxl
+from openpyxl.workbook.protection import WorkbookProtection
+from openpyxl.styles.borders import Border, Side
+from openpyxl.styles import Alignment
+from openpyxl.styles import Font
+from openpyxl.styles import PatternFill,colors
 Url = ""
 BD_Nombre = "public"
 Bandera_Dock = "YMS"
@@ -106,7 +112,7 @@ def Inicio():
                         var Resultado = JSON.parse(response);
                         if(Resultado["Estado"] == 1){
                             swal.close();
-                            var win = window.open(Resultado["Archivo"], '_blank');
+                            var win = window.open('"""+str(request.url_root)+"""/Portal_File/Gen/'+Resultado["Archivo"], '_blank');
                             win.focus();
                         }else{
                             Swal.fire({icon: 'error',position: 'top-end',title: 'Process error ['+ Resultado["Contenido"] +']',showConfirmButton: false,toast: true,background : "#fac9c9",timer: 3500,timerProgressBar: true});
@@ -1448,6 +1454,127 @@ def Ver_Historico(Datos):
         Resultado["Contenido"] += str(sys.exc_info())
     Cur += json.dumps(Resultado)
     return Cur
+def Ver_Detalle(Datos):
+    if "K" in session.keys():
+        fernet = Fernet(session["K"])
+    Compartido_2023 = LibDM_2023.Compartido()
+    Cur = ""
+    Resultado = {"Estado":0,"Contenido":""}
+    DB = LibDM_2023.DataBase()
+    try:
+        Formulario = {"Col":"", "Campos": [],"Clase": "Formato" }
+        Tabla_Datos = []
+        Columnas = []
+        Columnas.append({"title":"Packing Slip", "field":"Packing Slip","headerFilter":"input"})
+        Columnas.append({"title":"Numero de Parte", "field":"Numero de Parte","headerFilter":"input"})
+        Columnas.append({"title":"Destino", "field":"Destino","headerFilter":"input"})
+        Columnas.append({"title":"Cantidad de ASN", "field":"Cantidad de ASN","headerFilter":"input"})
+        Columnas.append({"title":"Cantidad Real", "field":"Cantidad Real","headerFilter":"input"})
+        for D in ["1 Damage","2 Shortage","3 Surplus","4 ASN Issue","5 Missing doc in Prisma"]:
+            Columnas.append({"title":str(D),"field":str(D),"hozAlign":"center","width":50,"headerSort":0,"headerHozAlign":"center"})
+        Columnas.append({"title":"6 Other (Explain in Comments)","field":"6 Other","hozAlign":"center","width":100,"headerSort":0,"headerHozAlign":"center"})
+        
+        for Partes in DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".cosyd_partes WHERE cosyd_master = '"+str(Datos["IDMaster"])+"'"):
+            for K in Partes.keys():
+                if Partes[K] is None:
+                    Partes[K]  = ""
+            Aux_Datos = {}
+            Opciones = ""
+
+            Aux_Datos["ID"] = str(Partes["cosyd_p_id"])
+            Aux_Datos["Packing Slip"] = str(Partes["cosyd_p_pakingslip"])
+            Aux_Datos["Numero de Parte"] = str(Partes["cosyd_parte"])
+            Aux_Datos["Cantidad de ASN"] = str(Partes["cosyd_cantidad_asn"])
+            Aux_Datos["Cantidad Real"] = str(Partes["cosyd_cantidad_real"])
+            Aux_Datos["Destino"] = str(Partes["cosyd_p_destino"])
+            Aux_Datos["Pallets"] = str(Partes["cosyd_p_pallets"])
+            Aux_Datos["OSD"] = str(Partes["cosyd"])
+            Aux_Datos["Comentario"] = str(Partes["cosyd_comentario"])
+            Aux_Datos["Estado"] = int(Partes["cosyd_p_estado"])
+
+            if Partes["cosyd"] != "":
+                Partes["cosyd_p_1_damage"] = 'X' if str(Partes["cosyd"]) == "1.- Damage" else ""
+                Partes["cosyd_p_2_shortage"] = 'X' if str(Partes["cosyd"]) == "2.- Surplus" else ""
+                Partes["cosyd_p_3_surplusr"] = 'X' if str(Partes["cosyd"]) == "3.- Surplus" else ""
+                Partes["cosyd_p_4_asn_issue"] = 'X' if str(Partes["cosyd"]) == "4.- ASN Issue" else ""
+                Partes["cosyd_p_5_missing_doc_in_prisma"] = 'X' if str(Partes["cosyd"]) == "5.- Missing doc. in Prisma" else ""
+                if Partes["cosyd_p_1_damage"] == "" and Partes["cosyd_p_2_shortage"] == "" and Partes["cosyd_p_3_surpluse"] == "" and Partes["cosyd_p_4_asn_issue"] == "" and Partes["cosyd_p_5_missing_doc_in_prisma"] == "":
+                    Partes["cosyd_p_6_other"] = "["+str(Partes["cosyd"])+"] - " + str(Partes["cosyd_comentario"])
+            else:
+                Partes["cosyd_p_1_damage"] = 'X' if int(Partes["cosyd_p_1_damage"]) == 1 else ""
+                Partes["cosyd_p_2_shortage"] = 'X' if int(Partes["cosyd_p_2_shortage"]) == 1 else ""
+                Partes["cosyd_p_3_surpluse"] = 'X' if int(Partes["cosyd_p_3_surpluse"]) == 1 else ""
+                Partes["cosyd_p_4_asn_issue"] = 'X' if int(Partes["cosyd_p_4_asn_issue"]) == 1 else ""
+                Partes["cosyd_p_5_missing_doc_in_prisma"] = 'X' if int(Partes["cosyd_p_5_missing_doc_in_prisma"]) == 1 else ""
+                Partes["cosyd_p_6_other"] = str(Partes["cosyd_p_6_other"]) if Partes["cosyd_p_6_other"] is not None else ""
+
+            Aux_Datos["1 Damage"] = str(Partes["cosyd_p_1_damage"])
+            Aux_Datos["2 Shortage"] = str(Partes["cosyd_p_2_shortage"])
+            Aux_Datos["3 Surplus"] = str(Partes["cosyd_p_3_surpluse"])
+            Aux_Datos["4 ASN Issue"] = str(Partes["cosyd_p_4_asn_issue"])
+            Aux_Datos["5 Missing doc in Prisma"] = str(Partes["cosyd_p_5_missing_doc_in_prisma"])
+            Aux_Datos["6 Other"] = str(Partes["cosyd_p_6_other"])
+
+            
+            Tabla_Datos.append(Aux_Datos)
+
+        Resultado["Contenido"] += """
+        <div class='w-100 d-flex justify-content-around'>
+            <button class='btn btn-outline-success mb-1' id="download-xlsx-detalle"><i class='mdi mdi-microsoft-excel'></i> Descargar Excel</button>
+        </div>
+        <div id='Detalle-Partes' class='border border-dark bg-dark-subtle'></div>
+        <script>
+            delete table;
+            var Col = """+str(Columnas)+""";
+            var table = new Tabulator("#Detalle-Partes", {
+                data:"""+str(Tabla_Datos)+""",
+                layout:"fitColumns",
+                rowFormatter:function(row){
+                if(row.getData().Estado > 1){
+                        row.getElement().style.backgroundColor = "#5dff67";
+                    }
+                },
+                height:500,
+                pagination:"local",
+                paginationSize:50,  
+                paginationCounter:"rows",
+                columns:Col,
+                selectable:false
+            });
+            document.getElementById("download-xlsx-detalle").addEventListener("click", function(){
+                table.download("xlsx", '"""+str(Datos["IDMaster"])+""".xlsx', {sheetName:"My Data"});
+            });
+            $( document ).ready(function() {
+                $('.tabulator-header-contents').addClass('bg-body-secondary').find('.tabulator-col').addClass('bg-body-secondary');
+            })
+            table.on("cellEdited", function(cell){
+
+                var parametros = {"Fun":'"""+str(fernet.encrypt("Modificar_Parte_Destino".encode()).decode("utf-8"))+"""',"ID":cell.getData()["ID"],"Destino":cell.getValue()};
+                 $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
+                    type:  "post",
+                    success:  function (response){},
+                    error: function (jqXHR, textStatus, errorThrown ){Mensaje(0,'Process error ['+ jqXHR.status + " | " + textStatus  + " | " + errorThrown +']');}
+                });
+                    
+            });
+            function Modificar_Parte(Accion,ID,Parte){
+                $("#Vent_2").removeClass('modal-xl modal-lg modal-sm').addClass('modal-lg')
+                $("#Vent_2").modal("show").find(".modal-body").html("<div class='w-100 text-center'><div class='spinner-grow' role='status'></div><b> Loading...</b></div>").parent().find(".modal-title").html("<i class='mdi mdi-plus'></i> Nuevo OS&D de Ruteo");
+                var parametros = {"Fun":'"""+str(fernet.encrypt("Modificar_Parte".encode()).decode("utf-8"))+"""',"ID_User":'"""+str(Datos["ID_User"])+"""',"Accion":Accion,"ID":ID,"Parte":Parte};
+                $.ajax({
+                    data:  parametros,
+                    url:   \""""+str(request.url)+"""\",
+                    type:  "post",
+                    success:  function (response){var Resultado = JSON.parse(response); $("#Vent_2").find(".modal-body").html(Resultado["Contenido"]);},
+                    error: function (jqXHR, textStatus, errorThrown){$("#Vent_2").find(".modal-body").html("<span style='color:red;'><b>ERROR</b></span> <hr>"+textStatus);}
+                });
+            }
+        </script>
+        """
+    except:
+        Resultado["Contenido"] += str(sys.exc_info())
+    Cur += json.dumps(Resultado)
+    return Cur
 
 def Cargar_Liberados(Datos):
     if "K" in session.keys():
@@ -1935,6 +2062,93 @@ def Cargar_Reporte(Datos):
         Resultado["Contenido"] += str(sys.exc_info())
     Cur += json.dumps(Resultado)
     return Cur
+
+def Generar_Archivo(Datos):
+    DB = LibDM_2023.DataBase()
+    Cur = ""
+    Resultado = { "Estado" :0, "Contenido":""}
+    try:
+        wb = openpyxl.Workbook()
+        sheet_obj = wb.create_sheet("Sheet1",0)
+        a = 1
+        i = 1
+        for Partes in DB.Get_Dato("select PASTER.cosyd,MASTER.cosyd_id,MASTER.cosyd_destino,MASTER.cosyd_packingslip,MASTER.cosyd_caja,PASTER.cosyd_parte,PASTER.cosyd_cantidad_asn,MASTER.cosyd_alta,PASTER.cosyd_p_pallets,MASTER.cosyd_ruta,MASTER.cosyd_ruta_fecha_hora,PASTER.cosyd_p_pakingslip,PASTER.cosyd_comentario,PASTER.cosyd_p_destino,PASTER.cosyd_p_1_Damage,PASTER.cosyd_p_2_Shortage,PASTER.cosyd_p_3_Surpluse,PASTER.cosyd_p_4_ASN_Issue,PASTER.cosyd_p_5_Missing_doc_in_Prisma,PASTER.cosyd_p_6_Other from "+str(BD_Nombre)+".cosyd MASTER inner join "+str(BD_Nombre)+".cosyd_partes PASTER on PASTER.cosyd_master = MASTER.cosyd_id where MASTER.cosyd_id = '"+str(Datos["IDMaster"])+"' "):
+            for Pallets in range(0,1):
+                Partes["cosyd"] = ""
+                Partes["cosyd"] += '1 Damage,' if int(Partes["cosyd_p_1_damage"]) == 1 else ""
+                Partes["cosyd"] += '2 Shortage,' if int(Partes["cosyd_p_2_shortage"]) == 1 else ""
+                Partes["cosyd"] += '3 Surplus,' if int(Partes["cosyd_p_3_surpluse"]) == 1 else ""
+                Partes["cosyd"] += '4 ASN_Issue,' if int(Partes["cosyd_p_4_asn_issue"]) == 1 else ""
+                Partes["cosyd"] += '5 Missing_doc_in_Prisma,' if int(Partes["cosyd_p_5_missing_doc_in_prisma"]) == 1 else ""
+                Partes["cosyd"] += "6 Other ("+str(Partes["cosyd_p_6_other"])+")" if Partes["cosyd_p_6_other"] is not None else ""
+                Partes["cosyd"] += " [DESTINO "+str(Partes["cosyd_p_destino"])+"]"
+                Datos = {
+                    "OS&D": Partes["cosyd"],
+                    "Folio": str(Partes["cosyd_id"]).zfill(5),
+                    "Paking Slip": str(Partes["cosyd_p_pakingslip"]),
+                    "Caja":str(Partes["cosyd_caja"]),
+                    "Parte": str(Partes["cosyd_parte"]),
+                    "Cantidad ASN" : str(Partes["cosyd_cantidad_asn"]),
+                    "Ruta / Fecha" : str(Partes["cosyd_ruta"]) + " / " + str(Partes["cosyd_ruta_fecha_hora"])
+                }
+            
+                Formato(a,sheet_obj,Datos)
+                if i%2:
+                    a += 24
+                else:
+                    a += 20
+                i += 1
+        wb.save(str(current_app.root_path).replace("\\","/")+"/Files/Gen/"+"/OS&D.xlsx")
+        Resultado["Archivo"] = "OS&D.xlsx"
+        Resultado["Estado"] = 1
+    except:
+        Resultado["Contenido"] = str(sys.exc_info())
+    Cur += json.dumps(Resultado)
+    return Cur
+def Formato(renglon_inicia,Hoja,Datos):
+    thin_border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
+    Hoja.cell(row = renglon_inicia, column = 1).value = "OS&D [ODC]"
+    Hoja.merge_cells("A"+str(renglon_inicia)+":I"+str(renglon_inicia+2))
+    Hoja.cell(row = renglon_inicia, column = 1).alignment = Alignment(horizontal='center',vertical='center',wrap_text=True)
+    Hoja.cell(row = renglon_inicia, column = 1).font = Font(size = "36",color="FFFFFF",bold=True)
+    Hoja.cell(row = renglon_inicia, column = 1).fill = PatternFill(bgColor=colors.Color(indexed=32), fill_type = "solid")
+
+    renglon_inicia+=3
+
+    Hoja.cell(row = renglon_inicia, column = 1).value = str(Datos["OS&D"])
+    Hoja.merge_cells("A"+str(renglon_inicia)+":I"+str(renglon_inicia+4))
+    Hoja.cell(row = renglon_inicia, column = 1).font = Font(size = "16",bold=True)
+    Hoja.cell(row = renglon_inicia, column = 1).alignment = Alignment(horizontal='center',vertical='center',wrap_text=True)
+
+    for i in range(1,10):
+        Hoja.cell(row = renglon_inicia, column = i).border = thin_border
+    for i in range(1,10):
+        Hoja.cell(row = renglon_inicia+1, column = i).border = thin_border
+    for i in range(1,10):
+        Hoja.cell(row = renglon_inicia+2, column = i).border = thin_border
+    for i in range(1,10):
+        Hoja.cell(row = renglon_inicia+3, column = i).border = thin_border
+    for i in range(1,10):
+        Hoja.cell(row = renglon_inicia+4, column = i).border = thin_border
+
+    renglon_inicia+=5
+    
+    for K in Datos.keys():
+        if "OS&D" != K:
+            Hoja.cell(row = renglon_inicia, column = 1).value = str(K)
+            Hoja.merge_cells("A"+str(renglon_inicia)+":C"+str(renglon_inicia+1))
+            Hoja.cell(row = renglon_inicia, column = 1).alignment = Alignment(horizontal='center',vertical='center',wrap_text=True)
+            Hoja.cell(row = renglon_inicia, column = 1).font = Font(size = "16",color="555555",bold=True)
+            Hoja.cell(row = renglon_inicia, column = 4).value = str(Datos[K])
+            Hoja.merge_cells("D"+str(renglon_inicia)+":I"+str(renglon_inicia+1))
+            Hoja.cell(row = renglon_inicia, column = 4).alignment = Alignment(horizontal='center',vertical='center',wrap_text=True)
+            Hoja.cell(row = renglon_inicia, column = 4).font = Font(size = "16",bold=True)
+            for i in range(1,10):
+                Hoja.cell(row = renglon_inicia, column = i).border = thin_border
+            for i in range(1,10):
+                Hoja.cell(row = renglon_inicia+1, column = i).border = thin_border
+
+            renglon_inicia+=2
 
 
 def Direccionar(Datos):
