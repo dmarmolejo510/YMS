@@ -5,7 +5,8 @@ import sys
 import json
 import os
 from Componentes import LibDM_2023
-Url = ""
+BD_Nombre = "public"
+Bandera_Dock = "YMS"
 fernet = Fernet(LibDM_2023.Compartido().Dame_K2())
 def Inicio():
     if "K" in session.keys():
@@ -59,7 +60,7 @@ def Inicio():
                 $("#Vent_1").find(".modal-title").html("<i class='mdi mdi-history'></i> History ["+Contenedor+"]");
                 $("#Vent_1").removeClass('modal-xl modal-lg modal-sm').addClass('modal-xl');
                 var parametros = {"Fun":'"""+str(fernet.encrypt("Ver_Historico".encode()).decode("utf-8"))+"""',"ID":ID};
-                $.ajax({data:  parametros,url:\""""+str(request.url_root)+"""/ODC/Container_Control\",type:  "post",
+                $.ajax({data:  parametros,url:\""""+str(request.url_root)+"""/YMS/Container_Control\",type:  "post",
                     success:  function (response)
                     {
                         var Resultado = JSON.parse(response);
@@ -79,6 +80,111 @@ def Inicio():
         Cur += render_template("general.html",Contenido=Contenido,Componentes=Compartido.Complementos(None),Menu=Menu,Titulo=Titulo)
     except:
         Cur += str(sys.exc_info())
+    return Cur
+def Buscar_Caja(Datos):
+    DB = LibDM_2023.DataBase()
+    Compartido_2023 = LibDM_2023.Compartido()
+    Cur = ""
+    Resultado = {"Contenido":"","Estado":0}
+    try:
+        Datos_Info = json.loads(str(Datos["Info"]))
+        Cajas = []
+        if str(Datos_Info["Fecha de Rura"]) != "":
+            if Datos_Info["Carrier"] == "-1":
+                Cajas_DB = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas WHERE cc_contenedor like '%"+str(Datos_Info["Container"])+"%' AND DATE(cc_fecha_hora) = '"+str(Datos_Info["Fecha de Rura"])+"'")
+            else:
+                Cajas_DB = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas WHERE cc_contenedor like '%"+str(Datos_Info["Container"])+"%' AND DATE(cc_fecha_hora) = '"+str(Datos_Info["Fecha de Rura"])+"' and cc_informacion_actual like '%"+str(Datos_Info["Carrier"])+"%'")
+        else:
+            if Datos_Info["Carrier"] == "-1":
+                Cajas_DB = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas WHERE cc_contenedor like '%"+str(Datos_Info["Container"])+"%'")
+            else:
+                Cajas_DB = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas WHERE cc_contenedor like '%"+str(Datos_Info["Container"])+"%' and cc_informacion_actual like '%"+str(Datos_Info["Carrier"])+"%'")
+        H_Str = []
+        for C in Cajas_DB:
+            H_Str.append("'"+str(C["cc_id"])+"'")
+        Historial = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas_moviemiento WHERE cch_master IN ("+str(','.join(H_Str))+")")
+        
+        for Caja in Cajas_DB:
+            Historial_Aqui = []
+            for H in Historial:
+                if int(H["cch_master"]) == int(Caja["cc_id"]):
+                    Historial_Aqui.append(H)
+            
+            Info_Actual = json.loads(str(Caja["cc_informacion_actual"]))
+            Estado_IN = "Not assigned"
+            Carrier_IN = Info_Actual["Carrier"]
+            Fecha_Out = ""
+            Carrier_Out = ""
+            Estado_Out = ""
+            Opciones = "<div class='btn-group' role='group' aria-label='Basic mixed styles example'>"
+            Opciones += "<button class='btn btn-sm btn-primary p-0 ps-1 pe-1' onclick='Ver_Historico("+str(Caja["cc_id"])+",\""+str(Caja["cc_contenedor"])+"\")'><i class='mdi mdi-history'></i></button>"
+            Opciones += "</div>"
+            for HQ in Historial_Aqui:
+                if str(HQ["cch_movimiento"]) == "ASIGNAR":
+                    Info_H = json.loads(str(HQ["cch_informacion_actual"]))
+                    Carrier_IN = Info_H["Carrier"]
+                    Estado_IN = "<span class='h-100 border' style='width:20px; background:var(--Color_"+str(HQ["cch_tipo_actual"])+");Color:var(--Color_"+str(HQ["cch_tipo_actual"])+");'>__</span>"
+                    try:
+                        Tipo = Info_H[HQ["cch_tipo_actual"]]
+                        Estado_IN += str(Tipo)
+                        Tipo_1 = Info_H[Tipo]
+                        Estado_IN += "/"+str(Tipo_1)
+                        Tipo_2 = Info_H[Tipo_1]
+                        Estado_IN += "/"+str(Tipo_2)
+                    except:
+                        pass
+                if str(HQ["cch_movimiento"]) == "SALIDA":
+                    Info_H = json.loads(str(HQ["cch_informacion_actual"]))
+                    Fecha_Out = str(HQ["cch_fecha_hora"])
+                    Carrier_Out = Info_H["Carrier"]
+                    Estado_Out = "<span class='h-100 border' style='width:20px; background:var(--Color_"+str(HQ["cch_tipo_actual"])+");Color:var(--Color_"+str(HQ["cch_tipo_actual"])+");'>__</span>"
+                    try:
+                        Tipo = Info_H[HQ["cch_tipo_actual"]]
+                        Estado_Out += str(Tipo)
+                        Tipo_1 = Info_H[Tipo]
+                        Estado_Out += "/"+str(Tipo_1)
+                        Tipo_2 = Info_H[Tipo_1]
+                        Estado_Out += "/"+str(Tipo_2)
+                    except:
+                        pass
+                if str(HQ["cch_movimiento"]) == "ELIMINADO":
+                    Estado_Out += "<span class='text-danger'>ELIMINADO</span>"
+
+
+
+            Cajas.append({"Contenedor":str(Caja["cc_contenedor"]),"In Date":Caja["cc_fecha_hora"].strftime("%Y-%m-%d %H:%M:%S"),"In Status":Estado_IN,"In Carrier":Carrier_IN,"Out Date":Fecha_Out,"Out Status":Estado_Out,"Out Carrier":Carrier_Out,'Opciones':Opciones})
+
+            pass
+        Resultado["Contenido"] += """
+        <div id='Tabla_Reporte' class='border border-dark bg-dark-subtle'></div>
+        <script>
+            delete Tabla_Reporte;
+            var Tabla_Reporte = new Tabulator("#Tabla_Reporte", {
+                minHeight:500,
+                layout:"fitColumns",
+                data:"""+str(Cajas)+""",
+                columns:[
+                    {field:"Contenedor","title":"Container"},
+                    {field:"In Date","title":"In Date"},
+                    {field:"In Status","title":"In Status",formatter:"html"},
+                    {field:"In Carrier","title":"In Carrier"},
+                    {field:"Out Date","title":"Out Date"},
+                    {field:"Out Status","title":"Out Status",formatter:"html"},
+                    {field:"Out Carrier","title":"Out Carrier"},
+                    {field:"Opciones","title":"Op",formatter:"html"}
+                ]
+            });
+            Tabla_Reporte.on("tableBuilt", function(){ 
+                setTimeout(() => {
+                    Tabla_Reporte.clearFilter();
+                    Tabla_Reporte.redraw();
+                }, 100);
+            });
+        </script>
+        """
+    except:
+         Resultado["Contenido"] = str(sys.exc_info())
+    Cur += json.dumps(Resultado)
     return Cur
 
 

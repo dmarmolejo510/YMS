@@ -12,7 +12,6 @@ from openpyxl.styles.borders import Border, Side
 from openpyxl.styles import Alignment
 from openpyxl.styles import Font
 from openpyxl.styles import PatternFill,colors
-Url = ""
 BD_Nombre = "public"
 Bandera_Dock = "YMS"
 fernet = Fernet(LibDM_2023.Compartido().Dame_K2())
@@ -1664,7 +1663,7 @@ def Cargar_Liberados(Datos):
             Aux_Datos["Fecha Alta"] = str(PakingSplip["cosyd_alta"])
             Aux_Datos["Fecha de envío del proveedor"] = ""
             Aux_Datos["Proveedor"] = PakingSplip["cosyd_proveedor"]
-            Aux_Datos["Packing Slip"] = str(PakingSplip["cosyd_p_pakingslip"])
+            Aux_Datos["Packing Slip"] = str(PakingSplip["cosyd_pakingslip"])
             Aux_Datos["Destino"] = PakingSplip["Destinos"]
             Aux_Datos["Contenedor"] = PakingSplip["cosyd_caja"]
             Aux_Datos["SCAC"] = PakingSplip["cosyd_scac"]
