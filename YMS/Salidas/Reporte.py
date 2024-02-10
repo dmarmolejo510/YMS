@@ -90,7 +90,7 @@ def Cargar_Fecha(Datos):
             if Programacion["cc_id"] is not None:
                 Cajas_Aqui.append(str(Programacion["cc_id"]))
 
-        Movimientos = DB.Get_Dato("SELECT * FROM wtc_slp.ccajas_moviemiento WHERE cch_master IN ("+str(",".join(Cajas_Aqui))+") ORDER BY cch_fecha_hora")
+        Movimientos = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas_moviemiento WHERE cch_master IN ("+str(",".join(Cajas_Aqui))+") ORDER BY cch_fecha_hora")
 
         for Programacion in Programacion_Abiertos:
             Info_Ahora = json.loads(str(Programacion["cc_informacion_actual"]))
