@@ -10,6 +10,7 @@ import pathlib
 import sys
 app = Flask(__name__)
 import Inicio
+from ToDo import Inicio as TODO
 PATH_DIR = str(pathlib.Path(__file__).parent.resolve()).replace("\\","/")
 @app.route('/recurso/<path:path>')
 def recurso(path):
@@ -37,3 +38,15 @@ def index():
             for K in request.form.keys():
                 Datos[K] = escape(request.form[K]).striptags()
             return render_template_string(Inicio.Direccionar(Datos))
+@app.route("/ToDo",methods=['GET','POST'])
+def ToDo_root():
+    if "IDu" not in session:
+        return render_template_string("<script>window.location= '"+str(request.url_root)+"';</script>")
+    else:
+        if request.method == "GET":
+            return render_template_string(TODO.Inicio())
+        else:
+            Datos = {}
+            for K in request.form.keys():
+                Datos[K] = escape(request.form[K]).striptags()
+            return render_template_string(TODO.Direccionar(Datos))

@@ -2042,9 +2042,9 @@ class Menu:
     def Get_Menu(self,Raiz,ID_User=None):
         DB = DataBase()
         Permisos = []
-        Info_User = DB.Get_Dato("select * FROM portal.cuser USR where USR.cusrid = '"+str(ID_User)+"'")
-        if len(Info_User) > 0:
-            Permisos = Info_User[0]["cpermisos_temp_portal2"].split(",")
+        Info_User = DB.Get_Dato("select * FROM public.cuser USR where USR.cusrid = '"+str(ID_User)+"'")
+        # if len(Info_User) > 0:
+        #     Permisos = Info_User[0]["cpermisos_temp_portal2"].split(",")
         Menu = {}
         Menu["To Do"] ={
             "Link": str(Raiz)+"ToDo",
@@ -2128,275 +2128,29 @@ class Menu:
                     "P":"",
                     "Grupo_IDS":[1500,1501,1502,1503,1504,1505]
                 }
-        # Menu["XDOCK NISSAN"] ={
-        #             "Link": str(Raiz)+"XDock",
-        #             "Items":{
-        #                 #"Yard":{"Icono":"mdi mdi-car-brake-parking","Link":"./yard.py","Fun":"Inicio","ID":1500},
-        #                 "Container Control":{
-        #                     "Icono":"mdi mdi-truck-trailer",
-        #                     "Items":{
-        #                         "Container":{"Icono":"mdi mdi-truck-trailer","Link":"./Container_Control/Container.py","Fun":"Inicio","ID":1501},
-        #                         "Container Manager":{"Icono":"mdi mdi-truck-trailer","Link":"./Container_Control/Container_Manager.py","Fun":"Inicio","ID":1502}
-        #                     }
-        #                 },
-        #                 "Outbound Status":{
-        #                     "Icono":"mdi mdi-progress-upload",
-        #                     "Items":{
-        #                         "Outbound Status":{"Icono":"mdi mdi-progress-upload","Link":"./Estado_Salidas/inicio.py","Fun":"Inicio","ID":1501},
-        #                         "Reporte":{"Icono":"mdi mdi-projector-screen","Link":"./Estado_Salidas/Reporte.py","Fun":"Inicio","ID":1501}
-        #                     }
-        #                 },
-        #                 "Pending Manifest":{"Icono":"mdi mdi-script","Link":"./Manifest.py","Fun":"Inicio","ID":1504},
-        #                 "OS&D":{"Icono":"mdi mdi-alert","Link":"./OSyD.py","Fun":"Inicio","ID":1508},
-        #                 "Reports":{
-        #                     "Icono":"mdi mdi-book",
-        #                     "Items":{
-        #                         "Container Search":{"Icono":"mdi mdi-feature-search","Link":"./Reportes/buscar.py","Fun":"Inicio","ID":1509},
-        #                         "Daily":{"Icono":"mdi mdi-book","Link":"./Reportes/daily.py","Fun":"Inicio","ID":1510},
-        #                         "Carrier":{"Icono":"mdi mdi-book","Link":"./Reportes/carrier.py","Fun":"Inicio","ID":1511},
-        #                         "Aging Report":{"Icono":"mdi mdi-book","Link":"./Reportes/tiempo.py","Fun":"Inicio","ID":1512},
-        #                         "Load ID":{"Icono":"mdi mdi-book","Link":"./Reportes/loadid.py","Fun":"Inicio","ID":1512}
-        #                     }
-        #                 },
-        #                 "Configuration":{
-        #                     "Icono":"mdi mdi-cog",
-        #                     "Items":{
-        #                         "Suppliers Master":{"Icono":"mdi mdi-card-bulleted","Link":"./Configuracion/Proveedores.py","Fun":"Inicio","ID":1505},
-        #                         "Route Master":{"Icono":"mdi mdi-swap-vertical-variant","Link":"./Configuracion/Rutas.py","Fun":"Inicio","ID":1506},
-        #                         "Docks Master":{"Icono":"mdi mdi-sign-caution","Link":"./Configuracion/Docks.py","Fun":"Inicio","ID":1507}
-        #                     }
-        #                 },
-
-        #             },
-        #             "Icono":"mdi mdi-factory",
-        #             "Color":"#FD9843",
-        #             "Letra":"",
-        #             "ID":"RH",
-        #             "Grupo_IDS":[1500,1501,1502,1503,1504,1505]
-        #         }
-        # Menu["LC"] ={
-        #             "Link": str(Raiz)+"LC",
-        #             "Items":{
-        #                 #"Yard":{"Icono":"mdi mdi-car-brake-parking","Link":"./yard.py","Fun":"Inicio","ID":1500},
-        #                 "Container Control":{
-        #                     "Icono":"mdi mdi-truck-trailer",
-        #                     "Items":{
-        #                         "Container":{"Icono":"mdi mdi-truck-trailer","Link":"./Container_Control/Container.py","Fun":"Inicio","ID":1501},
-        #                         "Container Manager":{"Icono":"mdi mdi-truck-trailer","Link":"./Container_Control/Container_Manager.py","Fun":"Inicio","ID":1502}
-        #                     }
-        #                 },
-        #                 "Operation ":{
-        #                     "Icono":"mdi mdi-cellphone-wireless",
-        #                     "Items":{
-        #                         "Inbound parts":{"Icono":"mdi mdi-inbox-arrow-up","Link":"./Operaciones/inbound_part.py","Fun":"Inicio","ID":1501},
-        #                         "Outbound parts":{"Icono":"mdi mdi-inbox-arrow-down","Link":"./Operaciones/outbound_part.py","Fun":"Inicio","ID":1502},
-        #                         "Inventory":{"Icono":"mdi mdi-warehouse","Link":"./Operaciones/inventario.py","Fun":"Inicio","ID":1503},
-        #                     }
-        #                 },
-        #                 # "Customs":{"Icono":"mdi mdi-script","Link":"./Customs.py","Fun":"Inicio","ID":1504},
-        #                 "OS&D":{"Icono":"mdi mdi-alert","Link":"./OSyD.py","Fun":"Inicio","ID":1508},
-        #                 "Reports":{
-        #                     "Icono":"mdi mdi-book",
-        #                     "Items":{
-        #                         "Container Search":{"Icono":"mdi mdi-feature-search","Link":"./Reportes/buscar.py","Fun":"Inicio","ID":1509},
-        #                         "Daily":{"Icono":"mdi mdi-book","Link":"./Reportes/daily.py","Fun":"Inicio","ID":1510},
-        #                         "Carrier":{"Icono":"mdi mdi-book","Link":"./Reportes/carrier.py","Fun":"Inicio","ID":1511},
-        #                         "Aging Report":{"Icono":"mdi mdi-book","Link":"./Reportes/tiempo.py","Fun":"Inicio","ID":1512}
-        #                     }
-        #                 },
-        #                 "Configuration":{
-        #                     "Icono":"mdi mdi-cog",
-        #                     "Items":{
-        #                         "Suppliers Master":{"Icono":"mdi mdi-card-bulleted","Link":"./Configuracion/Proveedores.py","Fun":"Inicio","ID":1505},
-        #                         "Route Master":{"Icono":"mdi mdi-swap-vertical-variant","Link":"./Configuracion/Rutas.py","Fun":"Inicio","ID":1506},
-        #                         "Docks Master":{"Icono":"mdi mdi-sign-caution","Link":"./Configuracion/Docks.py","Fun":"Inicio","ID":1507},
-        #                         "Part Master":{"Icono":"mdi mdi-screw-lag","Link":"./Configuracion/Partes.py","Fun":"Inicio","ID":1507}
-        #                     }
-        #                 },
-
-        #             },
-        #             "Icono":"mdi mdi-factory",
-        #             "Color":"#FFC107",
-        #             "Letra":"",
-        #             "ID":"RH",
-        #             "Grupo_IDS":[1500,1501,1502,1503,1504,1505]
-        #         }
-        # Menu["RG"] ={
-        #             "Link": str(Raiz)+"RG",
-        #             "Items":{
-        #                 "Container Control":{"Icono":"mdi mdi-truck","Link":"./Contenedores.py","Fun":"Inicio","ID":1504},
-        #                 "OS&D":{"Icono":"mdi mdi-alert","Link":"./OSyD.py","Fun":"Inicio","ID":1508},
-        #                 "Equipo Vacio":{"Icono":"mdi mdi-layers-minus","Link":"./equipo_vacio.py","Fun":"Inicio","ID":1508},
-        #                 "Reports":{
-        #                     "Icono":"mdi mdi-book",
-        #                     "Items":{
-        #                         "Container Search":{"Icono":"mdi mdi-feature-search","Link":"./Reportes/buscar.py","Fun":"Inicio","ID":1509}
-        #                     }
-        #                 }
-        #             },
-        #             "Icono":"mdi mdi-factory",
-        #             "Color":"#4DD4AC",
-        #             "Letra":"",
-        #             "ID":"RH",
-        #             "Grupo_IDS":[1500,1501,1502,1503,1504,1505]
-        #         }
-        # Menu["ILC Saltillo"] ={
-        #             "Link": str(Raiz)+"ILC_Saltillo",
-        #             "Items":{
-        #                 #"Yard":{"Icono":"mdi mdi-car-brake-parking","Link":"./yard.py","Fun":"Inicio","ID":1500},
-        #                 "Contenedores":{
-        #                     "Icono":"mdi mdi-truck-trailer",
-        #                     "Items":{
-        #                         "Contenedores":{"Icono":"mdi mdi-truck-trailer","Link":"./Container_Control/Container.py","Fun":"Inicio","ID":1501},
-        #                         "Administrador Contenedores":{"Icono":"mdi mdi-truck-trailer","Link":"./Container_Control/Container_Manager.py","Fun":"Inicio","ID":1502}
-        #                     }
-        #                 },
-        #                 "Estado de Outbound":{
-        #                     "Icono":"mdi mdi-progress-upload",
-        #                     "Items":{
-        #                         "Estado de Outbound":{"Icono":"mdi mdi-progress-upload","Link":"./Estado_Salidas/inicio.py","Fun":"Inicio","ID":1501},
-        #                         "Reporte":{"Icono":"mdi mdi-projector-screen","Link":"./Estado_Salidas/reporte.py","Fun":"Inicio","ID":1501}
-        #                     }
-        #                 },
-        #                 "OS&D":{"Icono":"mdi mdi-alert","Link":"./OSyD.py","Fun":"Inicio","ID":1508},
-        #                 "Reports":{
-        #                     "Icono":"mdi mdi-book",
-        #                     "Items":{
-        #                         "Buscar Container":{"Icono":"mdi mdi-feature-search","Link":"./Reportes/buscar.py","Fun":"Inicio","ID":1509},
-        #                         "Reporte Diario":{"Icono":"mdi mdi-book","Link":"./Reportes/daily.py","Fun":"Inicio","ID":1510},
-        #                         "Reporte de Tiempo":{"Icono":"mdi mdi-book","Link":"./Reportes/tiempo.py","Fun":"Inicio","ID":1512}
-        #                     }
-        #                 },
-        #                 "Configuration":{
-        #                     "Icono":"mdi mdi-cog",
-        #                     "Items":{
-        #                         "Administrador de Proveedores":{"Icono":"mdi mdi-card-bulleted","Link":"./Configuracion/Proveedores.py","Fun":"Inicio","ID":1505},
-        #                         "Administrador de Rutas":{"Icono":"mdi mdi-swap-vertical-variant","Link":"./Configuracion/Rutas.py","Fun":"Inicio","ID":1506},
-        #                         "Administrador de Docks":{"Icono":"mdi mdi-sign-caution","Link":"./Configuracion/Docks.py","Fun":"Inicio","ID":1507},
-        #                         "Administrador de Carrier":{"Icono":"mdi mdi-train","Link":"./Configuracion/Carrier.py","Fun":"Inicio","ID":1507},
-        #                         "Administrador Destinos OS&D":{"Icono":"mdi mdi-card-bulleted","Link":"./Configuracion/Destinos.py","Fun":"Inicio","ID":1507}
-        #                     }
-        #                 },
-
-        #             },
-        #             "Icono":"mdi mdi-factory",
-        #             "Color":"#43eafd",
-        #             "Letra":"",
-        #             "ID":"RH",
-        #             "Grupo_IDS":[1500,1501,1502,1503,1504,1505]
-        #         }
-        # Menu["RILC Toluca"] ={
-        #             "Link": str(Raiz)+"RILC_Toluca",
-        #             "Items":{
-        #                 #"Yard":{"Icono":"mdi mdi-car-brake-parking","Link":"./yard.py","Fun":"Inicio","ID":1500},
-        #                 "Contenedores":{
-        #                     "Icono":"mdi mdi-truck-trailer",
-        #                     "Items":{
-        #                         "Contenedores":{"Icono":"mdi mdi-truck-trailer","Link":"./Container_Control/Container.py","Fun":"Inicio","ID":1501},
-        #                         "Administrador Contenedores":{"Icono":"mdi mdi-truck-trailer","Link":"./Container_Control/Container_Manager.py","Fun":"Inicio","ID":1502}
-        #                     }
-        #                 },
-        #                 "Estado de Outbound":{
-        #                     "Icono":"mdi mdi-progress-upload",
-        #                     "Items":{
-        #                         "Estado de Outbound":{"Icono":"mdi mdi-progress-upload","Link":"./Estado_Salidas/inicio.py","Fun":"Inicio","ID":1501},
-        #                         "Reporte":{"Icono":"mdi mdi-projector-screen","Link":"./Estado_Salidas/reporte.py","Fun":"Inicio","ID":1501}
-        #                     }
-        #                 },
-        #                 "OS&D":{"Icono":"mdi mdi-alert","Link":"./OSyD.py","Fun":"Inicio","ID":1508},
-        #                 "Reports":{
-        #                     "Icono":"mdi mdi-book",
-        #                     "Items":{
-        #                         "Buscar Container":{"Icono":"mdi mdi-feature-search","Link":"./Reportes/buscar.py","Fun":"Inicio","ID":1509},
-        #                         "Reporte Diario":{"Icono":"mdi mdi-book","Link":"./Reportes/daily.py","Fun":"Inicio","ID":1510},
-        #                         "Reporte de Tiempo":{"Icono":"mdi mdi-book","Link":"./Reportes/tiempo.py","Fun":"Inicio","ID":1512}
-        #                     }
-        #                 },
-        #                 "Configuration":{
-        #                     "Icono":"mdi mdi-cog",
-        #                     "Items":{
-        #                         "Administrador de Proveedores":{"Icono":"mdi mdi-card-bulleted","Link":"./Configuracion/Proveedores.py","Fun":"Inicio","ID":1505},
-        #                         "Administrador de Rutas":{"Icono":"mdi mdi-swap-vertical-variant","Link":"./Configuracion/Rutas.py","Fun":"Inicio","ID":1506},
-        #                         "Administrador de Docks":{"Icono":"mdi mdi-sign-caution","Link":"./Configuracion/Docks.py","Fun":"Inicio","ID":1507},
-        #                         "Administrador de Carrier":{"Icono":"mdi mdi-train","Link":"./Configuracion/Carrier.py","Fun":"Inicio","ID":1507},
-        #                         "Administrador Destinos OS&D":{"Icono":"mdi mdi-card-bulleted","Link":"./Configuracion/Destinos.py","Fun":"Inicio","ID":1507}
-        #                     }
-        #                 },
-
-        #             },
-        #             "Icono":"mdi mdi-factory",
-        #             "Color":"#51c062",
-        #             "Letra":"",
-        #             "ID":"RH",
-        #             "Grupo_IDS":[1500,1501,1502,1503,1504,1505]
-        #         }
-        # Menu["DTNA Saltillo"] ={
-        #             "Link": str(Raiz)+"DTNA_Saltillo",
-        #             "Items":{
-        #                 #"Yard":{"Icono":"mdi mdi-car-brake-parking","Link":"./yard.py","Fun":"Inicio","ID":1500},
-        #                 "Cajas":{
-        #                     "Icono":"mdi mdi-truck-trailer",
-        #                     "Items":{
-        #                         "Cajas":{"Icono":"mdi mdi-truck-trailer","Link":"./Container_Control/Container.py","Fun":"Inicio","ID":1501},
-        #                         "Administrador Cajas":{"Icono":"mdi mdi-truck-trailer","Link":"./Container_Control/Container_Manager.py","Fun":"Inicio","ID":1502}
-        #                     }
-        #                 },
-        #                 "Estado de Outbound":{
-        #                     "Icono":"mdi mdi-progress-upload",
-        #                     "Items":{
-        #                         "Estado de Outbound":{"Icono":"mdi mdi-progress-upload","Link":"./Estado_Salidas/inicio.py","Fun":"Inicio","ID":1501},
-        #                         "Reporte":{"Icono":"mdi mdi-projector-screen","Link":"./Estado_Salidas/reporte.py","Fun":"Inicio","ID":1501}
-        #                     }
-        #                 },
-        #                 "Reports":{
-        #                     "Icono":"mdi mdi-book",
-        #                     "Items":{
-        #                         "Buscar Container":{"Icono":"mdi mdi-feature-search","Link":"./Reportes/buscar.py","Fun":"Inicio","ID":1509},
-        #                         "Reporte Diario":{"Icono":"mdi mdi-book","Link":"./Reportes/daily.py","Fun":"Inicio","ID":1510},
-        #                         "Reporte de Tiempo":{"Icono":"mdi mdi-book","Link":"./Reportes/tiempo.py","Fun":"Inicio","ID":1512}
-        #                     }
-        #                 },
-        #                 "Configuration":{
-        #                     "Icono":"mdi mdi-cog",
-        #                     "Items":{
-        #                         "Administrador de Proveedores":{"Icono":"mdi mdi-card-bulleted","Link":"./Configuracion/Proveedores.py","Fun":"Inicio","ID":1505},
-        #                         "Administrador de Rutas":{"Icono":"mdi mdi-swap-vertical-variant","Link":"./Configuracion/Rutas.py","Fun":"Inicio","ID":1506},
-        #                         "Administrador de Docks":{"Icono":"mdi mdi-sign-caution","Link":"./Configuracion/Docks.py","Fun":"Inicio","ID":1507},
-        #                         "Administrador de Carrier":{"Icono":"mdi mdi-train","Link":"./Configuracion/Carrier.py","Fun":"Inicio","ID":1507},
-        #                         "Administrador Destinos":{"Icono":"mdi mdi-card-bulleted","Link":"./Configuracion/Destinos.py","Fun":"Inicio","ID":1507}
-        #                     }
-        #                 },
-
-        #             },
-        #             "Icono":"mdi mdi-factory",
-        #             "Color":"#66a5ad",
-        #             "Letra":"",
-        #             "ID":"RH",
-        #             "Grupo_IDS":[1500,1501,1502,1503,1504,1505]
-        #         }
-        
-        
-        if ID_User is not None:
-            if "WTC" not in Permisos:
-                del Menu["WTC"]
-            if "ODC" not in Permisos:
-                del Menu["ODC"]
-            if "XDOCK NISSAN" not in Permisos:
-                del Menu["XDOCK NISSAN"]
-            if "LC" not in Permisos:
-                del Menu["LC"]
-            if "RG" not in Permisos:
-                del Menu["RG"]
-            if "ILC Saltillo" not in Permisos:
-                del Menu["ILC Saltillo"]
-            if "RILC Toluca" not in Permisos:
-                del Menu["RILC Toluca"]
-            if "DTNA Saltillo" not in Permisos:
-                del Menu["DTNA Saltillo"]
+    
+        # if ID_User is not None:
+        #     if "WTC" not in Permisos:
+        #         del Menu["WTC"]
+        #     if "ODC" not in Permisos:
+        #         del Menu["ODC"]
+        #     if "XDOCK NISSAN" not in Permisos:
+        #         del Menu["XDOCK NISSAN"]
+        #     if "LC" not in Permisos:
+        #         del Menu["LC"]
+        #     if "RG" not in Permisos:
+        #         del Menu["RG"]
+        #     if "ILC Saltillo" not in Permisos:
+        #         del Menu["ILC Saltillo"]
+        #     if "RILC Toluca" not in Permisos:
+        #         del Menu["RILC Toluca"]
+        #     if "DTNA Saltillo" not in Permisos:
+        #         del Menu["DTNA Saltillo"]
         return Menu
     def Menu(self,Activo,Raiz,ID_User):
         DB = DataBase()
-        Info_User = DB.Get_Dato("select EMP.IDEmpleado,EMP.Nombre,PER.cpu_permisos  FROM portal.cuser USR inner join linc.empleados EMP on USR.cusidempleado = EMP.IDEmpleado inner join portal.cpermisos_usuario PER on PER.cpu_id = USR.cgrupo_permisos where USR.cusrid = '"+str(ID_User)+"'")[0]
+        Info_User = DB.Get_Dato("select * FROM public.cuser USR where USR.cusrid = '"+str(ID_User)+"'")[0]
+        #Info_User = DB.Get_Dato("select EMP.IDEmpleado,EMP.Nombre,PER.cpu_permisos  FROM portal.cuser USR inner join linc.empleados EMP on USR.cusidempleado = EMP.IDEmpleado inner join portal.cpermisos_usuario PER on PER.cpu_id = USR.cgrupo_permisos where USR.cusrid = '"+str(ID_User)+"'")[0]
         Menu = self.Get_Menu(Raiz,str(ID_User))
         Res = ""
         Res += """
