@@ -166,7 +166,7 @@ class DataBase:
             return "Error : [ " + str(sys.exc_info()) + "]"
     def Dame_Nombre_IDEmpleado(self,idEmpleado):
         Res = "-"
-        for Emp in self.Get_Dato("ELECT \"Nombre\" FROM public.cuser where cusrid = '"+str(IDUsuario)+"'"):
+        for Emp in self.Get_Dato("ELECT \"Nombre\" FROM public.cuser where cusrid = '"+str(idEmpleado)+"'"):
             Res = str(Emp["Nombre"])
         return (Res)
     def Dame_Nombre_IDUsuario(self,IDUsuario):

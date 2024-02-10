@@ -289,7 +289,7 @@ def Cargar_Abiertos(Datos):
             Aux_Datos["Numeros"] = "<a class='link-primary' style='cursor:pointer' onclick='Ver_Detalle("+str(PakingSplip["cosyd_id"])+")'>"+str(Numeros)+"</a>" 
             Aux_Datos["Numeros_de_Parte"] = str(Numeros)
             Aux_Datos["Archivos"] = ""
-            Aux_Datos["Packing_Slip"] = PakingSplip["cosyd_p_pakingslip"]
+            Aux_Datos["Packing_Slip"] = PakingSplip["cosyd_packingslip"]
             for Archivo in str(PakingSplip["Evidencia"]).split(","):
                 if Archivo.strip() != "":
                     if "pdf" in Archivo:
