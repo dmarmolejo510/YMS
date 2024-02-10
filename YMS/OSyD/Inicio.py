@@ -1590,7 +1590,7 @@ def Cargar_Liberados(Datos):
 
         Tabla_Datos_Liberados = []
         for PakingSplip in DB.Get_Dato("""
-        SELECT MASTER.*,MAX(HISTORICO.cosyd_fecha) Fecha_Ultimo,string_agg(DISTINCT(PARTES.cosyd_p_destino),',') Destinos,MASTER.cosyd_packingslip  FROM """+str(BD_Nombre)+""".cosyd  MASTER
+        SELECT MASTER.*,MAX(HISTORICO.cosyd_fecha) "Fecha_Ultimo",string_agg(DISTINCT(PARTES.cosyd_p_destino),',') "Destinos",MASTER.cosyd_packingslip  FROM """+str(BD_Nombre)+""".cosyd  MASTER
         inner join """+str(BD_Nombre)+""".cosyd_historico HISTORICO on MASTER.cosyd_id = HISTORICO.cosyd_master 
         left join """+str(BD_Nombre)+""".cosyd_partes PARTES ON PARTES.cosyd_master = MASTER.cosyd_id
         WHERE MASTER.cosyd_estado IN (1,2)
