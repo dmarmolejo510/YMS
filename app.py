@@ -12,7 +12,7 @@ app = Flask(__name__)
 import Inicio
 from ToDo import Inicio as TODO
 from YMS import Inicio as YMS
-from YMS.Contenedores import Contenedores as YMS_Contenedores, Contenedores_M as YMS_Contenedores_M
+from YMS.Contenedores import Contenedores as YMS_Contenedor, Contenedores_M as YMS_Contenedor_M
 
 app.secret_key = LibDM_2023.Compartido().Dame_K()
 fernet = Fernet(LibDM_2023.Compartido().Dame_K2())
@@ -79,9 +79,9 @@ def YMS_Contenedores():
         return render_template_string("<script>window.location= '"+str(request.url_root)+"';</script>")
     else:
         if request.method == "GET":
-            return render_template_string(YMS_Contenedores.Inicio())
+            return render_template_string(YMS_Contenedor.Inicio())
         else:
             Datos = {}
             for K in request.form.keys():
                 Datos[K] = escape(request.form[K]).striptags()
-            return render_template_string(YMS_Contenedores.Direccionar(Datos))
+            return render_template_string(YMS_Contenedor.Direccionar(Datos))
