@@ -859,7 +859,7 @@ def Guardar_Nueva_Ruteo(Datos):
         """)
         if Error == "":
             Error += DB.Instruccion("UPDATE "+str(BD_Nombre)+".cproveedores SET crilcpr_email_s = '"+str(Info["Lista_distribucion"])+"' WHERE crilcpr_codigo = '"+str(Info["Proveedor"])+"'")
-            ID = DB.Get_Dato("SELECT MAX(cosyd_id) as ID FROM "+str(BD_Nombre)+".cosyd WHERE cosyd_tipo = 'RUTEO' AND cosyd_usuario = '"+str(Datos["ID_User"])+"' ")[0]["ID"]
+            ID = DB.Get_Dato("SELECT MAX(cosyd_id) as \"ID\" FROM "+str(BD_Nombre)+".cosyd WHERE cosyd_tipo = 'RUTEO' AND cosyd_usuario = '"+str(Datos["ID_User"])+"' ")[0]["ID"]
             Error += DB.Instruccion("""
             INSERT INTO """+str(BD_Nombre)+""".cosyd_historico
             (cosyd_master,cosyd_usuario,cosyd_comentario,cosyd_evidencia,cosyd_movimiento,cosyd_fecha)
