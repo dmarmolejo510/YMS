@@ -50,8 +50,8 @@ def Inicio():
                     }
                 });
             }
-            ToDo();
-            News();
+            //ToDo();
+            //News();
 
             function ToDo_Actualizar(){
                 Mostrar_Ventana_Cargando(false);
