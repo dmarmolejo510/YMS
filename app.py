@@ -22,6 +22,12 @@ UPLOAD_FOLDER = PATH_DIR+'/Files/'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
 
 @app.route('/recurso/<path:path>')
 def recurso(path):
@@ -31,6 +37,74 @@ def recurso(path):
         return send_from_directory(PATH_DIR+'/static/', path, mimetype='text/css')
     else:
         return send_from_directory(PATH_DIR+'/static/', path)
+@app.route('/ProFiles',methods=['GET','POST'])
+def ProFiles():
+    if request.method == 'POST':
+        try:
+            if "Fun" in request.form.keys():
+                if str(request.form["Fun"]) == "Eliminar":
+                    os.remove(os.path.join(app.config['UPLOAD_FOLDER'], request.form["Archivo"]))
+                return str(request.form)
+            else:
+                response = {}
+                structuredFiles = []
+                File_Name = None
+                if 'files[]' not in request.files:
+                    response["msg"] = "No hay parte de archivo en la solicitud";
+                    response["status"] = "error";
+                    response["key"] = None;
+                    response["file"] = File_Name;
+                    return json.dumps(response),400
+                files = request.files.getlist('files[]')
+                errors = {}
+                success = False
+                for file in files:
+                    if file and allowed_file(file.filename):
+                        Es_Recarga = False
+                        filename = secure_filename(file.filename)
+                        if len(filename.split("-")) >= 4 and len(filename.split("-")[len(filename.split("-"))-1]) >= 15:
+                            Es_Recarga = True
+                        if Es_Recarga == False:
+                            filename_F = ""
+                            Arr = filename.split(".")
+                            index = 0
+                            for A in Arr:
+                                if index == len(Arr)-1:
+                                    filename_F += "_" + str(uuid.uuid4())
+                                    filename_F += "."+str(A)
+                                else:
+                                    filename_F += str(A)
+                                index += 1
+                            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename_F))
+                            File_Name = filename_F
+                        else:
+                            File_Name = filename
+                        success = True
+                    else:
+                        errors[file.filename] = 'File type is not allowed'
+                if success and errors:
+                    response["msg"] = 'File(s) successfully uploaded'
+                    response["status"] = "success";
+                    response["key"] = str(uuid.uuid4());
+                    response["file"] = File_Name;
+                    return json.dumps(response),206
+                if success:
+                    response["msg"] = 'Files successfully uploaded'
+                    response["status"] = "success";
+                    response["key"] = str(uuid.uuid4());
+                    response["file"] = File_Name;
+                    return json.dumps(response),201
+                else:
+                    response["msg"] = str(errors);
+                    response["status"] = "error";
+                    response["key"] = None;
+                    response["file"] = File_Name;
+                    return json.dumps(response),400
+        except:
+            return str(sys.exc_info())
+
+
+
 @app.route("/",methods=['GET','POST'])
 def index():
     if "IDu" not in session:
