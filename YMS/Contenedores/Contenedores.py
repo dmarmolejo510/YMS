@@ -1896,7 +1896,7 @@ def Nueva_Caja(Datos):
                             {
                                 $("#Vent_1").modal("hide");
                                 Mensaje(2);
-                                Llamar_Funcion(\""""+str(request.url_root)+"""\");
+                                Llamar_Funcion(\""""+str(request.url)+"""\");
                             }
                             else
                                 Mensaje(0,Resultado["Contenido"]);

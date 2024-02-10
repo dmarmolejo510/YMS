@@ -163,3 +163,15 @@ def YMS_Contenedores():
             for K in request.form.keys():
                 Datos[K] = escape(request.form[K]).striptags()
             return render_template_string(YMS_Contenedor.Direccionar(Datos))
+@app.route("/YMS/Container_Manager",methods=['GET','POST'])
+def YMS_Contenedores_M():
+    if "IDu" not in session:
+        return render_template_string("<script>window.location= '"+str(request.url_root)+"';</script>")
+    else:
+        if request.method == "GET":
+            return render_template_string(YMS_Contenedor_M.Inicio())
+        else:
+            Datos = {}
+            for K in request.form.keys():
+                Datos[K] = escape(request.form[K]).striptags()
+            return render_template_string(YMS_Contenedor_M.Direccionar(Datos))
