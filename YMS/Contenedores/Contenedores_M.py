@@ -472,6 +472,8 @@ def Regresa_Guardar(Datos):
         
         Info_Aqui = json.loads(str(Info_Historico["cch_informacion_actual"]))
         
+        #for Instrucciones_Canceladas in DB.Get_Dato("SELECT * FROM ccajas_moviemiento where cch_fecha_hora  >= '2024-02-10 18:00:00'"):
+        Error += DB.Instruccion("UPDATE ccajas_moviemiento SET cch_movimiento = CONCATE(cch_movimiento,' | CANCELED STEP') WHERE cch_fecha_hora > '"+str(Datos["Fecha"])+"'")
         Error += DB.Instruccion("UPDATE "+str(BD_Nombre)+".ccajas SET cc_ubicacion = '"+str(Info_Historico["cch_ubicacion"])+"',cc_informacion_actual = '"+str(Info_Historico["cch_informacion_actual"])+"',cc_tipo_actual = "+str(Tipo)+", cc_dock= "+str(Dock)+", cc_negocio = "+str(Negocio)+", cc_zona ="+str(Zona)+",  cc_ultimo_mov = NOW(),cc_bloquear = '"+str(Info_Historico["cch_bloquear"])+"'  WHERE cc_id = '"+str(Datos["ID"])+"' ")
         if Error == "":
             Info_Ahora = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas WHERE cc_id = '"+str(Datos["ID"])+"'")[0]
