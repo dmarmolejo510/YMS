@@ -474,10 +474,6 @@ def Tipo_Nuevo(Datos):
                     Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Photos","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
                 if De_Donde == "Dock" and str(Datos["Donde"]) == "Dock":
                     Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Photos","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
-                if "Fecha_Salida" in Info_Actual.keys():
-                    Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Fecha de Salida","Requerido":1,"valor":str(Info_Actual["Fecha_Salida"]),"editable":False})
-                else:
-                    Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Fecha de Salida","Requerido":1,"valor":""})
             Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
             
             
@@ -505,21 +501,25 @@ def Tipo_Nuevo_1(Datos):
         Info = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".crutas WHERE cr_tipo = '"+str(Datos["Nivel_1"])+"'")[0]["cr_niveles"]
         Info = json.loads(Info)
         Opciones = []
+
+        Formulario = {"Col":"12", "Campos": [],"Clase": "Asignar" }
+        if str(Datos["Nivel_1"]) == "Inbound":
+            if "Fecha_Salida" in Info_Actual.keys():
+                Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Fecha de Salida","Requerido":1,"valor":str(Info_Actual["Fecha_Salida"]),"editable":False})
+            else:
+                Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Fecha de Salida","Requerido":1,"valor":""})
         if Info[Datos["Tipo"]] == 0 or "NOMBRE" in Info[Datos["Tipo"]].keys():
             if De_Donde == "Patio" and str(Datos["Donde"]) == "Patio":
                 if str(Datos["Nivel_1"]) == "Empty" and str(Datos["Tipo"]) == "Return Empty":
-                    Formulario = {"Col":"12", "Campos": [],"Clase": "Asignar" }
                     Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Photos","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
                     Formulario["Campos"].append({"tipo":"checkbox","campo":"Salida","titulo":"¿Lista para salir? (GENERA PASA DE SALIDA)","Requerido":1,"valor":True,"editable":False})
                     Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
             if De_Donde == "Patio" and str(Datos["Donde"]) == "Dock":
                 if str(Datos["Nivel_1"]) == "Empty":
-                    Formulario = {"Col":"12", "Campos": [],"Clase": "Asignar" }
                     Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Photos","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
                     Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
             if De_Donde == "Dock" and str(Datos["Donde"]) == "Dock":
                 if str(Datos["Nivel_1"]) == "Empty":
-                    Formulario = {"Col":"12", "Campos": [],"Clase": "Asignar" }
                     Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Photos","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
                     Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
             if int(Datos["Sin_Guardar"]) == 1:
@@ -1139,7 +1139,9 @@ def Modificar_A(Datos):
             Formulario["Campos"].append({"tipo":"texto","campo":"Sello Temporal","titulo":"Sello Termporal","Requerido":1,"min":1,"max":150,"valor":""})
             Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Fotos","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
             if "Fecha_Salida" in Info_Actual.keys():
-                Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Fecha de Salida","Requerido":1,"min":1,"max":30,"valor":Info_Actual["Fecha_Salida"],"editable":False})
+                Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Fecha de Salida","Requerido":1,"valor":str(Info_Actual["Fecha_Salida"]),"editable":False})
+            else:
+                Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Fecha de Salida","Requerido":1,"valor":""})
             Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
             Resultado["Contenido"] += """
             <hr>
