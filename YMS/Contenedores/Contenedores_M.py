@@ -85,13 +85,13 @@ def Inicio():
             Info_Actual = json.loads(str(Contenedor["cc_informacion_actual"]))
 
             Opciones += "<button class='btn btn-sm btn-primary p-0 ps-1 pe-1' onclick='Ver_Historico("+str(Contenedor["cc_id"])+",\""+str(Contenedor["cc_contenedor"])+"\")'><i class='mdi mdi-history'></i></button>"
-            if Contenedor["cc_bloquear"] == 0:
-                Opciones += "<button class='btn btn-sm btn-warning p-0 ps-1 pe-1' onclick='Modificar("+str(Contenedor["cc_id"])+",\""+str(Contenedor["cc_contenedor"])+"\")'><i class='mdi mdi-pencil'></i></button>"
-                Opciones += "<button class='btn btn-sm btn-danger p-0 ps-1 pe-1' onclick='Eliminar_Caja("+str(Contenedor["cc_id"])+",\""+str(Contenedor["cc_contenedor"])+"\")'><i class='mdi mdi-trash-can'></i></button>"
-            if Contenedor["cc_qr_salida"] is None:
-                Opciones += "<button class='btn btn-sm btn-info p-0 ps-1 pe-1' onclick='Regresar("+str(Contenedor["cc_id"])+",\""+str(Contenedor["cc_contenedor"])+"\")'><i class='mdi mdi-cursor-move'></i></button>"
-            if Contenedor["cc_bloquear"] == 1:
-                Opciones += "<span class='ms-1 me-1'><i class='mdi mdi-lock'></i></span>"
+            #if Contenedor["cc_bloquear"] == 0:
+            #    Opciones += "<button class='btn btn-sm btn-warning p-0 ps-1 pe-1' onclick='Modificar("+str(Contenedor["cc_id"])+",\""+str(Contenedor["cc_contenedor"])+"\")'><i class='mdi mdi-pencil'></i></button>"
+            Opciones += "<button class='btn btn-sm btn-danger p-0 ps-1 pe-1' onclick='Eliminar_Caja("+str(Contenedor["cc_id"])+",\""+str(Contenedor["cc_contenedor"])+"\")'><i class='mdi mdi-trash-can'></i></button>"
+            #if Contenedor["cc_qr_salida"] is None:
+            Opciones += "<button class='btn btn-sm btn-info p-0 ps-1 pe-1' onclick='Regresar("+str(Contenedor["cc_id"])+",\""+str(Contenedor["cc_contenedor"])+"\")'><i class='mdi mdi-cursor-move'></i></button>"
+            #if Contenedor["cc_bloquear"] == 1:
+            #    Opciones += "<span class='ms-1 me-1'><i class='mdi mdi-lock'></i></span>"
                 
         
             Sello = ""
@@ -472,7 +472,7 @@ def Regresa_Guardar(Datos):
         
         Info_Aqui = json.loads(str(Info_Historico["cch_informacion_actual"]))
         
-        Error += DB.Instruccion("UPDATE "+str(BD_Nombre)+".ccajas SET cc_ubicacion = '"+str(Info_Historico["cch_ubicacion"])+"',cc_informacion_actual = '"+str(Info_Historico["cch_informacion_actual"])+"',cc_tipo_actual = "+str(Tipo)+", cc_dock= "+str(Dock)+", cc_negocio = "+str(Negocio)+", cc_zona ="+str(Zona)+",  cc_ultimo_mov = NOW() WHERE cc_id = '"+str(Datos["ID"])+"' ")
+        Error += DB.Instruccion("UPDATE "+str(BD_Nombre)+".ccajas SET cc_ubicacion = '"+str(Info_Historico["cch_ubicacion"])+"',cc_informacion_actual = '"+str(Info_Historico["cch_informacion_actual"])+"',cc_tipo_actual = "+str(Tipo)+", cc_dock= "+str(Dock)+", cc_negocio = "+str(Negocio)+", cc_zona ="+str(Zona)+",  cc_ultimo_mov = NOW(),cc_bloquear = '"+str(Info_Historico["cch_bloquear"])+"'  WHERE cc_id = '"+str(Datos["ID"])+"' ")
         if Error == "":
             Info_Ahora = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas WHERE cc_id = '"+str(Datos["ID"])+"'")[0]
             Info_Ahora["cc_dock"] = 'null' if Info_Ahora["cc_dock"] is None else "'"+str(Info_Ahora["cc_dock"])+"'"
@@ -481,9 +481,9 @@ def Regresa_Guardar(Datos):
             Info_Ahora["cc_negocio"] = 'null' if Info_Ahora["cc_negocio"] is None else "'"+str(Info_Ahora["cc_negocio"])+"'"
             Error = DB.Instruccion(""" 
             INSERT INTO """+str(BD_Nombre)+""".ccajas_moviemiento
-            (cch_master,cch_fecha_hora,cch_contenedor,cch_ubicacion,cch_informacion_actual,cch_dock,cch_tipo_actual,cch_zona,cch_negocio,cch_usuario,cch_movimiento,cch_comentario)
+            (cch_master,cch_fecha_hora,cch_contenedor,cch_ubicacion,cch_informacion_actual,cch_dock,cch_tipo_actual,cch_zona,cch_negocio,cch_usuario,cch_movimiento,cch_comentario,cch_bloquear)
             VALUES
-            ('"""+str(Info_Ahora["cc_id"])+"""',NOW(),'"""+str(Info_Ahora["cc_contenedor"])+"""','"""+str(Info_Ahora["cc_ubicacion"])+"""','"""+str(Info_Ahora["cc_informacion_actual"])+"""',"""+str(Info_Ahora["cc_dock"])+""","""+str(Info_Ahora["cc_tipo_actual"])+""","""+str(Info_Ahora["cc_zona"])+""","""+str(Info_Ahora["cc_negocio"])+""",'"""+str(Datos["ID_User"])+"""','REGRESO A ["""+str(Datos["Fecha"])+"""]','"""+str(Datos["Comentario"])+"""')
+            ('"""+str(Info_Ahora["cc_id"])+"""',NOW(),'"""+str(Info_Ahora["cc_contenedor"])+"""','"""+str(Info_Ahora["cc_ubicacion"])+"""','"""+str(Info_Ahora["cc_informacion_actual"])+"""',"""+str(Info_Ahora["cc_dock"])+""","""+str(Info_Ahora["cc_tipo_actual"])+""","""+str(Info_Ahora["cc_zona"])+""","""+str(Info_Ahora["cc_negocio"])+""",'"""+str(Datos["ID_User"])+"""','REGRESO A ["""+str(Datos["Fecha"])+"""]','"""+str(Datos["Comentario"])+"""','"""+str(Info_Ahora["cc_bloquear"])+"""')
             """)
         if Error == "":
             Resultado["Estado"] = 1
@@ -511,9 +511,9 @@ def Eliminar_Caja(Datos):
             Info_Ahora["cc_negocio"] = 'null' if Info_Ahora["cc_negocio"] is None else "'"+str(Info_Ahora["cc_negocio"])+"'"
             Error = DB.Instruccion(""" 
             INSERT INTO """+str(BD_Nombre)+""".ccajas_moviemiento
-            (cch_master,cch_fecha_hora,cch_contenedor,cch_ubicacion,cch_informacion_actual,cch_dock,cch_tipo_actual,cch_zona,cch_negocio,cch_usuario,cch_movimiento,cch_comentario)
+            (cch_master,cch_fecha_hora,cch_contenedor,cch_ubicacion,cch_informacion_actual,cch_dock,cch_tipo_actual,cch_zona,cch_negocio,cch_usuario,cch_movimiento,cch_comentario,cch_bloquear)
             VALUES
-            ('"""+str(Info_Ahora["cc_id"])+"""',NOW(),'"""+str(Info_Ahora["cc_contenedor"])+"""','"""+str(Info_Ahora["cc_ubicacion"])+"""','"""+str(Info_Ahora["cc_informacion_actual"])+"""',"""+str(Info_Ahora["cc_dock"])+""","""+str(Info_Ahora["cc_tipo_actual"])+""","""+str(Info_Ahora["cc_zona"])+""","""+str(Info_Ahora["cc_negocio"])+""",'"""+str(Datos["ID_User"])+"""','ELIMINADO','"""+str(Datos["Comentario"])+"""')
+            ('"""+str(Info_Ahora["cc_id"])+"""',NOW(),'"""+str(Info_Ahora["cc_contenedor"])+"""','"""+str(Info_Ahora["cc_ubicacion"])+"""','"""+str(Info_Ahora["cc_informacion_actual"])+"""',"""+str(Info_Ahora["cc_dock"])+""","""+str(Info_Ahora["cc_tipo_actual"])+""","""+str(Info_Ahora["cc_zona"])+""","""+str(Info_Ahora["cc_negocio"])+""",'"""+str(Datos["ID_User"])+"""','ELIMINADO','"""+str(Datos["Comentario"])+"""','"""+str(Info_Ahora["cc_bloquear"])+"""')
             """)
         if Error == "":
             Resultado["Estado"] = 1

@@ -35,7 +35,7 @@ def Inicio():
                     <td>Entrada</td>
                     <td>DEFINIR RUTA</span></td>
                     <td class='text-center' style='width:40px;'><span style='writing-mode: vertical-lr;'>OPERACIONES</span></td>
-                    <td class='text-center' style='width:40px;'><span style='writing-mode: vertical-lr;'>SALIO</span></td>
+                    <td class='text-center' style='width:40px;'><span style='writing-mode: vertical-lr;'>SALIDA</span></td>
                     <td class='text-center' style='width:40px;'><span style='writing-mode: vertical-lr;'>COMPLETO</span></td>
                     <td>CUT TIME</td>
                 </tr>
@@ -114,7 +114,10 @@ def Inicio():
             if Salida is not None:
                 Contenido += "<td class='align-middle text-center table-success'><i class='mdi mdi-check-bold'></i></td>"
             else:
-                Contenido += "<td class='table-danger'></td>"
+                if Libera_Operaciones is not None:
+                    Contenido += "<td class='align-middle text-center table-warning'><button onclick='Salida("+str(Programacion["cc_id"])+",\""+str(Programacion["cc_contenedor"])+"\")' class='btn btn-sm btn-success p-0 m-0 ps-1 pe-1 Pulsa_Div'><i class='mdi mdi-check'></i></button></td>"
+                else:
+                    Contenido += "<td class='table-danger'></td>"
 
 
             if Definir_Ruta is not None and Libera_Operaciones is not None and Salida is not None:
@@ -142,55 +145,14 @@ def Inicio():
         """
         Contenido += """
         <script>
-            function Re_Asignar(ID,Fecha){
-                Mostrar_Ventana_Cargando(false);
-                $("#Vent_1").find(".modal-title").html("<i class='mdi mdi-history'></i> Re-Asignar LOAD ID ["+Fecha+"]");
-                $("#Vent_1").removeClass('modal-xl modal-lg modal-sm');
-                var parametros = {"Fun":'"""+str(fernet.encrypt("Re_Asignar".encode()).decode("utf-8"))+"""',"ID":ID};
-                $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
-                    success:  function (response)
-                    {
-                        var Resultado = JSON.parse(response);
-                        $("#Vent_1").modal("show").find(".modal-body").html(Resultado["Contenido"]);
-                        $("#Vent_1").find(".modal-footer").find("button").attr('onclick',"$('#Vent_1').modal('hide'); delete table; ")
-                        swal.close();
-                    },
-                    error: function (jqXHR, textStatus, errorThrown )
-                    {
-                        $("#Vent_1").modal("show").find(".modal-body").html("<i class='mdi mdi-alert'></i> "+ textStatus);
-                        swal.close();
-                    }
-                });
-            }
-            function Asignar_Load_ID(ID,Fecha){
-                Mostrar_Ventana_Cargando(false);
-                $("#Vent_1").find(".modal-title").html("<i class='mdi mdi-history'></i> Asignar LOAD ID ["+Fecha+"]");
-                $("#Vent_1").removeClass('modal-xl modal-lg modal-sm');
-                var parametros = {"Fun":'"""+str(fernet.encrypt("Asignar_Load_ID".encode()).decode("utf-8"))+"""',"ID":ID};
-                $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
-                    success:  function (response)
-                    {
-                        var Resultado = JSON.parse(response);
-                        $("#Vent_1").modal("show").find(".modal-body").html(Resultado["Contenido"]);
-                        $("#Vent_1").find(".modal-footer").find("button").attr('onclick',"$('#Vent_1').modal('hide'); delete table; ")
-                        swal.close();
-                    },
-                    error: function (jqXHR, textStatus, errorThrown )
-                    {
-                        $("#Vent_1").modal("show").find(".modal-body").html("<i class='mdi mdi-alert'></i> "+ textStatus);
-                        swal.close();
-                    }
-                });
-            }
-            function Liberar_Operaciones(ID_Caja,Caja){
+            function Salida(ID,Contenedor){
                 Swal.fire({
-                title: 'Estas segur@ de liberar la caja ['+Caja+']?',
-                buttonsStyling: false,showCancelButton: true,confirmButtonText: "<i class='mdi mdi-check'></i> Yes",cancelButtonText: "<i class='mdi mdi-close'></i> No",showLoaderOnConfirm: true,
+                title: '¿Estás seguro de darle salida al contenedor ['+Contenedor+']?',
+                buttonsStyling: false,showCancelButton: true,confirmButtonText: "<i class='mdi mdi-check'></i> Si",cancelButtonText: "<i class='mdi mdi-close'></i> No",showLoaderOnConfirm: true,
                 customClass: {confirmButton: 'btn btn-success ms-1 me-1',cancelButton: 'btn btn-danger ms-1 me-1'},
                 preConfirm: () => {
-                    
-                   Mostrar_Ventana_Cargando(false);
-                    var parametros = {"Fun":'"""+str(fernet.encrypt("Liberar_Operaciones".encode()).decode("utf-8"))+"""',"ID_Caja":ID_Caja};
+                    Mostrar_Ventana_Cargando(false);
+                    var parametros = {"Fun":'"""+str(fernet.encrypt("Salida".encode()).decode("utf-8"))+"""',"ID":ID};
                     $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
                         success:  function (response)
                         {
@@ -199,7 +161,7 @@ def Inicio():
                             {
                                 $("#Vent_1").modal("hide");
                                 Mensaje(2);
-                                Cargar_Fecha($("#fecha").val());
+                                Llamar_Funcion(\""""+str(request.url)+"""\");
                             }
                             else
                                 Mensaje(0,Resultado["Contenido"]);
@@ -210,256 +172,9 @@ def Inicio():
                             Mensaje(0,textStatus);
                         }
                     });
-                    
                 }
                 })
             }
-            function Documentos_WMS(ID_Caja,Caja){
-                Mostrar_Ventana_Cargando(false);
-                $("#Vent_1").find(".modal-title").html("<i class='mdi mdi-history'></i> Documentos WMS ["+Caja+"]");
-                $("#Vent_1").removeClass('modal-xl modal-lg modal-sm');
-                var parametros = {"Fun":'"""+str(fernet.encrypt("Documentos_WMS".encode()).decode("utf-8"))+"""',"ID_Caja":ID_Caja};
-                $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
-                    success:  function (response)
-                    {
-                        var Resultado = JSON.parse(response);
-                        $("#Vent_1").modal("show").find(".modal-body").html(Resultado["Contenido"]);
-                        $("#Vent_1").find(".modal-footer").find("button").attr('onclick',"$('#Vent_1').modal('hide'); delete table; ")
-                        swal.close();
-                    },
-                    error: function (jqXHR, textStatus, errorThrown )
-                    {
-                        $("#Vent_1").modal("show").find(".modal-body").html("<i class='mdi mdi-alert'></i> "+ textStatus);
-                        swal.close();
-                    }
-                });
-            }
-            function MGO_Actualizado(ID_Caja,Caja){
-                Swal.fire({
-                title: 'Estas segur@ de que ya está se actualizado la información de la caja  ['+Caja+'] en MGO?',
-                buttonsStyling: false,showCancelButton: true,confirmButtonText: "<i class='mdi mdi-check'></i> Yes",cancelButtonText: "<i class='mdi mdi-close'></i> No",showLoaderOnConfirm: true,
-                customClass: {confirmButton: 'btn btn-success ms-1 me-1',cancelButton: 'btn btn-danger ms-1 me-1'},
-                preConfirm: () => {
-                    
-                   Mostrar_Ventana_Cargando(false);
-                    var parametros = {"Fun":'"""+str(fernet.encrypt("MGO_Actualizado".encode()).decode("utf-8"))+"""',"ID_Caja":ID_Caja};
-                    $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
-                        success:  function (response)
-                        {
-                            var Resultado = JSON.parse(response);
-                            if(Resultado["Estado"] == 1)
-                            {
-                                $("#Vent_1").modal("hide");
-                                Mensaje(2);
-                                Cargar_Fecha($("#fecha").val());
-                            }
-                            else
-                                Mensaje(0,Resultado["Contenido"]);
-                                
-                        },
-                        error: function (jqXHR, textStatus, errorThrown )
-                        {
-                            Mensaje(0,textStatus);
-                        }
-                    });
-                    
-                }
-                })
-            }
-            function Agregar_Adicional(){
-                Mostrar_Ventana_Cargando(false);
-                $("#Vent_1").find(".modal-title").html("<i class='mdi mdi-history'></i> Agregar adicional");
-                $("#Vent_1").removeClass('modal-xl modal-lg modal-sm');
-                var parametros = {"Fun":'"""+str(fernet.encrypt("Agregar_Adicional".encode()).decode("utf-8"))+"""'};
-                $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
-                    success:  function (response)
-                    {
-                        var Resultado = JSON.parse(response);
-                        $("#Vent_1").modal("show").find(".modal-body").html(Resultado["Contenido"]);
-                        $("#Vent_1").find(".modal-footer").find("button").attr('onclick',"$('#Vent_1').modal('hide'); delete table; ")
-                        swal.close();
-                    },
-                    error: function (jqXHR, textStatus, errorThrown )
-                    {
-                        $("#Vent_1").modal("show").find(".modal-body").html("<i class='mdi mdi-alert'></i> "+ textStatus);
-                        swal.close();
-                    }
-                });
-            }
-            function Crear_Programacion(){
-                Mostrar_Ventana_Cargando(false);
-                $("#Vent_1").find(".modal-title").html("<i class='mdi mdi-plus'></i> Crear Programación de Día");
-                $("#Vent_1").removeClass('modal-xl modal-lg modal-sm');
-                var parametros = {"Fun":'"""+str(fernet.encrypt("Crear_Programacion".encode()).decode("utf-8"))+"""'};
-                $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
-                    success:  function (response)
-                    {
-                        var Resultado = JSON.parse(response);
-                        $("#Vent_1").modal("show").find(".modal-body").html(Resultado["Contenido"]);
-                        $("#Vent_1").find(".modal-footer").find("button").attr('onclick',"$('#Vent_1').modal('hide'); delete table; ")
-                        swal.close();
-                    },
-                    error: function (jqXHR, textStatus, errorThrown )
-                    {
-                        $("#Vent_1").modal("show").find(".modal-body").html("<i class='mdi mdi-alert'></i> "+ textStatus);
-                        swal.close();
-                    }
-                });
-            }
-            function Enviar_Correo(ID,Caja){
-                Mostrar_Ventana_Cargando(false);
-                $("#Vent_1").find(".modal-title").html("<i class='mdi mdi-history'></i> Enviar Correos de CAJA LISTA  de la caja ["+Caja+"]");
-                $("#Vent_1").removeClass('modal-xl modal-lg modal-sm');
-                var parametros = {"Fun":'"""+str(fernet.encrypt("Enviar_Correo".encode()).decode("utf-8"))+"""',"ID":ID};
-                $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
-                    success:  function (response)
-                    {
-                        var Resultado = JSON.parse(response);
-                        $("#Vent_1").modal("show").find(".modal-body").html(Resultado["Contenido"]);
-                        $("#Vent_1").find(".modal-footer").find("button").attr('onclick',"$('#Vent_1').modal('hide'); delete table; ")
-                        swal.close();
-                    },
-                    error: function (jqXHR, textStatus, errorThrown )
-                    {
-                        $("#Vent_1").modal("show").find(".modal-body").html("<i class='mdi mdi-alert'></i> "+ textStatus);
-                        swal.close();
-                    }
-                });
-            }
-            function Re_Enviar_Correo(ID,Caja){
-                Mostrar_Ventana_Cargando(false);
-                $("#Vent_1").find(".modal-title").html("<i class='mdi mdi-history'></i> Re-Enviar Correos de CAJA LISTA  de la caja ["+Caja+"]");
-                $("#Vent_1").removeClass('modal-xl modal-lg modal-sm');
-                var parametros = {"Fun":'"""+str(fernet.encrypt("Re_Enviar_Correo".encode()).decode("utf-8"))+"""',"ID":ID};
-                $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
-                    success:  function (response)
-                    {
-                        var Resultado = JSON.parse(response);
-                        $("#Vent_1").modal("show").find(".modal-body").html(Resultado["Contenido"]);
-                        $("#Vent_1").find(".modal-footer").find("button").attr('onclick',"$('#Vent_1').modal('hide'); delete table; ")
-                        swal.close();
-                    },
-                    error: function (jqXHR, textStatus, errorThrown )
-                    {
-                        $("#Vent_1").modal("show").find(".modal-body").html("<i class='mdi mdi-alert'></i> "+ textStatus);
-                        swal.close();
-                    }
-                });
-            }
-            function Cancelar_Load_ID(Load_ID,ID){
-                Swal.fire({
-                title: 'Estas segur@ de cancelar este LOAD ID ['+Load_ID+']?',
-                input: 'text',buttonsStyling: false,showCancelButton: true,confirmButtonText: "<i class='mdi mdi-check'></i> Yes",cancelButtonText: "<i class='mdi mdi-close'></i> No",showLoaderOnConfirm: true,
-                customClass: {confirmButton: 'btn btn-success ms-1 me-1',cancelButton: 'btn btn-danger ms-1 me-1'},
-                preConfirm: (Comentario) => {
-                    
-                    if(Comentario.trim() == ""){
-                        Mensaje(1,"Agrega comentario");
-                    }else{
-                        Mostrar_Ventana_Cargando(false);
-                        var parametros = {"Fun":'"""+str(fernet.encrypt("Cancelar_Load_ID".encode()).decode("utf-8"))+"""',"ID":ID,"Comentario":Comentario};
-                        $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
-                            success:  function (response)
-                            {
-                                var Resultado = JSON.parse(response);
-                                if(Resultado["Estado"] == 1)
-                                {
-                                    $("#Vent_1").modal("hide");
-                                    Mensaje(2);
-                                    Cargar_Fecha($("#fecha").val());
-                                }
-                                else
-                                    Mensaje(0,Resultado["Contenido"]);
-                                    
-                            },
-                            error: function (jqXHR, textStatus, errorThrown )
-                            {
-                                Mensaje(0,textStatus);
-                            }
-                        });
-                    }
-                    
-                    
-                }
-                })
-            }
-
-            function Folio_Prisma(Load_ID,Caja,ID){
-                Swal.fire({
-                title: 'Que folio de Prisma es para LOAD ID ['+Load_ID+'] y Caja ['+Caja+']?',
-                input: 'text',buttonsStyling: false,showCancelButton: true,confirmButtonText: "<i class='mdi mdi-check'></i> Yes",cancelButtonText: "<i class='mdi mdi-close'></i> No",showLoaderOnConfirm: true,
-                customClass: {confirmButton: 'btn btn-success ms-1 me-1',cancelButton: 'btn btn-danger ms-1 me-1'},
-                preConfirm: (Comentario) => {
-                    
-                    if(Comentario.trim() == ""){
-                        Mensaje(1,"Agrega comentario");
-                    }else{
-                        Mostrar_Ventana_Cargando(false);
-                        var parametros = {"Fun":'"""+str(fernet.encrypt("Folio_Prisma".encode()).decode("utf-8"))+"""',"Load_ID":Load_ID,"Comentario":Comentario,"ID":ID};
-                        $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
-                            success:  function (response)
-                            {
-                                var Resultado = JSON.parse(response);
-                                if(Resultado["Estado"] == 1)
-                                {
-                                    $("#Vent_1").modal("hide");
-                                    Mensaje(2);
-                                    Cargar_Fecha($("#fecha").val());
-                                }
-                                else
-                                    Mensaje(0,Resultado["Contenido"]);
-                                    
-                            },
-                            error: function (jqXHR, textStatus, errorThrown )
-                            {
-                                Mensaje(0,textStatus);
-                            }
-                        });
-                    }
-                    
-                    
-                }
-                })
-            }
-
-            function Cancelar_Ruta(ID,Tipo,Ruta){
-                Swal.fire({
-                title: 'Estas seguro de Cacelar la Ruta ['+Tipo+' '+Ruta+']?',
-                input: 'text',buttonsStyling: false,showCancelButton: true,confirmButtonText: "<i class='mdi mdi-check'></i> Yes",cancelButtonText: "<i class='mdi mdi-close'></i> No",showLoaderOnConfirm: true,
-                customClass: {confirmButton: 'btn btn-success ms-1 me-1',cancelButton: 'btn btn-danger ms-1 me-1'},
-                preConfirm: (Comentario) => {
-                    
-                    if(Comentario.trim() == ""){
-                        Mensaje(1,"Agrega comentario");
-                    }else{
-                        Mostrar_Ventana_Cargando(false);
-                        var parametros = {"Fun":'"""+str(fernet.encrypt("Cancelar_Ruta".encode()).decode("utf-8"))+"""',"ID":ID,"Comentario":Comentario};
-                        $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
-                            success:  function (response)
-                            {
-                                var Resultado = JSON.parse(response);
-                                if(Resultado["Estado"] == 1)
-                                {
-                                    $("#Vent_1").modal("hide");
-                                    Mensaje(2);
-                                    Cargar_Fecha($("#fecha").val());
-                                }
-                                else
-                                    Mensaje(0,Resultado["Contenido"]);
-                                    
-                            },
-                            error: function (jqXHR, textStatus, errorThrown )
-                            {
-                                Mensaje(0,textStatus);
-                            }
-                        });
-                    }
-                    
-                    
-                }
-                })
-            }
-
         </script>
         </div>
         """
@@ -468,7 +183,33 @@ def Inicio():
     except:
         Cur += str(sys.exc_info())
     return Cur
+def Salida(Datos):
+    DB = LibDM_2023.DataBase()
+    Compartido_2023 = LibDM_2023.Compartido()
+    Cur = ""
+    Resultado = {"Contenido":"","Estado":0}
+    Error = ""
+    try:
+        Error += DB.Instruccion("UPDATE "+str(BD_Nombre)+".ccajas SET cc_activo = 0,cc_fecha_hora_salida = NOW(), cc_ultimo_mov = NOW() WHERE cc_id = '"+str(Datos["ID"])+"' ")
+        if Error == "":
+            Info_Ahora = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas WHERE cc_id = '"+str(Datos["ID"])+"'")[0]
+            Info_Ahora["cc_dock"] = 'null' if Info_Ahora["cc_dock"] is None else "'"+str(Info_Ahora["cc_dock"])+"'"
+            Info_Ahora["cc_tipo_actual"] = 'null' if Info_Ahora["cc_tipo_actual"] is None else "'"+str(Info_Ahora["cc_tipo_actual"])+"'"
+            Info_Ahora["cc_zona"] = 'null' if Info_Ahora["cc_zona"] is None else "'"+str(Info_Ahora["cc_zona"])+"'"
+            Info_Ahora["cc_negocio"] = 'null' if Info_Ahora["cc_negocio"] is None else "'"+str(Info_Ahora["cc_negocio"])+"'"
+            Error += DB.Instruccion(""" 
+            INSERT INTO """+str(BD_Nombre)+""".ccajas_moviemiento
+            (cch_master,cch_fecha_hora,cch_contenedor,cch_ubicacion,cch_informacion_actual,cch_dock,cch_tipo_actual,cch_zona,cch_negocio,cch_usuario,cch_movimiento)
+            VALUES
+            ('"""+str(Info_Ahora["cc_id"])+"""',NOW(),'"""+str(Info_Ahora["cc_contenedor"])+"""','"""+str(Info_Ahora["cc_ubicacion"])+"""','"""+str(Info_Ahora["cc_informacion_actual"])+"""',"""+str(Info_Ahora["cc_dock"])+""","""+str(Info_Ahora["cc_tipo_actual"])+""","""+str(Info_Ahora["cc_zona"])+""","""+str(Info_Ahora["cc_negocio"])+""",'"""+str(Datos["ID_User"])+"""','SALIDA')
+            """)
+        if Error == "":
+            Resultado["Estado"] = 1
 
+    except:
+        Resultado["Contenido"] = str(sys.exc_info())
+    Cur += json.dumps(Resultado)
+    return Cur
 
 def Direccionar(Datos):
     try:
