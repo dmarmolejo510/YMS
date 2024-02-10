@@ -1946,7 +1946,7 @@ def Cargar_Reporte(Datos):
             Aux_Datos["Cantidad ASN"] = str(PakingSplip["cosyd_cantidad_asn"])
             Aux_Datos["Cantidad Real"] = str(PakingSplip["cosyd_cantidad_real"])
             Aux_Datos["OS&D"] = str(PakingSplip["cosyd"])
-            Aux_Datos["Comentario Parte"] = str(PakingSplip["Comm_Parte"])
+            Aux_Datos["Comentario Parte"] = str(PakingSplip["comm_Parte"])
 
             if PakingSplip["cosyd"] != "":
                 PakingSplip["cosyd_p_1_Damage"] = 'X' if str(PakingSplip["cosyd"]) == "1.- Damage" else ""
