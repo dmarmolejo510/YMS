@@ -474,7 +474,10 @@ def Tipo_Nuevo(Datos):
                     Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Photos","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
                 if De_Donde == "Dock" and str(Datos["Donde"]) == "Dock":
                     Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Photos","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
-            
+                if "Fecha_Salida" in Info_Actual.keys():
+                    Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Fecha de Salida","Requerido":1,"valor":str(Info_Actual["Fecha_Salida"]),"editable":False})
+                else:
+                    Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Fecha de Salida","Requerido":1,"valor":""})
             Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
             
             
@@ -524,11 +527,6 @@ def Tipo_Nuevo_1(Datos):
                 <hr>
                 <div class='w-100 text-center'><button class='btn btn-success w-75' onclick='Modificar_Guardar("""+str(Datos["ID"])+""")'><i class='mdi mdi-floppy'></i> Save</button></div>
                 """
-            if Datos["Tipo"] == "Outbound":
-                if "Fecha_Salida" in Info_Actual.keys():
-                    Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Fecha de Salida","Requerido":1,"valor":str(Info_Actual["Fecha_Salida"]),"editable":False})
-                else:
-                    Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Fecha de Salida","Requerido":1,"valor":""})
         else:
             for K in Info[Datos["Tipo"]].keys():
                 Opciones.append(K)
@@ -583,10 +581,10 @@ def Tipo_Nuevo_2(Datos):
         De_Donde = str(Datos["De_Donde"])
         if Datos["Nivel_1"] == "Outbound":
             Formulario = {"Col":"12", "Campos": [],"Clase": "Asignar" }
-            if "Fecha_Salida" in Info_Actual.keys():
-                Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Fecha de Salida","Requerido":1,"valor":str(Info_Actual["Fecha_Salida"]),"editable":False})
-            else:
-                Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Fecha de Salida","Requerido":1,"valor":""})
+            # if "Fecha_Salida" in Info_Actual.keys():
+            #     Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Fecha de Salida","Requerido":1,"valor":str(Info_Actual["Fecha_Salida"]),"editable":False})
+            # else:
+            #     Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Fecha de Salida","Requerido":1,"valor":""})
             if De_Donde == "Patio" and str(Datos["Donde"]) == "Patio":
                 Formulario["Campos"].append({"tipo":"checkbox","campo":"Salida","titulo":"¿Lista para salir? (GENERA PASA DE SALIDA)","Requerido":1,"valor":False})
             Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
@@ -1140,8 +1138,8 @@ def Modificar_A(Datos):
         if Datos["Poner_En"] == "Outbound" and Datos["A_Donde"] == "Patio":
             Formulario["Campos"].append({"tipo":"texto","campo":"Sello Temporal","titulo":"Sello Termporal","Requerido":1,"min":1,"max":150,"valor":""})
             Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Fotos","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
-            if "Fecha_Salida" in Info_Actual.keys():
-                Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Fecha de Salida","Requerido":1,"min":1,"max":30,"valor":Info_Actual["Fecha_Salida"],"editable":False})
+            # if "Fecha_Salida" in Info_Actual.keys():
+            #     Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Fecha de Salida","Requerido":1,"min":1,"max":30,"valor":Info_Actual["Fecha_Salida"],"editable":False})
             Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
             Resultado["Contenido"] += """
             <hr>
@@ -1193,8 +1191,8 @@ def Modificar_A(Datos):
                 </script>
                 """
             Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Fotos","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
-            if "Fecha_Salida" in Info_Actual.keys():
-                Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Fecha de Salida","Requerido":1,"min":1,"max":30,"valor":Info_Actual["Fecha_Salida"],"editable":False})
+            # if "Fecha_Salida" in Info_Actual.keys():
+            #     Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Fecha de Salida","Requerido":1,"min":1,"max":30,"valor":Info_Actual["Fecha_Salida"],"editable":False})
             Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
             Resultado["Contenido"] += "<div id='Opciones_1'></div>"
             Resultado["Contenido"] += """
