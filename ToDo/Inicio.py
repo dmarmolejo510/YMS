@@ -5,7 +5,7 @@ import json
 import os
 from Componentes import LibDM_2023
 Url = ""
-PATH_DIR = str(current_app.root_path).replace("\\","/")
+#PATH_DIR = str(current_app.root_path).replace("\\","/")
 def Inicio():
     # fernet = Fernet(LibDM_2023.Compartido().Dame_K2())
     # if "K" in session.keys():
