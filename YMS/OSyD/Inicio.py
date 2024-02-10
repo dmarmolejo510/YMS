@@ -201,7 +201,7 @@ def Cargar_Abiertos(Datos):
                     Problemas.append("1. Damage")
                 if int(Partes["cosyd_p_2_shortage"]) == 1 and "2. Shortage" not in Problemas:
                     Problemas.append("2. Shortage")
-                if int(Partes["cosyd_p_3_surplus"]) == 1 and "3. Surplus" not in Problemas:
+                if int(Partes["cosyd_p_3_surpluse"]) == 1 and "3. Surplus" not in Problemas:
                     Problemas.append("3. Surplus")
                 if int(Partes["cosyd_p_4_asn_Issue"]) == 1 and "4. ASN Issue" not in Problemas:
                     Problemas.append("4. ASN Issue")
