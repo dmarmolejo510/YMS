@@ -43,7 +43,7 @@ def Inicio():
             <tbody>
         """
         Cajas_Aqui = []
-        Programacion_Abiertos = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas WHERE (cc_activo = 1 or cc_informacion_actual LIKE concat('%',DATE(NOW()),'%') ) AND cc_tipo_actual = 'Outbound' AND cc_informacion_actual LIKE '%Fecha_Salida%'")
+        Programacion_Abiertos = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas WHERE (cc_activo = 1 or cc_informacion_actual LIKE concat('%',DATE(NOW()),'%') or to_char(cch_fecha_hora, 'YYYY-MM-DD') = to_char(now(), 'YYYY-MM-DD') ) AND cc_tipo_actual = 'Outbound' AND cc_informacion_actual LIKE '%Fecha_Salida%'")
         for Programacion in Programacion_Abiertos:
             Cajas_Aqui.append(str(Programacion["cc_id"]))
         Movimientos = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas_moviemiento WHERE cch_master IN ("+str(",".join(Cajas_Aqui))+") ORDER BY cch_fecha_hora")
