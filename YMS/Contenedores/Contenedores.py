@@ -124,7 +124,7 @@ def Inicio():
                     Contenedor[K] = ""
 
             Dock.append({"Dock":str(Contenedor["cc_dock"]),"Tiempo":"<span class='tiempo' tiempo='"+str(Contenedor["cc_ultimo_mov"])+"'></span>","Caja":str(Contenedor["cc_contenedor"]),"Carrier":Info_Actual["Carrier"],"Tipo":Contenedor["cc_tipo_actual"],"Estado":Estado,"Ruta":Ruta,"Opciones":"<div class='text-center'>"+str(Opciones)+"</div>"})
-        Contenido += """<div class='text-end pe-1 pt-1'><small class='link-primary' style='cursor:pointer' onclick='Llamar_Funcion(\""""+str(Dir_Raiz)+"""\");'>Actualizar <i class='mdi mdi-refresh'></i></small></div>"""
+        Contenido += """<div class='text-end pe-1 pt-1'><small class='link-primary' style='cursor:pointer' onclick='Llamar_Funcion(\""""+str(request.url)+"""\");'>Actualizar <i class='mdi mdi-refresh'></i></small></div>"""
         Contenido += "<div class='h2 fw-lighter mt-1 mb-1 text-center border-bottom'><i class='mdi mdi-truck-trailer'></i> Contenedores</div>"
         Contenido += """
         <div class='text-end mb-1'> <button class='btn btn-success' onclick='Nueva_Caja()'><i class='mdi mdi-plus'></i> Nuevo Contenedor</button> </div>
