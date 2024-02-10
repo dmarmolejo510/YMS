@@ -1138,8 +1138,8 @@ def Modificar_A(Datos):
         if Datos["Poner_En"] == "Outbound" and Datos["A_Donde"] == "Patio":
             Formulario["Campos"].append({"tipo":"texto","campo":"Sello Temporal","titulo":"Sello Termporal","Requerido":1,"min":1,"max":150,"valor":""})
             Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Fotos","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
-            # if "Fecha_Salida" in Info_Actual.keys():
-            #     Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Fecha de Salida","Requerido":1,"min":1,"max":30,"valor":Info_Actual["Fecha_Salida"],"editable":False})
+            if "Fecha_Salida" in Info_Actual.keys():
+                Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Fecha de Salida","Requerido":1,"min":1,"max":30,"valor":Info_Actual["Fecha_Salida"],"editable":False})
             Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
             Resultado["Contenido"] += """
             <hr>

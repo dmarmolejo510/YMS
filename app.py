@@ -13,6 +13,7 @@ import Inicio
 from ToDo import Inicio as TODO
 from YMS import Inicio as YMS
 from YMS.Contenedores import Contenedores as YMS_Contenedor, Contenedores_M as YMS_Contenedor_M
+from YMS.Salidas import Estado as YMS_Salida_Estado, Reporte as YMS_Salida_Reporte
 
 app.secret_key = LibDM_2023.Compartido().Dame_K()
 fernet = Fernet(LibDM_2023.Compartido().Dame_K2())
@@ -175,3 +176,29 @@ def YMS_Contenedores_M():
             for K in request.form.keys():
                 Datos[K] = escape(request.form[K]).striptags()
             return render_template_string(YMS_Contenedor_M.Direccionar(Datos))
+
+
+@app.route("/YMS/OutBound/Status",methods=['GET','POST'])
+def YMS_Outbound_Estado():
+    if "IDu" not in session:
+        return render_template_string("<script>window.location= '"+str(request.url_root)+"';</script>")
+    else:
+        if request.method == "GET":
+            return render_template_string(YMS_Salida_Estado.Inicio())
+        else:
+            Datos = {}
+            for K in request.form.keys():
+                Datos[K] = escape(request.form[K]).striptags()
+            return render_template_string(YMS_Salida_Estado.Direccionar(Datos))
+@app.route("/YMS/OutBound/Report",methods=['GET','POST'])
+def YMS_Outbound_Reporte():
+    if "IDu" not in session:
+        return render_template_string("<script>window.location= '"+str(request.url_root)+"';</script>")
+    else:
+        if request.method == "GET":
+            return render_template_string(YMS_Salida_Reporte.Inicio())
+        else:
+            Datos = {}
+            for K in request.form.keys():
+                Datos[K] = escape(request.form[K]).striptags()
+            return render_template_string(YMS_Salida_Reporte.Direccionar(Datos))
