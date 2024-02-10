@@ -272,7 +272,7 @@ def Cargar_Abiertos(Datos):
                 PakingSplip["Fecha_Ultimo"] = datetime.now()
             
 
-            Aux_Datos["Destino"] = PakingSplip["cosyd_p_destino"]
+            Aux_Datos["Destino"] = PakingSplip["cosyd_destino"]
             Aux_Datos["Contenedor"] = PakingSplip["cosyd_caja"]
             Aux_Datos["SCAC"] = PakingSplip["cosyd_scac"]
             Clase_Hora = ""
