@@ -1945,7 +1945,7 @@ def Guardar_Caja(Datos):
                 ('"""+str(Datos_Info["Container"])+"""','Patio',NOW(),'"""+str(Codigo)+"""','"""+str(json.dumps(Info))+"""',NOW(),'Empty')
                 """)
             if Error == "":
-                IDMaster = DB.Get_Dato("SELECT MAX(cc_id) AS ID FROM "+str(BD_Nombre)+".ccajas WHERE cc_contenedor = '"+str(Datos_Info["Container"])+"' AND cc_activo = 1 AND cc_ubicacion = 'Patio'")[0]["ID"]
+                IDMaster = DB.Get_Dato("SELECT MAX(cc_id) AS id FROM "+str(BD_Nombre)+".ccajas WHERE cc_contenedor = '"+str(Datos_Info["Container"])+"' AND cc_activo = 1 AND cc_ubicacion = 'Patio'")[0]["id"]
                 Error = DB.Instruccion(""" 
                 INSERT INTO """+str(BD_Nombre)+""".ccajas_moviemiento
                 (cch_master,cch_fecha_hora,cch_contenedor,cch_ubicacion,cch_informacion_actual,cch_usuario,cch_movimiento)
