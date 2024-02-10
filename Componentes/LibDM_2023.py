@@ -1,6 +1,7 @@
 from flask import request,current_app
 #import MySQLdb
 import psycopg2
+import psycopg2.extras
 import sys
 from datetime import datetime
 from datetime import date
@@ -26,7 +27,7 @@ class DataBase:
     def Instruccion(self,Query):
         try:
             conn = psycopg2.connect("postgres://portal_grdv_user:BaIupfqBcJ7MgbQbjMoKGBKTNM6lUmQN@dpg-cn3ehsf109ks73epklng-a/portal_grdv",database="portal_grdv", user="portal_grdv_user", password="BaIupfqBcJ7MgbQbjMoKGBKTNM6lUmQN")
-            cursor1=conn.cursor()
+            cursor1=conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
             cursor1.execute(Query)
             conn.commit()
             conn.close()
@@ -81,7 +82,7 @@ class DataBase:
             global ID_User
             ArrRes = []
             conn = psycopg2.connect("postgres://portal_grdv_user:BaIupfqBcJ7MgbQbjMoKGBKTNM6lUmQN@dpg-cn3ehsf109ks73epklng-a/portal_grdv",database="portal_grdv", user="portal_grdv_user", password="BaIupfqBcJ7MgbQbjMoKGBKTNM6lUmQN")
-            cursor1=conn.cursor()
+            cursor1=conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
             cursor1.execute(Query)
             ArrRes = cursor1.fetchall()
             for A in ArrRes:
