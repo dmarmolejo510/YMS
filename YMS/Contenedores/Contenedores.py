@@ -1875,7 +1875,7 @@ def Nueva_Caja(Datos):
     try:
         Formulario = {"Col":"12", "Campos": [],"Clase": "Alta_Caja" }
         Formulario["Campos"].append({"tipo":"texto","campo":"Container","titulo":"Contenedor","Requerido":1,"min":1,"max":150,"valor":""})
-        Formulario["Campos"].append({"tipo":"seleccion","campo":"Carrier","titulo":"Carrier","Requerido":1,"Tipo_Opciones":"Query","Opciones":"SELECT cca_nombre as Valor, cca_nombre as Texto FROM "+str(BD_Nombre)+".ccarrier WHERE cca_activo = '1'","valor":"","Col":12})
+        Formulario["Campos"].append({"tipo":"seleccion","campo":"Carrier","titulo":"Carrier","Requerido":1,"Tipo_Opciones":"Query","Opciones":"SELECT cca_nombre as valor, cca_nombre as texto FROM "+str(BD_Nombre)+".ccarrier WHERE cca_activo = '1'","valor":"","Col":12})
         Formulario["Campos"].append({"tipo":"texto","campo":"Sello Proveedor","titulo":"Sello Proveedor","Requerido":1,"min":0,"max":20,"valor":""})
         Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
         Resultado["Contenido"] += "<div class='w-100 text-center'><button class='btn btn-success w-75' onclick='Guardar_Caja()'><i class='mdi mdi-floppy'></i> Guardar</button></div>"

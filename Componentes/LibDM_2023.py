@@ -893,16 +893,16 @@ class Compartido:
                         Cur += """<option class='' value='-1'></option>"""
                     if Campo["Tipo_Opciones"] == "Query":
                         for Opciones in DB.Get_Dato(Campo["Opciones"]):
-                            if str(Valor_Actual) == str(Opciones["Valor"]):
-                                Cur += " <option class='valio' value='"+str(Opciones["Valor"])+"' selected>"+str(Opciones["Texto"])+"</option>"
+                            if str(Valor_Actual) == str(Opciones["valor"]):
+                                Cur += " <option class='valio' value='"+str(Opciones["valor"])+"' selected>"+str(Opciones["texto"])+"</option>"
                             else:
-                                Cur += " <option class='valio' value='"+str(Opciones["Valor"])+"'>"+str(Opciones["Texto"])+"</option>"
+                                Cur += " <option class='valio' value='"+str(Opciones["valor"])+"'>"+str(Opciones["texto"])+"</option>"
                     if Campo["Tipo_Opciones"] == "Query_70":
                         for Opciones in DB.Get_Dato_70(Campo["Opciones"]):
-                            if str(Valor_Actual) == str(Opciones["Valor"]):
-                                Cur += " <option class='valio' value='"+str(Opciones["Valor"])+"' selected>"+str(Opciones["Texto"])+"</option>"
+                            if str(Valor_Actual) == str(Opciones["valor"]):
+                                Cur += " <option class='valio' value='"+str(Opciones["valor"])+"' selected>"+str(Opciones["texto"])+"</option>"
                             else:
-                                Cur += " <option class='valio' value='"+str(Opciones["Valor"])+"'>"+str(Opciones["Texto"])+"</option>"
+                                Cur += " <option class='valio' value='"+str(Opciones["valor"])+"'>"+str(Opciones["texto"])+"</option>"
                     if Campo["Tipo_Opciones"] == "Opciones":
                         for Opciones in Campo["Opciones"]:
                             if str(Valor_Actual) == str(Opciones):
@@ -928,17 +928,17 @@ class Compartido:
                     if Campo["Tipo_Opciones"] == "Query":
                         if Campo["Opciones"] != "":
                             for Opciones in DB.Get_Dato(Campo["Opciones"]):
-                                if str(Valor_Actual) == str(Opciones["Valor"]):
-                                    Cur += " <option class='valio' value='"+str(Opciones["Valor"])+"' selected>"+str(Opciones["Texto"])+"</option>"
+                                if str(Valor_Actual) == str(Opciones["valor"]):
+                                    Cur += " <option class='valio' value='"+str(Opciones["valor"])+"' selected>"+str(Opciones["texto"])+"</option>"
                                 else:
-                                    Cur += " <option class='valio' value='"+str(Opciones["Valor"])+"'>"+str(Opciones["Texto"])+"</option>"
+                                    Cur += " <option class='valio' value='"+str(Opciones["valor"])+"'>"+str(Opciones["texto"])+"</option>"
                     if Campo["Tipo_Opciones"] == "Query_70":
                         if Campo["Opciones"] != "":
                             for Opciones in DB.Get_Dato_70(Campo["Opciones"]):
-                                if str(Valor_Actual) == str(Opciones["Valor"]):
-                                    Cur += " <option class='valio' value='"+str(Opciones["Valor"])+"' selected>"+str(Opciones["Texto"])+"</option>"
+                                if str(Valor_Actual) == str(Opciones["valor"]):
+                                    Cur += " <option class='valio' value='"+str(Opciones["valor"])+"' selected>"+str(Opciones["texto"])+"</option>"
                                 else:
-                                    Cur += " <option class='valio' value='"+str(Opciones["Valor"])+"'>"+str(Opciones["Texto"])+"</option>"
+                                    Cur += " <option class='valio' value='"+str(Opciones["valor"])+"'>"+str(Opciones["texto"])+"</option>"
                     if Campo["Tipo_Opciones"] == "Opciones":
                         if Campo["Opciones"] != "":
                             for Opciones in Campo["Opciones"]:
@@ -962,17 +962,17 @@ class Compartido:
                     if Campo["Tipo_Opciones"] == "Query":
                         if Campo["Opciones"] != "":
                             for Opciones in DB.Get_Dato(Campo["Opciones"]):
-                                if str(Valor_Actual) == str(Opciones["Valor"]):
-                                    Cur += " <option class='valio' value='"+str(Opciones["Valor"])+"' selected>"+str(Opciones["Texto"])+"</option>"
+                                if str(Valor_Actual) == str(Opciones["valor"]):
+                                    Cur += " <option class='valio' value='"+str(Opciones["valor"])+"' selected>"+str(Opciones["texto"])+"</option>"
                                 else:
-                                    Cur += " <option class='valio' value='"+str(Opciones["Valor"])+"'>"+str(Opciones["Texto"])+"</option>"
+                                    Cur += " <option class='valio' value='"+str(Opciones["valor"])+"'>"+str(Opciones["texto"])+"</option>"
                     if Campo["Tipo_Opciones"] == "Query_70":
                         if Campo["Opciones"] != "":
                             for Opciones in DB.Get_Dato_70(Campo["Opciones"]):
-                                if str(Valor_Actual) == str(Opciones["Valor"]):
-                                    Cur += " <option class='valio' value='"+str(Opciones["Valor"])+"' selected>"+str(Opciones["Texto"])+"</option>"
+                                if str(Valor_Actual) == str(Opciones["valor"]):
+                                    Cur += " <option class='valio' value='"+str(Opciones["valor"])+"' selected>"+str(Opciones["texto"])+"</option>"
                                 else:
-                                    Cur += " <option class='valio' value='"+str(Opciones["Valor"])+"'>"+str(Opciones["Texto"])+"</option>"
+                                    Cur += " <option class='valio' value='"+str(Opciones["valor"])+"'>"+str(Opciones["texto"])+"</option>"
                     if Campo["Tipo_Opciones"] == "Opciones":
                         if Campo["Opciones"] != "":
                             for Opciones in Campo["Opciones"]:
