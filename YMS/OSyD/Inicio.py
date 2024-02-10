@@ -23,9 +23,9 @@ def Inicio():
         Titulo = LibDM_2023.Menu().Get_Titulo(Activo)
         Contenido = ""
 
-        Compartido += """<div class='text-end pe-1 pt-1'><small class='link-primary' style='cursor:pointer' onclick='Llamar_Funcion(\""""+str(request.url)+"""\");'>Actualizar <i class='mdi mdi-refresh'></i></small></div>"""
-        Compartido += "<div class='h2 fw-lighter mt-1 mb-1 text-center border-bottom'><i class='mdi mdi-alert'></i> OS&D</div>"
-        Compartido += """
+        Contenido += """<div class='text-end pe-1 pt-1'><small class='link-primary' style='cursor:pointer' onclick='Llamar_Funcion(\""""+str(request.url)+"""\");'>Actualizar <i class='mdi mdi-refresh'></i></small></div>"""
+        Contenido += "<div class='h2 fw-lighter mt-1 mb-1 text-center border-bottom'><i class='mdi mdi-alert'></i> OS&D</div>"
+        Contenido += """
         <div class='container-fluid'>
              <ul class="nav nav-tabs nav-fill">
                 <li class="nav-item">
