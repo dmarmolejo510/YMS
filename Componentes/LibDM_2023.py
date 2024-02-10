@@ -214,7 +214,7 @@ class Compartido:
                 Compl += """<link rel="stylesheet" type="text/css" href=\""""+str(Url)+"""/Default/"""+str(Arch)+"""">"""
         Compl += """<link rel="stylesheet" type="text/css" href=\""""+str(Url)+"""/Default/MaterialDesign/css/materialdesignicons.min.css">"""
         if Adicinal is not None:
-            Adicional_Dir = sorted(os.listdir(str(Path_Componentes)+'/static/Adicional'))
+            Adicional_Dir = os.listdir(str(Path_Componentes)+'/static/Adicional')
             for Arch in Adicional_Dir:
                 for Add in Adicinal:
                     if Arch[0:2] == Add:
