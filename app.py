@@ -73,15 +73,4 @@ def YMS_root():
             for K in request.form.keys():
                 Datos[K] = escape(request.form[K]).striptags()
             return render_template_string(YMS.Direccionar(Datos))
-@app.route("/YMS/Container_Control",methods=['GET','POST'])
-def YMS_root():
-    if "IDu" not in session:
-        return render_template_string("<script>window.location= '"+str(request.url_root)+"';</script>")
-    else:
-        if request.method == "GET":
-            return render_template_string(YMS_Contenedores.Inicio())
-        else:
-            Datos = {}
-            for K in request.form.keys():
-                Datos[K] = escape(request.form[K]).striptags()
-            return render_template_string(YMS_Contenedores.Direccionar(Datos))
+        
