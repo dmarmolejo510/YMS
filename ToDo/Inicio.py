@@ -7,113 +7,73 @@ from Componentes import LibDM_2023
 Url = ""
 PATH_DIR = str(current_app.root_path).replace("\\","/")
 def Inicio():
-    fernet = Fernet(LibDM_2023.Compartido().Dame_K2())
-    if "K" in session.keys():
-        fernet = Fernet(session["K"])
+    # fernet = Fernet(LibDM_2023.Compartido().Dame_K2())
+    # if "K" in session.keys():
+    #     fernet = Fernet(session["K"])
     Cur = ""
     try:
         Activo = "To Do"
-        Compartido = LibDM_2023.Compartido()
-        Menu = LibDM_2023.Menu().Menu(Activo,request.url_root,session["IDu"])
-        Titulo = LibDM_2023.Menu().Get_Titulo(Activo)
-        Contenido = """
-        <div class='row h-100 me-1'>
-            <div class='col border Completar p-0' id='ToDo' completo=0></div>
-            <div class='col-2 border Completar p-0' id='News' style='box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;' completo=1></div>
-        </div>
-        <script>
-            Mostrar_Ventana_Cargando(true);
-            function ToDo(){
-                var parametros = {"Fun":'"""+str(fernet.encrypt("ToDo".encode()).decode("utf-8"))+"""',"Activo":"To Do"};
-                $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
-                    success:  function (response)
-                    {
-                        var Resultado = JSON.parse(response);
-                        $("#ToDo").html(Resultado["Contenido"]).attr('completo',1);
-                    },
-                    error: function (jqXHR, textStatus, errorThrown )
-                    {
-                        $("#ToDo").html(textStatus).attr('completo',1);
-                    }
-                });
-            }
-            function News(){
-                var parametros = {"Fun":'"""+str(fernet.encrypt("News".encode()).decode("utf-8"))+"""'};
-                $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
-                    success:  function (response)
-                    {
-                        var Resultado = JSON.parse(response);
-                        $("#News").html(Resultado["Contenido"]).attr('completo',1);
-                    },
-                    error: function (jqXHR, textStatus, errorThrown )
-                    {
-                        $("#News").html(textStatus).attr('completo',1);
-                    }
-                });
-            }
+        # Compartido = LibDM_2023.Compartido()
+        # Menu = LibDM_2023.Menu().Menu(Activo,request.url_root,session["IDu"])
+        # Titulo = LibDM_2023.Menu().Get_Titulo(Activo)
+        # Contenido = """
+        # <div class='row h-100 me-1'>
+        #     <div class='col border Completar p-0' id='ToDo' completo=0></div>
+        #     <div class='col-2 border Completar p-0' id='News' style='box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;' completo=1></div>
+        # </div>
+        # <script>
+        #     Mostrar_Ventana_Cargando(true);
+        #     function ToDo(){
+        #         var parametros = {"Fun":'"""+str(fernet.encrypt("ToDo".encode()).decode("utf-8"))+"""',"Activo":"To Do"};
+        #         $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
+        #             success:  function (response)
+        #             {
+        #                 var Resultado = JSON.parse(response);
+        #                 $("#ToDo").html(Resultado["Contenido"]).attr('completo',1);
+        #             },
+        #             error: function (jqXHR, textStatus, errorThrown )
+        #             {
+        #                 $("#ToDo").html(textStatus).attr('completo',1);
+        #             }
+        #         });
+        #     }
+        #     function News(){
+        #         var parametros = {"Fun":'"""+str(fernet.encrypt("News".encode()).decode("utf-8"))+"""'};
+        #         $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
+        #             success:  function (response)
+        #             {
+        #                 var Resultado = JSON.parse(response);
+        #                 $("#News").html(Resultado["Contenido"]).attr('completo',1);
+        #             },
+        #             error: function (jqXHR, textStatus, errorThrown )
+        #             {
+        #                 $("#News").html(textStatus).attr('completo',1);
+        #             }
+        #         });
+        #     }
 
-            function ToDo_Actualizar(){
-                Mostrar_Ventana_Cargando(false);
-                var parametros = {"Fun":'"""+str(fernet.encrypt("ToDo".encode()).decode("utf-8"))+"""',"Activo":"To Do"};
-                $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
-                    success:  function (response)
-                    {
-                        var Resultado = JSON.parse(response);
-                        $("#ToDo").html(Resultado["Contenido"]).attr('completo',1);
-                        swal.close();
-                    },
-                    error: function (jqXHR, textStatus, errorThrown )
-                    {
-                        $("#ToDo").html(textStatus).attr('completo',1);
-                        swal.close();
-                    }
-                });
-            }
-        </script>
-        """
-        Cur += render_template("general.html",Contenido=Contenido,Componentes=Compartido.Complementos(None),Menu=Menu,Titulo=Titulo)
+        #     function ToDo_Actualizar(){
+        #         Mostrar_Ventana_Cargando(false);
+        #         var parametros = {"Fun":'"""+str(fernet.encrypt("ToDo".encode()).decode("utf-8"))+"""',"Activo":"To Do"};
+        #         $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
+        #             success:  function (response)
+        #             {
+        #                 var Resultado = JSON.parse(response);
+        #                 $("#ToDo").html(Resultado["Contenido"]).attr('completo',1);
+        #                 swal.close();
+        #             },
+        #             error: function (jqXHR, textStatus, errorThrown )
+        #             {
+        #                 $("#ToDo").html(textStatus).attr('completo',1);
+        #                 swal.close();
+        #             }
+        #         });
+        #     }
+        # </script>
+        # """
+        # Cur += render_template("general.html",Contenido=Contenido,Componentes=Compartido.Complementos(None),Menu=Menu,Titulo=Titulo)
     except:
         Cur += str(sys.exc_info())
-    return Cur
-def ToDo(Datos):
-    DB = LibDM_2023.DataBase()
-    Resultado = {"Contenido":"","Estado":0}
-    Cur = ""
-    try:
-        Resultado["Contenido"] += """
-        <div class='w-100 h-100 position-relative'>
-            <div class='row p-5'>
-        """
-        Resultado["Contenido"] += """
-            </div>
-        </div>
-        <script>
-            function Ver_Detalle(Icono,Nombre,Codigo,Aplicar){
-                Mostrar_Ventana_Cargando(false);
-                $("#Vent_1").find(".modal-title").html("<i class='mdi "+Icono+"'></i> " + Nombre);
-                $("#Vent_1").removeClass('modal-xl modal-lg modal-sm').addClass('modal-xl');
-                var parametros = {"Fun":"Ver_Detalle","Codigo":Codigo,"Aplicar":Aplicar };
-                $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
-                    success:  function (response)
-                    {
-                        var Resultado = JSON.parse(response);
-                        $("#Vent_1").modal("show").find(".modal-body").html(Resultado["Contenido"]);
-                        $("#Vent_1").find(".modal-footer").find("button").attr('onclick',"$('#Vent_1').modal('hide'); delete table; ")
-                        swal.close();
-                    },
-                    error: function (jqXHR, textStatus, errorThrown )
-                    {
-                        $("#Vent_1").modal("show").find(".modal-body").html("<i class='mdi mdi-alert'></i> "+ textStatus);
-                        swal.close();
-                    }
-                });
-            }
-        </script>
-        """
-        
-    except:
-        Resultado["Contenido"] += str(sys.exc_info())
-    Cur += json.dumps(Resultado)
     return Cur
 
 def Direccionar(Datos):
