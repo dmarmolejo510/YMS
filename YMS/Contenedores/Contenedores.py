@@ -1582,10 +1582,10 @@ def Ver_Historico(Datos):
 
             if "Fotos" in Info_Actual.keys():
                 for F in Info_Actual["Fotos"]:
-                    Archivos += "<a href='http://10.4.7.219:8080/Portal_File/"+str(F)+"' target='_blank'><i class='mdi mdi-file-image'></i></a>"
+                    Archivos += "<a href='"+str(request.url_root)+"/Portal_File/"+str(F)+"' target='_blank'><i class='mdi mdi-file-image'></i></a>"
             if "Archivos" in Info_Actual.keys():
                 for F in Info_Actual["Archivos"]:
-                    Archivos += "<a href='http://10.4.7.219:8080/Portal_File/"+str(F)+"' target='_blank'><i class='mdi mdi-file'></i></a>"
+                    Archivos += "<a href='"+str(request.url_root)+"/Portal_File/"+str(F)+"' target='_blank'><i class='mdi mdi-file'></i></a>"
             
             Sello = ""
             if "Sello Proveedor" in Info_Actual.keys():

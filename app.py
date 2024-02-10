@@ -102,7 +102,11 @@ def ProFiles():
                     return json.dumps(response),400
         except:
             return str(sys.exc_info())
-
+@app.route('/Portal_File/<path:file>',methods=['GET','POST'])
+def downloadFile (file):
+    #For windows you need to use drive name [ex: F:/Example.pdf]
+    path = str(UPLOAD_FOLDER)+str(file)
+    return send_file(path, as_attachment=True)
 
 
 @app.route("/",methods=['GET','POST'])
