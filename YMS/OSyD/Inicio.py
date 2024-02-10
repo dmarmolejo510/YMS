@@ -195,7 +195,7 @@ def Cargar_Abiertos(Datos):
             OK = 0
             Numeros = 0
             Problemas = []
-            Historico = int(DB.Get_Dato("SELECT COUNT(*) AS Numero FROM "+str(BD_Nombre)+".cosyd_historico WHERE cosyd_master = '"+str(PakingSplip["cosyd_id"])+"'")[0]["Numero"])
+            Historico = int(DB.Get_Dato("SELECT COUNT(*) AS \"Numero\" FROM "+str(BD_Nombre)+".cosyd_historico WHERE cosyd_master = '"+str(PakingSplip["cosyd_id"])+"'")[0]["Numero"])
             for Partes in DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".cosyd_partes WHERE cosyd_master = '"+str(PakingSplip["cosyd_id"])+"'"):
                 if int(Partes["cosyd_p_1_damage"]) == 1 and "1. Damage" not in Problemas:
                     Problemas.append("1. Damage")
