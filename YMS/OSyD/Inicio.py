@@ -1135,7 +1135,7 @@ def Modificar_Ruteo(Datos):
     try:
         Formulario = {"Col":"", "Campos": [],"Clase": "Formato" }
 
-        Info_Gen = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".cosyd inner join "+str(BD_Nombre)+".cosyd_historico  WHERE  cosyd_id = '"+str(Datos["ID"])+"' ")[0]
+        Info_Gen = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".cosyd inner join "+str(BD_Nombre)+".cosyd_historico on public.cosyd.cosyd_id = public.cosyd_historico.cosyd_master  WHERE  cosyd_id = '"+str(Datos["ID"])+"' ")[0]
 
         Formulario["Campos"].append({"tipo":"texto","campo":"Ruta","titulo":"Ruta","editable":False,"Requerido":1,"min":1,"max":20,"valor":Info_Gen["cosyd_ruta"],"Col":6})
         Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha de Rura","titulo":"Fecha de Ruta","Requerido":1,"Col":6,"valor":Info_Gen["cosyd_ruta_fecha_hora"],"editable":False})
@@ -1162,9 +1162,9 @@ def Modificar_Ruteo(Datos):
             for Archivo in str(H["cosyd_evidencia"]).split(","):
                 if Archivo.strip() != "":
                     if "pdf" in Archivo:
-                        Aux_Datos["Archivos"] += "<a href='http://10.4.7.219:8080/Portal_File/"+str(Archivo)+"' target='_blank' class='mdi mdi-file-pdf-box ms-1'></a>"
+                        Aux_Datos["Archivos"] += "<a href='"+str(request.url_root)+"/Portal_File/"+str(Archivo)+"' target='_blank' class='mdi mdi-file-pdf-box ms-1'></a>"
                     else:
-                        Aux_Datos["Archivos"] += "<a href='http://10.4.7.219:8080/Portal_File/"+str(Archivo)+"' target='_blank' class='mdi mdi-image ms-1'></a>"
+                        Aux_Datos["Archivos"] += "<a href='"+str(request.url_root)+"/Portal_File/"+str(Archivo)+"' target='_blank' class='mdi mdi-image ms-1'></a>"
             Tabla_Datos.append(Aux_Datos)
 
         Resultado["Contenido"] += """
@@ -1385,6 +1385,67 @@ def Eliminar_Ruteo(Datos):
         Resultado["Contenido"] += str(Error)
     except:
         Resultado["Contenido"] = str(sys.exc_info())
+    Cur += json.dumps(Resultado)
+    return Cur
+def Ver_Historico(Datos):
+    Compartido_2023 = LibDM_2023.Compartido()
+    DB = LibDM_2023.DataBase()
+    Cur = ""
+    Resultado = {"Estado":0,"Contenido":""}
+    try:
+        Historico = DB.Get_Dato("select MASTER.cosyd_id,MASTER.cosyd_tipo,MASTER.cosyd_proveedor,MASTER.cosyd_packingslip,MASTER.cosyd_estado,MASTER.cosyd_alta,MASTER.cosyd_baja,MASTER.cosyd_caja,MASTER.cosyd_destino,MASTER.cosyd_scac,MASTER.cosyd_fecha_envio,MASTER.cosyd_correo,MASTER.cosyd_archivos,MASTER.cosyd_ruta,MASTER.cosyd_ruta_fecha_hora,HISTORICO.cosyd_master,HISTORICO.cosyd_usuario,HISTORICO.cosyd_comentario,HISTORICO.cosyd_evidencia,HISTORICO.cosyd_movimiento,HISTORICO.cosyd_fecha from "+str(BD_Nombre)+".cosyd MASTER inner join "+str(BD_Nombre)+".cosyd_historico HISTORICO on MASTER.cosyd_id = HISTORICO.cosyd_master  where MASTER.cosyd_id = '"+str(Datos["ID"])+"'")
+        Tabla_Datos = []
+        Columnas = []
+        Columnas.append({"title":"Fecha y Hora", "field":"Fecha y Hora"})
+        Columnas.append({"title":"Usuario", "field":"Usuario"})
+        Columnas.append({"title":"Tipo", "field":"Tipo"})
+        Columnas.append({"title":"Comentario", "field":"Comentario"})
+        Columnas.append({"title":"Archivo(s)", "field":"Archivos","formatter":"html"})
+        for H in Historico:
+            Aux_Datos ={}
+            Aux_Datos["Fecha y Hora"] = H["cosyd_fecha"].strftime("%Y-%m-%d %H:%M:%S")
+            Aux_Datos["Usuario"] = str(DB.Dame_Nombre_IDUsuario(H["cosyd_usuario"]))
+            Aux_Datos["Tipo"]  = H["cosyd_movimiento"]
+            Aux_Datos["Comentario"]  = H["cosyd_comentario"]
+            Aux_Datos["Archivos"] = ""
+            for Archivo in str(H["cosyd_evidencia"]).split(","):
+                if Archivo.strip() != "":
+                    if "pdf" in Archivo:
+                        Aux_Datos["Archivos"] += "<a href='"+str(request.url_root)+"/Portal_File/"+str(Archivo)+"' target='_blank' class='mdi mdi-file-pdf-box ms-1'></a>"
+                    else:
+                        Aux_Datos["Archivos"] += "<a href='"+str(request.url_root)+"/Portal_File/"+str(Archivo)+"' target='_blank' class='mdi mdi-image ms-1'></a>"
+            Tabla_Datos.append(Aux_Datos)
+
+        Resultado["Contenido"] += """
+        <div id='Tabla-Detalles' class='border border-dark bg-dark-subtle'></div>
+        <script>
+            delete table;
+            var Col = """+str(Columnas)+""";
+            var table = new Tabulator("#Tabla-Detalles", {
+                minHeight:300,
+                data:"""+str(Tabla_Datos)+""",
+                layout:"fitColumns",
+                pagination:"local",
+                rowFormatter:function(row){
+                if(row.getData().Estado == 1){
+                        row.getElement().style.backgroundColor = "#5dff67";
+                    }
+                },
+                paginationSize:50,  
+                paginationCounter:"rows",
+                columns:Col,
+                selectable:false
+            });
+            document.getElementById("download-xlsx-ruteo").addEventListener("click", function(){
+                table.download("xlsx", "Ruteo.xlsx", {sheetName:"My Data"});
+            });
+            $( document ).ready(function() {
+                $('.tabulator-header-contents').addClass('bg-body-secondary').find('.tabulator-col').addClass('bg-body-secondary');
+            })
+        </script>
+        """
+    except:
+        Resultado["Contenido"] += str(sys.exc_info())
     Cur += json.dumps(Resultado)
     return Cur
 
