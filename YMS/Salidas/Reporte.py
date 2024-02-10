@@ -214,7 +214,7 @@ def Cargar_Fecha(Datos):
     except:
         Resultado["Contenido"] = str(sys.exc_info())
     Cur += json.dumps(Resultado)
-    print(Cur)
+    return Cur
 def Descargar_Reporte(Datos):
     DB = LibDM_2023.DataBase()
     Compartido_2023 = LibDM_2023.Compartido()
@@ -320,7 +320,7 @@ def Descargar_Reporte(Datos):
     except:
         Resultado["Contenido"] = str(sys.exc_info())
     Cur += json.dumps(Resultado)
-    print(Cur)
+    return Cur
 
 def Direccionar(Datos):
     try:
