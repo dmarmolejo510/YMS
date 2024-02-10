@@ -501,7 +501,7 @@ def Cargar_Abiertos(Datos):
     except:
         Resultado["Contenido"] = str(sys.exc_info())
     Cur += json.dumps(Resultado)
-    print(Cur)
+    return Cur
 def Nueva_Ruteo(Datos):
     if "K" in session.keys():
         fernet = Fernet(session["K"])
@@ -898,8 +898,495 @@ def Guardar_Nueva_Ruteo(Datos):
     except:
         Resultado["Contenido"] = str(sys.exc_info())
     Cur += json.dumps(Resultado)
-    print(Cur)
+    return Cur
+def Completar_Ruteo(Datos):
+    if "K" in session.keys():
+        fernet = Fernet(session["K"])
+    Compartido_2023 = LibDM_2023.Compartido()
+    Cur = ""
+    Resultado = {"Estado":0,"Contenido":""}
+    DB = LibDM_2023.DataBase()
+    try:
 
+
+        Info_Gen = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".cosyd inner join "+str(BD_Nombre)+".cosyd_historico  WHERE  cosyd_id = '"+str(Datos["ID"])+"' ")[0]
+
+        Formulario_2 = {"Col":"", "Campos": [],"Clase": "Formulario_2" }
+        Formulario_2["Campos"].append({"tipo":"texto","campo":"Usuario","titulo":"Usuario","editable":False,"Requerido":1,"min":1,"max":50,"valor":DB.Dame_Nombre_IDUsuario(Info_Gen["cosyd_usuario"]),"Col":12})
+        Formulario_2["Campos"].append({"tipo":"archivo","campo":"Archivos Producción","titulo":"Archivo(s) Producción","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["application/pdf","image/png","image/jpeg","image/gif"],"valor":Info_Gen["cosyd_archivos"],"editable":False})
+        Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario_2))
+
+        
+        Formulario = {"Col":"", "Campos": [],"Clase": "Formato" }
+        Formulario["Campos"].append({"tipo":"texto","campo":"Ruta","titulo":"Ruta","editable":True,"Requerido":1,"min":1,"max":20,"valor":"","Col":6})
+        Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha de Rura","titulo":"Fecha de Ruta","Requerido":1,"Col":6,"valor":"","editable":True})
+        Formulario["Campos"].append({"tipo":"seleccion","campo":"SCAC","titulo":"SCAC","Tipo_Opciones":"Query","Opciones":"SELECT cca_nombre as Valor, cca_nombre as Texto FROM "+str(BD_Nombre)+".ccarrier WHERE cca_activo = 1","Requerido":1,"Col":6,"valor":"","editable":True})
+        Formulario["Campos"].append({"tipo":"texto","campo":"Contenedor-Caja","titulo":"Contenedor-Caja","editable":True,"Requerido":1,"min":1,"max":100,"valor":str(Info_Gen["cosyd_caja"]),"Col":6})
+        Formulario["Campos"].append({"tipo":"texto","campo":"Destino","titulo":"Destino","editable":True,"Requerido":1,"min":1,"max":50,"valor":"","Col":6})
+        Formulario["Campos"].append({"tipo":"seleccion","campo":"Proveedor","id":"Proveedor_Nuevo","titulo":"Proveedor","Tipo_Opciones":"Query","Opciones":"SELECT crilcpr_codigo as Valor, CONCAT(crilcpr_codigo,' - ',crilcpr_nombre) AS Texto FROM "+str(BD_Nombre)+".cproveedores WHERE crilcpr_activo = '1' ORDER BY crilcpr_codigo","Requerido":1,"Col":6,"valor":"","editable":True})
+        Formulario["Campos"].append({"tipo":"multitexto","campo":"Comentario","titulo":"Comentario","editable":True,"Requerido":1,"min":1,"max":1500,"valor":"","Col":12})
+        Formulario["Campos"].append({"tipo":"multitexto","campo":"Lista_distribucion","titulo":"Lista de distribución (Correos) separado por ´;´;","editable":True,"Requerido":0,"min":0,"max":1500,"valor":"","Col":12})
+        Formulario["Campos"].append({"tipo":"archivo","campo":"Archivos","titulo":"Archivo(s)","Requerido":0,"Col":12,"min":0,"max":5,"tipo_archivo":["application/pdf","image/png","image/jpeg","image/gif"],"valor":"","editable":True})
+        Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
+
+        Resultado["Contenido"] += """
+        <hr>
+        <div class='mb-1'>
+            <button id="reactivity-add" class='btn btn-success btn-sm'><i class='mdi mdi-plus'></i> Add New Number Part</button>
+            <button id="reactivity-delete" class='btn btn-danger btn-sm'><i class='mdi mdi-close'></i> Remove Last Number Part</button>
+        </div>
+        <div id="example-table" class='border border-dark bg-dark-subtle'></div>
+        <script>
+            var tabledata = [];
+            var table = new Tabulator("#example-table", {
+                height:"311px",
+                layout:"fitColumns",
+                reactiveData:true, //turn on data reactivity
+                data:tabledata,
+                columns:[
+                    {title:"Packing Slip", field:"Packing Slip", editor:"input"},
+                    {title:"Numero de Parte", field:"Numero de Parte", editor:"input"},
+                    {title:"Cantidad de ASN", field:"Cantidad de ASN", sorter:"number", editor:"input"},
+                    {title:"Cantidad Real", field:"Cantidad Real", sorter:"number", editor:"input"},
+                    /*{title:"Pallets", field:"Pallets", sorter:"number", editor:"input"},*/
+                    {title:"OS&D", field:"OSD", editor:"list", editorParams:{values:{"1.- Damage":"1.- Damage","2.- Shortage":"2.- Shortage","3.- Surplus":"3.- Surplus","4.- ASN Issue":"4.- ASN Issue","5.- Missing doc. in Prisma":"5.- Missing doc. in Prisma","6.- Other (Explain in Comments)":"6.- Other (Explain in Comments)"}}},
+                    {title:"Comentario", field:"Comentario",editor:"input"},
+                ],
+            });
+            document.getElementById("reactivity-add").addEventListener("click", function(){
+                var Ultimo_PS = "";
+                tabledata.forEach((element) => {
+                    Ultimo_PS = element["Packing Slip"].trim();
+                });
+                tabledata.push({"Packing Slip":Ultimo_PS,"Numero de Parte":"","Cantidad de ASN":"","Cantidad Real":"","OSD":"","Comentario":"","Pallets":"1"});
+            });
+            document.getElementById("reactivity-delete").addEventListener("click", function(){
+                tabledata.pop();
+            });
+            $("#Proveedor_Nuevo").on( "change", function() {
+                Cargar_Lista_distribucion($("#Proveedor_Nuevo").find('option:selected').val());
+            } );
+            function Cargar_Lista_distribucion(Codigo){
+                $("#Lista_distribucion").val("Loading...");
+                var parametros = {"Fun":'"""+str(fernet.encrypt("Cargar_Lista_distribucion".encode()).decode("utf-8"))+"""',"Codigo":Codigo};
+                $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
+                    success:  function (response){
+                        var obj = JSON.parse(response);
+                        if(obj["Estado"] == 1)
+                        {
+                            $("#Lista_distribucion").val(obj["Contenido"]);
+                        }
+                        else
+                        {
+                            $("#Lista_distribucion").val('Process error: '+obj["Contenido"]);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown )
+                    {
+                         $("#Lista_distribucion").val('Process error :'+ textStatus);
+                    }
+                });
+            }
+        </script>
+        <hr>
+        """
+        
+        html = "<table><thead><tr><th>Parte</th></tr></thead><tbody><tr><td>A</td></tr></tbody></table>"
+
+        Resultado["Contenido"] += """
+        <br>
+        <div class='w-100 text-center'><button class='btn btn-outline-success w-50' onclick='Guardar_Completar_Ruteo("""+str(Datos["ID"])+""")'><i class='mdi mdi-floppy'></i> Save</button></div>
+        <script>
+
+            Actualizar_Cambia_Texto();
+            function Guardar_Completar_Ruteo(ID)
+            {
+                var Ok = true;
+                tabledata.forEach((element) => {
+                if(element["Numero de Parte"].trim() == "")
+                    Ok = false;
+                if(element["Cantidad de ASN"].trim() == "")
+                    Ok = false;
+                if(element["Pallets"].trim() == "")
+                    Ok = false;
+                /*if(element["Cantidad Real"].trim() == "")
+                    Ok = false;*/
+                if(element["OSD"].trim() == "")
+                    Ok = false;
+                if(element["Packing Slip"].trim() == "")
+                    Ok = false;
+                });
+                if(tabledata.length == 0)
+                    Ok = false;
+                var Info = Dame_Formulario(".Formato",true);
+                if(Info != null)
+                {
+                    if(Ok == false)
+                    {
+                        Swal.fire({icon: 'warning',position: 'top-end',title: 'Verifique lista de numero de parte, no puede haber campos en blanco y debe de incluir por lo menos un numero de parte',showConfirmButton: false,toast: true,background : "#ffeb96",timer: 1500,timerProgressBar: true});
+                    }
+                    else{
+                        Info["Partes"] = tabledata;
+                        Mostrar_Ventana_Cargando(false);
+                        var parametros = {"Fun":'"""+str(fernet.encrypt("Guardar_Completar_Ruteo".encode()).decode("utf-8"))+"""',"Info":JSON.stringify(Info),"ID_User":'"""+str(Datos["ID_User"])+"""',"ID":ID};
+                            $.ajax({
+                                data:  parametros,url:   \""""+str(request.url)+"""\",type:  "post",
+                                success:  function (response){
+                                    var obj = JSON.parse(response);
+                                    if(obj["Estado"] == 1)
+                                    {
+                                        $("#Vent_1").modal("hide");
+                                        Swal.fire({icon: 'success',position: 'top-end',title: '¡Guardado con éxito!',showConfirmButton: false,toast: true,background : "#c9fad7",timer: 1500,timerProgressBar: true});
+                                        Cargar_Abiertos();
+                                    }
+                                    else
+                                    {
+                                        Swal.fire({icon: 'error',position: 'top-end',title: 'Process error ['+ obj["Contenido"] +']',showConfirmButton: false,toast: true,background : "#fac9c9",timer: 3500,timerProgressBar: true});
+                                    }
+                                },
+                                error: function (jqXHR, textStatus, errorThrown )
+                                {
+                                    Swal.fire({icon: 'error',position: 'top-end',title: 'Process error ['+ textStatus +']',showConfirmButton: false,toast: true,background : "#fac9c9",timer: 3500,timerProgressBar: true});
+                                }
+                        });
+                    }
+
+                    
+                }
+
+            }
+
+        </script>
+        """
+    except:
+        Resultado["Contenido"] += str(sys.exc_info())
+    Cur += json.dumps(Resultado)
+    return Cur
+def Guardar_Completar_Ruteo(Datos):
+    DB = LibDM_2023.DataBase()
+    Cur = ""
+    Resultado = { "Estado" :0, "Contenido":""}
+    try:
+        Info = json.loads(Datos["Info"])
+        Error = ""
+
+        Tipo = None
+        for Parte in Info["Partes"]:
+            Tipo = str(Parte["OSD"])
+
+        if str(Tipo) == "1.- Damage":
+            Error += DB.Instruccion("""
+            UPDATE """+str(BD_Nombre)+""".cosyd SET 
+            cosyd_proveedor = '"""+str(Info["Proveedor"])+"""',
+            cosyd_caja = '"""+str(Info["Contenedor-Caja"])+"""',
+            cosyd_destino = '"""+str(Info["Destino"])+"""',
+            cosyd_scac = '"""+str(Info["SCAC"])+"""',
+            cosyd_comentario = '"""+str(Info["Comentario"])+"""',
+            cosyd_correo = '"""+str(Info["Lista_distribucion"])+"""',
+            cosyd_archivos = '"""+str(','.join(Info["Archivos"]))+"""',
+            cosyd_ruta = '"""+str(Info["Ruta"])+"""',
+            cosyd_ruta_fecha_hora = '"""+str(Info["Fecha de Rura"])+"""',
+            cosyd_estado = 2
+            WHERE cosyd_id = '"""+str(Datos["ID"])+"""'""")
+        else:
+            Error += DB.Instruccion("""
+            UPDATE """+str(BD_Nombre)+""".cosyd SET 
+            cosyd_proveedor = '"""+str(Info["Proveedor"])+"""',
+            cosyd_caja = '"""+str(Info["Contenedor-Caja"])+"""',
+            cosyd_destino = '"""+str(Info["Destino"])+"""',
+            cosyd_scac = '"""+str(Info["SCAC"])+"""',
+            cosyd_comentario = '"""+str(Info["Comentario"])+"""',
+            cosyd_correo = '"""+str(Info["Lista_distribucion"])+"""',
+            cosyd_archivos = '"""+str(','.join(Info["Archivos"]))+"""',
+            cosyd_ruta = '"""+str(Info["Ruta"])+"""',
+            cosyd_ruta_fecha_hora = '"""+str(Info["Fecha de Rura"])+"""',
+            cosyd_estado = 1
+            WHERE cosyd_id = '"""+str(Datos["ID"])+"""'""")
+
+        Error += DB.Instruccion("""
+        INSERT INTO """+str(BD_Nombre)+""".cosyd_historico
+        (cosyd_master,cosyd_usuario,cosyd_comentario,cosyd_evidencia,cosyd_movimiento,cosyd_fecha)
+        VALUES
+        ('"""+str(Datos["ID"])+"""','"""+str(Datos["ID_User"])+"""','"""+str(Info["Comentario"])+"""','"""+str(','.join(Info["Archivos"]))+"""','COMPLETAR',NOW())
+        """)
+        if Error == "":
+            for Parte in Info["Partes"]:
+                Error += DB.Instruccion("""
+                INSERT INTO """+str(BD_Nombre)+""".cosyd_partes
+                (cosyd_master,cosyd_parte,cosyd_cantidad_asn,cosyd_cantidad_real,cosyd,cosyd_comentario,cosyd_p_pallets,cosyd_p_pakingslip,cosyd_p_destino)
+                VALUES
+                ('"""+str(Datos["ID"])+"""','"""+str(Parte["Numero de Parte"])+"""','"""+str(Parte["Cantidad de ASN"])+"""','"""+str(Parte["Cantidad Real"])+"""','"""+str(Parte["OSD"])+"""','"""+str(Parte["Comentario"])+"""','"""+str(Parte["Pallets"])+"""','"""+str(Parte["Packing Slip"])+"""','"""+str(Info["Destino"])+"""')
+                """)
+
+        if Error == "":
+            Resultado["Estado"] = 1
+        Resultado["Contenido"] += str(Error)
+    except:
+        Resultado["Contenido"] = str(sys.exc_info())
+    Cur += json.dumps(Resultado)
+    return Cur
+def Modificar_Ruteo(Datos):
+    if "K" in session.keys():
+        fernet = Fernet(session["K"])
+    Compartido_2023 = LibDM_2023.Compartido()
+    Cur = ""
+    Resultado = {"Estado":0,"Contenido":""}
+    DB = LibDM_2023.DataBase()
+    try:
+        Formulario = {"Col":"", "Campos": [],"Clase": "Formato" }
+
+        Info_Gen = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".cosyd inner join "+str(BD_Nombre)+".cosyd_historico  WHERE  cosyd_id = '"+str(Datos["ID"])+"' ")[0]
+
+        Formulario["Campos"].append({"tipo":"texto","campo":"Ruta","titulo":"Ruta","editable":False,"Requerido":1,"min":1,"max":20,"valor":Info_Gen["cosyd_ruta"],"Col":6})
+        Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha de Rura","titulo":"Fecha de Ruta","Requerido":1,"Col":6,"valor":Info_Gen["cosyd_ruta_fecha_hora"],"editable":False})
+        Formulario["Campos"].append({"tipo":"texto","campo":"SCAC","titulo":"SCAC","editable":False,"Requerido":1,"min":1,"max":20,"valor":Info_Gen["cosyd_scac"],"Col":6})
+        Formulario["Campos"].append({"tipo":"texto","campo":"Contenedor-Caja","titulo":"Contenedor","editable":False,"Requerido":1,"min":0,"max":100,"valor":Info_Gen["cosyd_caja"],"Col":6})
+        Formulario["Campos"].append({"tipo":"texto","campo":"Destino","titulo":"Destino","editable":False,"Requerido":0,"min":0,"max":50,"valor":Info_Gen["cosyd_destino"],"Col":6})
+        Formulario["Campos"].append({"tipo":"seleccion","campo":"Proveedor","titulo":"Proveedor","editable":False,"Tipo_Opciones":"Query","Opciones":"SELECT crilcpr_codigo as Valor, CONCAT(crilcpr_codigo,' - ',crilcpr_nombre) AS Texto FROM "+str(BD_Nombre)+".cproveedores ORDER BY crilcpr_codigo","Requerido":1,"Col":6,"valor":Info_Gen["cosyd_proveedor"]})
+        Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
+        Historico = DB.Get_Dato("select MASTER.cosyd_id,MASTER.cosyd_tipo,MASTER.cosyd_proveedor,MASTER.cosyd_packingslip,MASTER.cosyd_estado,MASTER.cosyd_alta,MASTER.cosyd_baja,MASTER.cosyd_caja,MASTER.cosyd_destino,MASTER.cosyd_scac,MASTER.cosyd_fecha_envio,MASTER.cosyd_correo,MASTER.cosyd_archivos,MASTER.cosyd_ruta,MASTER.cosyd_ruta_fecha_hora,HISTORICO.cosyd_master,HISTORICO.cosyd_usuario,HISTORICO.cosyd_comentario,HISTORICO.cosyd_evidencia,HISTORICO.cosyd_movimiento,HISTORICO.cosyd_fecha from "+str(BD_Nombre)+".cosyd MASTER inner join "+str(BD_Nombre)+".cosyd_historico HISTORICO on MASTER.cosyd_id = HISTORICO.cosyd_master  where MASTER.cosyd_id = '"+str(Datos["ID"])+"'")
+        Tabla_Datos = []
+        Columnas = []
+        Columnas.append({"title":"Fecha y Hora", "field":"Fecha y Hora"})
+        Columnas.append({"title":"Usuario", "field":"Usuario"})
+        Columnas.append({"title":"Tipo", "field":"Tipo"})
+        Columnas.append({"title":"Comentario", "field":"Comentario","formatter":"textarea"})
+        Columnas.append({"title":"Archivo(s)", "field":"Archivos","formatter":"html"})
+        for H in Historico:
+            Aux_Datos ={}
+            Aux_Datos["Fecha y Hora"] = H["cosyd_fecha"].strftime("%Y-%m-%d %H:%M:%S")
+            Aux_Datos["Usuario"] = str(DB.Dame_Nombre_IDUsuario(H["cosyd_usuario"]))
+            Aux_Datos["Tipo"]  = H["cosyd_movimiento"]
+            Aux_Datos["Comentario"]  = H["cosyd_comentario"]
+            Aux_Datos["Archivos"] = ""
+            for Archivo in str(H["cosyd_evidencia"]).split(","):
+                if Archivo.strip() != "":
+                    if "pdf" in Archivo:
+                        Aux_Datos["Archivos"] += "<a href='http://10.4.7.219:8080/Portal_File/"+str(Archivo)+"' target='_blank' class='mdi mdi-file-pdf-box ms-1'></a>"
+                    else:
+                        Aux_Datos["Archivos"] += "<a href='http://10.4.7.219:8080/Portal_File/"+str(Archivo)+"' target='_blank' class='mdi mdi-image ms-1'></a>"
+            Tabla_Datos.append(Aux_Datos)
+
+        Resultado["Contenido"] += """
+        <br>
+        <div><i class='mdi mdi-history'></i> Historial de comentarios</div>
+        <div id='Tabla-Detalles' class='border border-dark bg-dark-subtle'></div>
+        <script>
+            delete table;
+            var Col = """+str(Columnas)+""";
+            var table = new Tabulator("#Tabla-Detalles", {
+                height:300,
+                data:"""+str(Tabla_Datos)+""",
+                layout:"fitColumns",
+                rowFormatter:function(row){
+                if(row.getData().Estado == 1){
+                        row.getElement().style.backgroundColor = "#5dff67";
+                    }
+                },
+                columns:Col,
+                initialSort:[
+                    {column:"Fecha y Hora", dir:"desc"}
+                ],
+                selectable:false
+            });
+            document.getElementById("download-xlsx-ruteo").addEventListener("click", function(){
+                table.download("xlsx", "Ruteo.xlsx", {sheetName:"My Data"});
+            });
+            $( document ).ready(function() {
+                $('.tabulator-header-contents').addClass('bg-body-secondary').find('.tabulator-col').addClass('bg-body-secondary');
+            })
+        </script>
+        """
+
+        Formulario = {"Col":"", "Campos": [],"Clase": "Formato" }
+        Formulario["Campos"].append({"tipo":"multitexto","campo":"Nuevo Comentario","titulo":"Nuevo Comentario","Requerido":1,"min":1,"max":1500,"valor":"","Col":12})
+        Formulario["Campos"].append({"tipo":"archivo","campo":"Nuevo Archivos","titulo":"Nuevo Archivo(s)","Requerido":0,"Col":12,"min":0,"max":5,"tipo_archivo":["application/pdf","image/png","image/jpeg","image/gif"],"valor":""})
+        Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
+
+            
+        Resultado["Contenido"] += """
+        <br>
+        <div class='w-100 text-center'>
+            <button class='btn btn-warning w-75 mb-1' onclick='Guardar_Modificar_Ruteo("""+str(Datos["ID"])+""")'><i class='mdi mdi-message-alert'></i> Agregar Comentario/Evidencia OS&D</button>
+        """
+        
+        if Datos["De_Donde"] == "ABIERTOS":
+            Resultado["Contenido"] += """<button class='btn btn-success w-75' onclick='Cerrar_OSyD("""+str(Datos["ID"])+""",\"ABIERTOS\")'><i class='mdi mdi-check-bold'></i> Liberar OS&D</button>"""
+        if Datos["De_Donde"] == "LIBERADOS":
+            Resultado["Contenido"] += """<button class='btn btn-danger w-75 mb-1' onclick='Cerrar_OSyD("""+str(Datos["ID"])+""",\"REGRESAR\")'><i class='mdi mdi-arrow-left-bold'></i> Regresar a Abiertos</button>"""
+            Resultado["Contenido"] += """<button class='btn btn-success w-75' onclick='Cerrar_OSyD("""+str(Datos["ID"])+""",\"CERRAR\")'><i class='mdi mdi-check-bold'></i> Cerrar OS&D</button>"""
+        
+        if Datos["De_Donde"] == "PRE_LIBERADO":
+            Resultado["Contenido"] += """<button class='btn btn-danger w-75 mb-1' onclick='Cerrar_OSyD("""+str(Datos["ID"])+""",\"REGRESAR\")'><i class='mdi mdi-arrow-left-bold'></i> Regresar a Abiertos</button>"""
+            Resultado["Contenido"] += """<button class='btn btn-success w-75' onclick='Cerrar_OSyD("""+str(Datos["ID"])+""",\"LIBERAR\")'><i class='mdi mdi-check-bold'></i> Liberar OS&D</button>"""
+
+        Resultado["Contenido"] += """
+        </div>
+        <script>
+
+            Actualizar_Cambia_Texto();
+            function Guardar_Modificar_Ruteo(ID)
+            {
+                var Info = Dame_Formulario(".Formato",true);
+                if(Info != null)
+                {
+                    Mostrar_Ventana_Cargando(false);
+                    var parametros = {"Fun":'"""+str(fernet.encrypt("Guardar_Modificar_Ruteo".encode()).decode("utf-8"))+"""',"Info":JSON.stringify(Info),"ID":ID};
+                        $.ajax({data:  parametros,url:\""""+str(request.user_agent)+"""\",type:  "post",
+                            success:  function (response){
+                                var obj = JSON.parse(response);
+                                if(obj["Estado"] == 1)
+                                {
+                                    $("#Vent_1").modal("hide");
+                                    Swal.fire({icon: 'success',position: 'top-end',title: '¡Guardado con éxito!',showConfirmButton: false,toast: true,background : "#c9fad7",timer: 1500,timerProgressBar: true});
+        """
+        if Datos["De_Donde"] == "ABIERTOS":
+            Resultado["Contenido"] += "Cargar_Abiertos();"
+        else:
+            Resultado["Contenido"] += "Cargar_Liberados();"
+        Resultado["Contenido"] += """
+                                    
+                                }
+                                else
+                                {
+                                    Swal.fire({icon: 'error',position: 'top-end',title: 'Process error ['+ obj["Contenido"] +']',showConfirmButton: false,toast: true,background : "#fac9c9",timer: 3500,timerProgressBar: true});
+                                }
+                             },
+                            error: function (jqXHR, textStatus, errorThrown )
+                            {
+                                Swal.fire({icon: 'error',position: 'top-end',title: 'Process error ['+ textStatus +']',showConfirmButton: false,toast: true,background : "#fac9c9",timer: 3500,timerProgressBar: true});
+                            }
+                    });
+                }
+
+            }
+            function Cerrar_OSyD(ID,De_Donde){
+                var Info = Dame_Formulario(".Formato",true);
+                if(Info != null)
+                {
+                    Mostrar_Ventana_Cargando(false);
+                    var parametros = {"Fun":'"""+str(fernet.encrypt("Cerrar_OSyD".encode()).decode("utf-8"))+"""',"Info":JSON.stringify(Info),"ID":ID,"De_Donde":De_Donde};
+                        $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
+                            success:  function (response){
+                                var obj = JSON.parse(response);
+                                if(obj["Estado"] == 1)
+                                {
+                                    $("#Vent_1").modal("hide");
+                                    Swal.fire({icon: 'success',position: 'top-end',title: '¡Guardado con éxito!',showConfirmButton: false,toast: true,background : "#c9fad7",timer: 1500,timerProgressBar: true});
+        """
+        if Datos["De_Donde"] == "ABIERTOS":
+            Resultado["Contenido"] += "Cargar_Abiertos();"
+        elif Datos["De_Donde"] == "PRE_LIBERADO":
+            Resultado["Contenido"] += "Cargar_Pre_Liberados();"
+        else:
+            Resultado["Contenido"] += "Cargar_Liberados();"
+        Resultado["Contenido"] += """
+                                }
+                                else
+                                {
+                                    Swal.fire({icon: 'error',position: 'top-end',title: 'Process error ['+ obj["Contenido"] +']',showConfirmButton: false,toast: true,background : "#fac9c9",timer: 3500,timerProgressBar: true});
+                                }
+                             },
+                            error: function (jqXHR, textStatus, errorThrown )
+                            {
+                                Swal.fire({icon: 'error',position: 'top-end',title: 'Process error ['+ textStatus +']',showConfirmButton: false,toast: true,background : "#fac9c9",timer: 3500,timerProgressBar: true});
+                            }
+                    });
+                }
+            }
+        </script>
+        """
+    except:
+        Resultado["Contenido"] += str(sys.exc_info())
+    Cur += json.dumps(Resultado)
+    return Cur
+def Guardar_Modificar_Ruteo(Datos):
+    DB = LibDM_2023.DataBase()
+    Cur = ""
+    Resultado = { "Estado" :0, "Contenido":""}
+    try:
+        Info = json.loads(Datos["Info"])
+        Error = ""
+        Error += DB.Instruccion("UPDATE "+str(BD_Nombre)+".cosyd SET cosyd_comentario = '"+str(Info["Nuevo Comentario"])+"', cosyd_archivos = '"+str(','.join(Info["Nuevo Archivos"]))+"' WHERE cosyd_id = '"+str(Datos["ID"])+"'")
+        Error += DB.Instruccion("""
+        INSERT INTO """+str(BD_Nombre)+""".cosyd_historico
+        (cosyd_master,cosyd_usuario,cosyd_comentario,cosyd_evidencia,cosyd_movimiento,cosyd_fecha)
+        VALUES
+        ('"""+str(Datos["ID"])+"""','"""+str(Datos["ID_User"])+"""','"""+str(Info["Nuevo Comentario"])+"""','"""+str(','.join(Info["Nuevo Archivos"]))+"""','ACTUALIZAR',NOW())
+        """)
+        if Error == "":
+            Resultado["Estado"] = 1
+        Resultado["Contenido"] += str(Error)
+    except:
+        Resultado["Contenido"] = str(sys.exc_info())
+    Cur += json.dumps(Resultado)
+    return Cur
+def Cerrar_OSyD(Datos):
+    DB = LibDM_2023.DataBase()
+    Cur = ""
+    Resultado = { "Estado" :0, "Contenido":""}
+    try:
+        Info = json.loads(Datos["Info"])
+        Error = ""
+        if Datos["De_Donde"] == "ABIERTOS":
+            Error += DB.Instruccion("UPDATE "+str(BD_Nombre)+".cosyd SET cosyd_comentario = '"+str(Info["Nuevo Comentario"])+"', cosyd_archivos = '"+str(','.join(Info["Nuevo Archivos"]))+"',cosyd_estado = '2' WHERE cosyd_id = '"+str(Datos["ID"])+"'")
+            Error += DB.Instruccion("""
+            INSERT INTO """+str(BD_Nombre)+""".cosyd_historico
+            (cosyd_master,cosyd_usuario,cosyd_comentario,cosyd_evidencia,cosyd_movimiento,cosyd_fecha)
+            VALUES
+            ('"""+str(Datos["ID"])+"""','"""+str(Datos["ID_User"])+"""','"""+str(Info["Nuevo Comentario"])+"""','"""+str(','.join(Info["Nuevo Archivos"]))+"""','LIBERADO',NOW())
+            """)
+        elif Datos["De_Donde"] == "REGRESAR":
+            Error += DB.Instruccion("UPDATE "+str(BD_Nombre)+".cosyd SET cosyd_comentario = '"+str(Info["Nuevo Comentario"])+"', cosyd_archivos = '"+str(','.join(Info["Nuevo Archivos"]))+"',cosyd_estado = '1' WHERE cosyd_id = '"+str(Datos["ID"])+"'")
+            Error += DB.Instruccion("""
+            INSERT INTO """+str(BD_Nombre)+""".cosyd_historico
+            (cosyd_master,cosyd_usuario,cosyd_comentario,cosyd_evidencia,cosyd_movimiento,cosyd_fecha)
+            VALUES
+            ('"""+str(Datos["ID"])+"""','"""+str(Datos["ID_User"])+"""','"""+str(Info["Nuevo Comentario"])+"""','"""+str(','.join(Info["Nuevo Archivos"]))+"""','REGRESAR',NOW())
+            """)
+        elif Datos["De_Donde"] == "LIBERAR":
+            Error += DB.Instruccion("UPDATE "+str(BD_Nombre)+".cosyd SET cosyd_comentario = '"+str(Info["Nuevo Comentario"])+"', cosyd_archivos = '"+str(','.join(Info["Nuevo Archivos"]))+"',cosyd_estado = '1' WHERE cosyd_id = '"+str(Datos["ID"])+"'")
+            Error += DB.Instruccion("""
+            INSERT INTO """+str(BD_Nombre)+""".cosyd_historico
+            (cosyd_master,cosyd_usuario,cosyd_comentario,cosyd_evidencia,cosyd_movimiento,cosyd_fecha)
+            VALUES
+            ('"""+str(Datos["ID"])+"""','"""+str(Datos["ID_User"])+"""','"""+str(Info["Nuevo Comentario"])+"""','"""+str(','.join(Info["Nuevo Archivos"]))+"""','LIBERADO',NOW())
+            """)
+        else:
+            Error += DB.Instruccion("UPDATE "+str(BD_Nombre)+".cosyd SET cosyd_comentario = '"+str(Info["Nuevo Comentario"])+"', cosyd_archivos = '"+str(','.join(Info["Nuevo Archivos"]))+"',cosyd_estado = '3', cosyd_baja = NOW() WHERE cosyd_id = '"+str(Datos["ID"])+"'")
+            Error += DB.Instruccion("""
+            INSERT INTO """+str(BD_Nombre)+""".cosyd_historico
+            (cosyd_master,cosyd_usuario,cosyd_comentario,cosyd_evidencia,cosyd_movimiento,cosyd_fecha)
+            VALUES
+            ('"""+str(Datos["ID"])+"""','"""+str(Datos["ID_User"])+"""','"""+str(Info["Nuevo Comentario"])+"""','"""+str(','.join(Info["Nuevo Archivos"]))+"""','CERRADO',NOW())
+            """)
+        if Error == "":
+            Resultado["Estado"] = 1
+        Resultado["Contenido"] += str(Error)
+    except:
+        Resultado["Contenido"] = str(sys.exc_info())
+    Cur += json.dumps(Resultado)
+    return Cur
+def Eliminar_Ruteo(Datos):
+    DB = LibDM_2023.DataBase()
+    Cur = ""
+    Resultado = { "Estado" :0, "Contenido":""}
+    try:
+        Error = ""
+        Error += DB.Instruccion("UPDATE "+str(BD_Nombre)+".cosyd SET cosyd_comentario = '"+str(Datos["Comentario"])+"',cosyd_estado = 0 WHERE cosyd_id = '"+str(Datos["ID"])+"'")
+        Error += DB.Instruccion("""
+        INSERT INTO """+str(BD_Nombre)+""".cosyd_historico
+        (cosyd_master,cosyd_usuario,cosyd_comentario,cosyd_evidencia,cosyd_movimiento,cosyd_fecha)
+        VALUES
+        ('"""+str(Datos["ID"])+"""','"""+str(Datos["ID_User"])+"""','"""+str(Datos["Comentario"])+"""','','ELIMINAR',NOW())
+        """)
+        if Error == "":
+            Resultado["Estado"] = 1
+        Resultado["Contenido"] += str(Error)
+    except:
+        Resultado["Contenido"] = str(sys.exc_info())
+    Cur += json.dumps(Resultado)
+    return Cur
 
 
 def Direccionar(Datos):
