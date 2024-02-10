@@ -451,7 +451,7 @@ def Regresa_Guardar(Datos):
     Resultado = {"Contenido":"","Estado":0}
     Error = ""
     try:
-        Info_Historico = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas_moviemiento WHERE cch_master = '"+str(Datos["ID"])+"' AND cch_fecha_hora = '"+str(Datos["Fecha"])+"'")[0]
+        Info_Historico = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas_moviemiento WHERE cch_master = '"+str(Datos["ID"])+"' AND to_char(cch_fecha_hora, 'YYYY-MM-DD HH24:MI:SS') = '"+str(Datos["Fecha"])+"'")[0]
         Dock = "null"
         if Info_Historico["cch_dock"] is not None:
             Dock = "'"+str(Info_Historico["cch_dock"])+"'"
@@ -523,8 +523,6 @@ def Eliminar_Caja(Datos):
         Resultado["Contenido"] = str(sys.exc_info())
     Cur += json.dumps(Resultado)
     return Cur
-
-
 
 def Direccionar(Datos):
     try:
