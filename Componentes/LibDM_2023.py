@@ -2056,20 +2056,82 @@ class Menu:
             "P":"",
             "Grupo_IDS":[]
         }
-        Menu["WTC"] ={
-                    "Link": str(Raiz)+"WTC",
-                    "Items":{
-                        "Yard":{"Icono":"mdi mdi-script","Link":"/WTC/Yard","P":"Yard","Fun":"Inicio","ID":1504},
-                        "Dispatch":{"Icono":"mdi mdi-check-decagram","Link":"/WTC/Despacho","P":"Yard","Fun":"Inicio","ID":1508}
-                    },
-                    "Icono":"mdi mdi-domain",
-                    "Color":"#8C68CD",
-                    "Letra":"rgba(255, 255, 255, 0.9)",
-                    "ID":"RH",
-                    "P":"",
-                    "Grupo_IDS":[]
-                }
-        Menu["ODC"] ={
+        
+        # Menu["WTC"] ={
+        #             "Link": str(Raiz)+"WTC",
+        #             "Items":{
+        #                 "Yard":{"Icono":"mdi mdi-script","Link":"/WTC/Yard","P":"Yard","Fun":"Inicio","ID":1504},
+        #                 "Dispatch":{"Icono":"mdi mdi-check-decagram","Link":"/WTC/Despacho","P":"Yard","Fun":"Inicio","ID":1508}
+        #             },
+        #             "Icono":"mdi mdi-domain",
+        #             "Color":"#8C68CD",
+        #             "Letra":"rgba(255, 255, 255, 0.9)",
+        #             "ID":"RH",
+        #             "P":"",
+        #             "Grupo_IDS":[]
+        #         }
+        # Menu["ODC"] ={
+        #             "Link": str(Raiz)+"ODC",
+        #             "Items":{
+        #                 "Container Control":{
+        #                     "Icono":"mdi mdi-truck-trailer",
+        #                     "Items":{
+        #                         "Container":{"Icono":"mdi mdi-truck-trailer","Link":"/ODC/Container_Control","P":"Yard","Fun":"Inicio","ID":1501},
+        #                         "Container Manager":{"Icono":"mdi mdi-truck-trailer","Link":"/ODC/Container_Manager","P":"Yard","Fun":"Inicio","ID":1502},
+        #                     }
+        #                 },
+        #                 "Outbound Status":{
+        #                     "Icono":"mdi mdi-progress-upload",
+        #                     "Items":{
+        #                         "Outbound Status":{"Icono":"mdi mdi-progress-upload","Link":"/ODC/OutBound/Status","P":"Yard","Fun":"Inicio","ID":1501},
+        #                         "Reporte":{"Icono":"mdi mdi-projector-screen","Link":"/ODC/OutBound/Report","P":"Yard","Fun":"Inicio","ID":1501}
+        #                     }
+        #                 },
+        #                 # "MilkRun Status":{
+        #                 #     "Icono":"mdi mdi-progress-upload",
+        #                 #     "Items":{
+        #                 #         "MilkRun Status":{"Icono":"mdi mdi-progress-upload","Link":"./MilkRun/inicio.py","P":"Yard","Fun":"Inicio","ID":1501},
+        #                 #         "Reporte":{"Icono":"mdi mdi-projector-screen","Link":"./MilkRun/reporte.py","P":"Yard","Fun":"Inicio","ID":1501}
+        #                 #     }
+        #                 # },
+        #                 # "Empty Rack":{
+        #                 #     "Icono":"mdi mdi-dots-square",
+        #                 #     "Items":{
+        #                 #         "Estado Empty Racks":{"Icono":"mdi mdi-dots-square","Link":"./Equipo_Vacio/manifiestos.py","P":"Yard","Fun":"Inicio","ID":1501},
+        #                 #         "Ingreso de Equipo Vacio":{"Icono":"mdi mdi-inbox-arrow-down","Link":"./Equipo_Vacio/ingreso.py","P":"Yard","Fun":"Inicio","ID":1501},
+        #                 #         "Reporte":{"Icono":"mdi mdi-view-grid-compact","Link":"./Equipo_Vacio/reporte.py","P":"Yard","Fun":"Inicio","ID":1502}
+        #                 #     }
+        #                 # },
+        #                 "OS&D":{"Icono":"mdi mdi-alert","Link":"/ODC/OSyD","Fun":"Inicio","ID":1508},
+        #                 "Reports":{
+        #                     "Icono":"mdi mdi-book",
+        #                     "Items":{
+        #                         "Container Search":{"Icono":"mdi mdi-feature-search","Link":"/ODC/Report/Container","P":"Yard","Fun":"Inicio","ID":1509},
+        #                         "Daily":{"Icono":"mdi mdi-book","Link":"/ODC/Report/Daily","P":"Yard","Fun":"Inicio","ID":1510},
+        #                         "Carrier":{"Icono":"mdi mdi-book","Link":"/ODC/Report/Carrier","P":"Yard","Fun":"Inicio","ID":1511},
+        #                         "Aging Report":{"Icono":"mdi mdi-book","Link":"/ODC/Report/Aging","P":"Yard","Fun":"Inicio","ID":1512}
+        #                     }
+        #                 },
+        #                 "Configuration":{
+        #                     "Icono":"mdi mdi-cog",
+        #                     "Items":{
+        #                         "Suppliers Master":{"Icono":"mdi mdi-card-bulleted","Link":"/ODC/Conf/Suppliers","P":"Yard","Fun":"Inicio","ID":1505},
+        #                         "Route Master":{"Icono":"mdi mdi-swap-vertical-variant","Link":"/ODC/Conf/Routes","P":"Yard","Fun":"Inicio","ID":1506},
+        #                         "Docks Master":{"Icono":"mdi mdi-sign-caution","Link":"/ODC/Conf/Docks","P":"Yard","Fun":"Inicio","ID":1507},
+        #                         "Destinos":{"Icono":"mdi mdi-card-bulleted","Link":"/ODC/Conf/Destination","P":"Yard","Fun":"Inicio","ID":1507}
+        #                     }
+        #                 },
+
+        #             },
+        #             "Icono":"mdi mdi-factory",
+        #             "Color":"#3D8BFD",
+        #             "Letra":"",
+        #             "ID":"RH",
+        #             "P":"",
+        #             "Grupo_IDS":[1500,1501,1502,1503,1504,1505]
+        #         }
+        
+        Menu["YMS"] ={
                     "Link": str(Raiz)+"ODC",
                     "Items":{
                         "Container Control":{
@@ -2086,21 +2148,6 @@ class Menu:
                                 "Reporte":{"Icono":"mdi mdi-projector-screen","Link":"/ODC/OutBound/Report","P":"Yard","Fun":"Inicio","ID":1501}
                             }
                         },
-                        # "MilkRun Status":{
-                        #     "Icono":"mdi mdi-progress-upload",
-                        #     "Items":{
-                        #         "MilkRun Status":{"Icono":"mdi mdi-progress-upload","Link":"./MilkRun/inicio.py","P":"Yard","Fun":"Inicio","ID":1501},
-                        #         "Reporte":{"Icono":"mdi mdi-projector-screen","Link":"./MilkRun/reporte.py","P":"Yard","Fun":"Inicio","ID":1501}
-                        #     }
-                        # },
-                        # "Empty Rack":{
-                        #     "Icono":"mdi mdi-dots-square",
-                        #     "Items":{
-                        #         "Estado Empty Racks":{"Icono":"mdi mdi-dots-square","Link":"./Equipo_Vacio/manifiestos.py","P":"Yard","Fun":"Inicio","ID":1501},
-                        #         "Ingreso de Equipo Vacio":{"Icono":"mdi mdi-inbox-arrow-down","Link":"./Equipo_Vacio/ingreso.py","P":"Yard","Fun":"Inicio","ID":1501},
-                        #         "Reporte":{"Icono":"mdi mdi-view-grid-compact","Link":"./Equipo_Vacio/reporte.py","P":"Yard","Fun":"Inicio","ID":1502}
-                        #     }
-                        # },
                         "OS&D":{"Icono":"mdi mdi-alert","Link":"/ODC/OSyD","Fun":"Inicio","ID":1508},
                         "Reports":{
                             "Icono":"mdi mdi-book",
