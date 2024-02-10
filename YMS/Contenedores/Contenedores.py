@@ -646,7 +646,7 @@ def Tipo_Nuevo_2(Datos):
     except:
          Resultado["Contenido"] = str(sys.exc_info())
     Cur += json.dumps(Resultado)
-    print(Cur)
+    return Cur
 def Modificar(Datos):
     if "K" in session.keys():
         fernet = Fernet(session["K"])
@@ -1512,7 +1512,7 @@ def Evidencia(Datos):
     except:
          Resultado["Contenido"] = str(sys.exc_info())
     Cur += json.dumps(Resultado)
-    print(Cur)
+    return Cur
 def Evidencia_Guardar(Datos):
     DB = LibDM_2023.DataBase()
     Compartido_2023 = LibDM_2023.Compartido()
@@ -1675,7 +1675,7 @@ def Imprimir_Pase(Datos):
     except:
         Resultado["Contenido"] = str(sys.exc_info())
     Cur += json.dumps(Resultado)
-    print(Cur)
+    return Cur
 def Generar_Pase_Salida(ID_Caja,Nombre_Archivo):
     DB = LibDM_2023.DataBase()
     try:
