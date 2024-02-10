@@ -10,7 +10,7 @@ import pathlib
 import sys
 app = Flask(__name__)
 import Inicio
-from ToDo import Inicio as TODO
+#from ToDo import Inicio as TODO
 PATH_DIR = str(pathlib.Path(__file__).parent.resolve()).replace("\\","/")
 @app.route('/recurso/<path:path>')
 def recurso(path):
