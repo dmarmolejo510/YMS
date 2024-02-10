@@ -1556,7 +1556,7 @@ def Ver_Historico(Datos):
     Resultado = {"Contenido":"","Estado":0}
     try:
         Historico = []
-        Usuarios = DB.Get_Dato("SELECT cusrid,Nombre FROM public.cuser")
+        Usuarios = DB.Get_Dato("SELECT cusrid,\"Nombre\" FROM public.cuser")
         for H in DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas_moviemiento WHERE cch_master = '"+str(Datos["ID"])+"' ORDER BY cch_fecha_hora"):
             Info_Actual = json.loads(str(H["cch_informacion_actual"]))
             Usr_Aqui = None
@@ -1807,7 +1807,7 @@ def Guardar_OSyD(Datos):
         ('PRODUCCION','"""+str(Datos["ID_User"])+"""',NOW(),'"""+str(Info_Datos["Caja"])+"""','"""+str(Info_Datos["Comentario"])+"""','"""+str(','.join(Info_Datos["Fotos"]))+"""','"""+str(Info_Datos["Carrier"])+"""')
         """)
         if Error == "":
-            ID = DB.Get_Dato("SELECT MAX(cosyd_id) as ID FROM "+str(BD_Nombre)+".cosyd WHERE cosyd_tipo = 'PRODUCCION' AND cosyd_usuario = '"+str(Datos["ID_User"])+"' ")[0]["ID"]
+            ID = DB.Get_Dato("SELECT MAX(cosyd_id) as id FROM "+str(BD_Nombre)+".cosyd WHERE cosyd_tipo = 'PRODUCCION' AND cosyd_usuario = '"+str(Datos["ID_User"])+"' ")[0]["id"]
             Error += DB.Instruccion("""
             INSERT INTO """+str(BD_Nombre)+""".cosyd_historico
             (cosyd_master,cosyd_usuario,cosyd_comentario,cosyd_evidencia,cosyd_movimiento,cosyd_fecha)
