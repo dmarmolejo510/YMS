@@ -888,7 +888,7 @@ def Guardar_Nueva_Ruteo(Datos):
                         cosyd_p_6_Other = "'"+str(Parte["6 Other"]).strip()+"'"
                     Error += DB.Instruccion("""
                     INSERT INTO """+str(BD_Nombre)+""".cosyd_partes
-                    (cosyd_master,cosyd_parte,cosyd_cantidad_asn,cosyd_cantidad_real,cosyd_p_pakingslip,cosyd_p_destino,cosyd_p_1_Damage,cosyd_p_2_Shortage,cosyd_p_3_Surplus,cosyd_p_4_ASN_Issue,cosyd_p_5_Missing_doc_in_Prisma,cosyd_p_6_Other)
+                    (cosyd_master,cosyd_parte,cosyd_cantidad_asn,cosyd_cantidad_real,cosyd_p_pakingslip,cosyd_p_destino,cosyd_p_1_damage,cosyd_p_2_shortage,cosyd_p_3_surpluse,cosyd_p_4_asn_issue,cosyd_p_5_missing_doc_in_prisma,cosyd_p_6_other)
                     VALUES
                     ('"""+str(ID)+"""','"""+str(Parte["Numero de Parte"])+"""','"""+str(Parte["Cantidad de ASN"])+"""','"""+str(Parte["Cantidad Real"])+"""','"""+str(Info["Packing Slip"])+"""','"""+str(Info["Destino"])+"""',"""+str(cosyd_p_1_Damage)+""","""+str(cosyd_p_2_Shortage)+""","""+str(cosyd_p_3_Surplus)+""","""+str(cosyd_p_4_ASN_Issue)+""","""+str(cosyd_p_5_Missing_doc_in_Prisma)+""","""+str(cosyd_p_6_Other)+""")
                     """)
