@@ -194,15 +194,15 @@ def Cargar_Abiertos(Datos):
             Problemas = []
             Historico = int(DB.Get_Dato("SELECT COUNT(*) AS Numero FROM "+str(BD_Nombre)+".cosyd_historico WHERE cosyd_master = '"+str(PakingSplip["cosyd_id"])+"'")[0]["Numero"])
             for Partes in DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".cosyd_partes WHERE cosyd_master = '"+str(PakingSplip["cosyd_id"])+"'"):
-                if int(Partes["cosyd_p_1_Damage"]) == 1 and "1. Damage" not in Problemas:
+                if int(Partes["cosyd_p_1_damage"]) == 1 and "1. Damage" not in Problemas:
                     Problemas.append("1. Damage")
-                if int(Partes["cosyd_p_2_Shortage"]) == 1 and "2. Shortage" not in Problemas:
+                if int(Partes["cosyd_p_2_shortage"]) == 1 and "2. Shortage" not in Problemas:
                     Problemas.append("2. Shortage")
-                if int(Partes["cosyd_p_3_Surplus"]) == 1 and "3. Surplus" not in Problemas:
+                if int(Partes["cosyd_p_3_surplus"]) == 1 and "3. Surplus" not in Problemas:
                     Problemas.append("3. Surplus")
-                if int(Partes["cosyd_p_4_ASN_Issue"]) == 1 and "4. ASN Issue" not in Problemas:
+                if int(Partes["cosyd_p_4_asn_Issue"]) == 1 and "4. ASN Issue" not in Problemas:
                     Problemas.append("4. ASN Issue")
-                if int(Partes["cosyd_p_5_Missing_doc_in_Prisma"]) == 1 and "5. Missing doc in Prisma" not in Problemas:
+                if int(Partes["cosyd_p_5_missing_doc_in_prisma"]) == 1 and "5. Missing doc in Prisma" not in Problemas:
                     Problemas.append("5. Missing doc in Prisma")
                 Numeros += 1
             for K in PakingSplip.keys():
