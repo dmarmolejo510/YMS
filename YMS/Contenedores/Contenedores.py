@@ -524,6 +524,11 @@ def Tipo_Nuevo_1(Datos):
                 <hr>
                 <div class='w-100 text-center'><button class='btn btn-success w-75' onclick='Modificar_Guardar("""+str(Datos["ID"])+""")'><i class='mdi mdi-floppy'></i> Save</button></div>
                 """
+            if Datos["Tipo"] == "Outbound":
+                if "Fecha_Salida" in Info_Actual.keys():
+                    Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Fecha de Salida","Requerido":1,"valor":str(Info_Actual["Fecha_Salida"]),"editable":False})
+                else:
+                    Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Fecha de Salida","Requerido":1,"valor":""})
         else:
             for K in Info[Datos["Tipo"]].keys():
                 Opciones.append(K)
