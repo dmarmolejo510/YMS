@@ -1449,6 +1449,252 @@ def Ver_Historico(Datos):
     Cur += json.dumps(Resultado)
     return Cur
 
+def Cargar_Liberados(Datos):
+    if "K" in session.keys():
+        fernet = Fernet(session["K"])
+    DB = LibDM_2023.DataBase()
+    Compartido_2023 = LibDM_2023.Compartido()
+    Cur = ""
+    Resultado = {"Contenido":"","Estado":0}
+    try:
+        Contador_Abierto = {"valor":0,"clase":"text-bg-secondary"}
+        Contador_Liberados = {"valor":0,"clase":"text-bg-secondary"}
+        Resultado["Contenido"] += "<div class='h3 text-center mt-2'>OS&D Liberados</div>"
+
+        Tabla_Datos_Liberados = []
+        for PakingSplip in DB.Get_Dato("""
+        SELECT MASTER.*,MAX(HISTORICO.cosyd_fecha) Fecha_Ultimo,string_agg(DISTINCT(PARTES.cosyd_p_destino),',') Destinos,MASTER.cosyd_packingslip  FROM """+str(BD_Nombre)+""".cosyd  MASTER
+        inner join """+str(BD_Nombre)+""".cosyd_historico HISTORICO on MASTER.cosyd_id = HISTORICO.cosyd_master 
+        left join """+str(BD_Nombre)+""".cosyd_partes PARTES ON PARTES.cosyd_master = MASTER.cosyd_id
+        WHERE MASTER.cosyd_estado IN (1,2)
+        group by MASTER.cosyd_id  ORDER BY cosyd_alta
+        """):
+            if int(PakingSplip["cosyd_estado"]) == 1:
+                Contador_Abierto["valor"] += 1
+            if int(PakingSplip["cosyd_estado"]) == 2:
+                Contador_Liberados["valor"] += 1
+            OK = 0
+            Numeros = 0
+            Cumeros_Ok = 0
+            Problemas = []
+            for Partes in DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".cosyd_partes WHERE cosyd_master = '"+str(PakingSplip["cosyd_id"])+"'"):
+                if int(Partes["cosyd_p_1_damage"]) == 1 and "1. Damage" not in Problemas:
+                    Problemas.append("1. Damage")
+                if int(Partes["cosyd_p_2_shortage"]) == 1 and "2. Shortage" not in Problemas:
+                    Problemas.append("2. Shortage")
+                if int(Partes["cosyd_p_3_surpluse"]) == 1 and "3. Surplus" not in Problemas:
+                    Problemas.append("3. Surplus")
+                if int(Partes["cosyd_p_4_asn_issue"]) == 1 and "4. ASN Issue" not in Problemas:
+                    Problemas.append("4. ASN Issue")
+                if int(Partes["cosyd_p_5_missing_doc_in_prisma"]) == 1 and "5. Missing doc in Prisma" not in Problemas:
+                    Problemas.append("5. Missing doc in Prisma")
+                if int(Partes["cosyd_p_estado"]) != 1:
+                    Cumeros_Ok += 1
+                Numeros += 1
+            for K in PakingSplip.keys():
+                if PakingSplip[K] is None:
+                    PakingSplip[K]  = ""
+            Aux_Datos = {}
+            Aux_Datos["Estado"] = OK
+            Opciones = """
+            <button class='btn btn-warning btn-sm p-0 ps-1 pe-1' onclick='Ver_Historico("""+str(PakingSplip["cosyd_id"])+""",\""""+str(PakingSplip["cosyd_id"]).zfill(5)+"""\");'><i class='mdi mdi-history'></i></button>
+            """
+            if Numeros == 0:
+                Aux_Datos["Estado"] = 2
+                Opciones += """
+                <button class='btn btn-primary btn-sm p-0 ps-1 pe-1' onclick='Completar_Ruteo("""+str(PakingSplip["cosyd_id"])+""");'><i class='mdi mdi-file-document-edit'></i></button>
+                """
+            else:
+                Opciones += """
+                <button class='btn btn-primary btn-sm p-0 ps-1 pe-1' onclick='Modificar_Ruteo("Editar","""+str(PakingSplip["cosyd_id"])+""",\""""+str(PakingSplip["cosyd_id"]).zfill(5)+"""\",\"LIBERADOS\",\""""+str(",".join(Problemas))+"""\");'><i class='mdi mdi-file-document-edit'></i></button>
+                <button class='btn btn-dark btn-sm p-0 ps-1 pe-1' onclick='Generar_Archivo_Ruteo("""+str(PakingSplip["cosyd_id"])+""");'><i class='mdi mdi-printer'></i></button>
+                """
+            
+            Diff = datetime.now() - PakingSplip["Fecha_Ultimo"]
+            Aux_Datos[" "] = str(Opciones)
+            Lleva = ""
+            if Diff.days > 0:
+                Lleva += str(Diff.days)+" Day(s) "
+            segundos = Diff.seconds
+            horas, segundos = divmod(segundos, 3600)
+            minutos, segundos = divmod(segundos, 60)
+
+            if len(str(horas)) == 1:
+                horas = "0"+str(horas)
+            if len(str(minutos)) == 1:
+                minutos = "0"+str(minutos)
+            if len(str(segundos)) == 1:
+                segundos = "0"+str(segundos)
+            Lleva += str(horas)+":"+str(minutos)+":"+str(segundos)
+
+            Aux_Datos["Ultima modificacion"] = str(Lleva)
+            Aux_Datos["Folio"] = str(PakingSplip["cosyd_id"]).zfill(5)
+            Aux_Datos["Problema"] = str(",".join(Problemas))
+
+            Aux_Datos["Ruta"] = str(PakingSplip["cosyd_ruta"])
+            Aux_Datos["Fecha de Ruta"] = str(PakingSplip["cosyd_ruta_fecha_hora"])
+
+            Aux_Datos["Fecha Alta"] = str(PakingSplip["cosyd_alta"])
+            Aux_Datos["Fecha de envío del proveedor"] = ""
+            Aux_Datos["Proveedor"] = PakingSplip["cosyd_proveedor"]
+            Aux_Datos["Packing Slip"] = str(PakingSplip["cosyd_p_pakingslip"])
+            Aux_Datos["Destino"] = PakingSplip["Destinos"]
+            Aux_Datos["Contenedor"] = PakingSplip["cosyd_caja"]
+            Aux_Datos["SCAC"] = PakingSplip["cosyd_scac"]
+            Aux_Datos["Ultimo Comentario"] = PakingSplip["cosyd_comentario"]
+            Aux_Datos["Numeros"] = "<a class='link-primary' style='cursor:pointer' onclick='Ver_Detalle("+str(PakingSplip["cosyd_id"])+")'>"+str(Numeros)+"</a>" 
+            Aux_Datos["Numeros_de_Parte"] = str(Numeros)
+            Aux_Datos["Archivos"] = ""
+            for Archivo in str(PakingSplip["cosyd_archivos"]).split(","):
+                if Archivo.strip() != "":
+                    if "pdf" in Archivo:
+                        Aux_Datos["Archivos"] += "<a href='"+str(request.url_root)+"/Portal_File/"+str(Archivo)+"' target='_blank' class='mdi mdi-file-pdf-box ms-1'></a>"
+                    else:
+                        Aux_Datos["Archivos"] += "<a href='"+str(request.url_root)+"/Portal_File/"+str(Archivo)+"' target='_blank' class='mdi mdi-image ms-1'></a>"
+
+            
+            if int(PakingSplip["cosyd_estado"]) == 2:
+                Tabla_Datos_Liberados.append(Aux_Datos)
+        
+
+        Tabla_Datos_Liberados_Partes = []
+        for PakingSplip in DB.Get_Dato("""
+        SELECT 
+        PARTES.cosyd_p_pakingslip,MASTER.cosyd_id, MASTER.cosyd_ruta,MASTER.cosyd_ruta_fecha_hora,MASTER.cosyd_alta, MASTER.cosyd_proveedor,PARTES.cosyd_p_destino, PARTES.cosyd_parte,MASTER.cosyd_caja,PARTES.cosyd_cantidad_real,MASTER.cosyd_scac,MASTER.cosyd_comentario,MASTER.cosyd_archivos  
+        FROM """+str(BD_Nombre)+""".cosyd  MASTER
+        inner join """+str(BD_Nombre)+""".cosyd_partes PARTES ON PARTES.cosyd_master = MASTER.cosyd_id
+        WHERE MASTER.cosyd_estado = 2
+        ORDER BY cosyd_alta
+        """):
+            Tabla_Datos_Liberados_Partes.append({"Cantidad":str(PakingSplip["cosyd_cantidad_real"]),"Packing Slip":str(PakingSplip["cosyd_p_pakingslip"]),"Folio":str(PakingSplip["cosyd_id"]),"Ruta":str(PakingSplip["cosyd_ruta"]),"Fecha de Ruta":str(PakingSplip["cosyd_ruta_fecha_hora"]),"Fecha Alta":str(PakingSplip["cosyd_alta"]),"Proveedor":str(PakingSplip["cosyd_proveedor"]),"Destino":str(PakingSplip["cosyd_p_destino"]),"Numero de Parte":str(PakingSplip["cosyd_parte"]),"Contenedor":str(PakingSplip["cosyd_caja"]),"SCAC":str(PakingSplip["cosyd_scac"]),"Ultimo Comentario":str(PakingSplip["cosyd_comentario"])})
+            pass
+        if Contador_Abierto["valor"] > 0:
+            Contador_Abierto["clase"] = "text-bg-danger"
+        if Contador_Liberados["valor"] > 0:
+            Contador_Liberados["clase"] = "text-bg-danger"
+        Resultado["Contenido"] += """
+        <div class='row'>
+            <div class='col-12'>
+                <div class='w-100 d-flex justify-content-end'>
+                    <!--<button class='btn btn-outline-primary mb-1' onclick='Nueva_Ruteo()'><i class='mdi mdi-plus'></i> Nuevo</button>-->
+                    <button class='btn btn-primary mb-1' id="download-xlsx-ruteo"><i class='mdi mdi-microsoft-excel'></i> Descargar Excel</button>
+                    <button class='btn btn-dark mb-1 ms-1' id="download-xlsx-ruteo-partes"><i class='mdi mdi-microsoft-excel'></i> Descargar Excel Partes</button>
+                </div>
+                <div id='Tabla-Ruteo' class='border border-dark bg-dark-subtle'></div>
+                <script>
+                    delete table_liberados;
+                    var Col = [
+                        {title: ' ', field: ' ', formatter: 'html',download: false,width:120}, 
+                        {title: 'Packing Slip', field: 'Packing Slip', formatter: 'html'}, 
+                        {title: 'Folio', field: 'Folio', headerFilter: 'input'}, 
+                        {title: 'Ruta', field: 'Ruta', headerFilter: 'input'}, 
+                        {title: 'Fecha de Ruta', field: 'Fecha de Ruta', headerFilter: 'input'}, 
+                        {title: 'Fecha Alta', field: 'Fecha Alta', headerFilter: 'input'}, 
+                        {title: 'Proveedor', field: 'Proveedor', headerFilter: 'input'}, 
+                        {title: 'Destino', field: 'Destino', headerFilter: 'input'}, 
+                        {title: 'Numeros de Parte', field: 'Numeros', formatter: 'html',download: false,width:50},
+                        {title: 'Numeros_de_Parte', field: 'Numeros_de_Parte',download: true,visible:false,width:50}, 
+                        {title: 'Problema', field: 'Problema',width:150},
+                        {title: 'Contenedor', field: 'Contenedor', headerFilter: 'input'}, 
+                        {title: 'SCAC', field: 'SCAC', headerFilter: 'input'}, 
+                        {title: 'Ultimo Comentario', field: 'Ultimo Comentario', headerFilter: 'input'}, 
+                        {title: 'Archivo(s)', field: 'Archivos', formatter: 'html',download: false}];
+                    var table_liberados = new Tabulator("#Tabla-Ruteo", {
+                        minHeight:800,
+                        data:"""+str(Tabla_Datos_Liberados)+""",
+                        initialSort:[
+                            {column:"Fecha Alta", dir:"desc"}
+                        ],
+                        layout:"fitColumns",
+                        pagination:"local",
+                        rowFormatter:function(row){
+                        if(row.getData().Estado == 1){
+                                row.getElement().style.backgroundColor = "#5dff67";
+                            }
+                        },
+                        paginationSize:50,  
+                        paginationCounter:"rows",
+                        columns:Col,
+                        selectable:false
+                    });
+                    document.getElementById("download-xlsx-ruteo").addEventListener("click", function(){
+                        table_liberados.download("xlsx", "Ruteo.xlsx", {sheetName:"My Data"});
+                    });
+                </script>
+
+
+                <div style='display:none;' id='Tabla-Ruteo-Partes' class='border border-dark bg-dark-subtle'></div>
+                <script>
+                    delete table_liberados_Partes;
+                    var Col = [
+                        {title: 'Packing Slip', field: 'Packing Slip'}, 
+                        {title: 'Folio', field: 'Folio', headerFilter: 'input'}, 
+                        {title: 'Ruta', field: 'Ruta', headerFilter: 'input'}, 
+                        {title: 'Fecha de Ruta', field: 'Fecha de Ruta', headerFilter: 'input'}, 
+                        {title: 'Fecha Alta', field: 'Fecha Alta', headerFilter: 'input'}, 
+                        {title: 'Proveedor', field: 'Proveedor', headerFilter: 'input'}, 
+                        {title: 'Destino', field: 'Destino', headerFilter: 'input'}, 
+                        {title: 'Numero de Parte', field: 'Numero de Parte'},
+                        {title: 'Cantidad', field: 'Cantidad'},
+                        {title: 'Contenedor', field: 'Contenedor', headerFilter: 'input'}, 
+                        {title: 'SCAC', field: 'SCAC', headerFilter: 'input'}, 
+                        {title: 'Ultimo Comentario', field: 'Ultimo Comentario', headerFilter: 'input'}];
+                    var table_liberados_Partes = new Tabulator("#Tabla-Ruteo-Partes", {
+                        minHeight:800,
+                        data:"""+str(Tabla_Datos_Liberados_Partes)+""",
+                        initialSort:[
+                            {column:"Fecha Alta", dir:"desc"}
+                        ],
+                        layout:"fitColumns",
+                        pagination:"local",
+                        rowFormatter:function(row){
+                        if(row.getData().Estado == 1){
+                                row.getElement().style.backgroundColor = "#5dff67";
+                            }
+                        },
+                        paginationSize:50,  
+                        paginationCounter:"rows",
+                        columns:Col,
+                        selectable:false
+                    });
+                    document.getElementById("download-xlsx-ruteo-partes").addEventListener("click", function(){
+                        table_liberados_Partes.download("xlsx", "Ruteo.xlsx", {sheetName:"My Data"});
+                    });
+                    table_liberados_Partes.on("tableBuilt", function(){
+                            $("#Tabla-Ruteo-Partes").hide();
+                    });
+                    
+                </script>
+
+
+            </div>
+        </div>
+        <script>
+            $( document ).ready(function() {
+                $('.tabulator-header-contents').addClass('bg-body-secondary').find('.tabulator-col').addClass('bg-body-secondary');
+                $("#Tab_Abierto").find('.badge').html("""+str(Contador_Abierto["valor"])+""").removeClass('text-bg-danger text-bg-secondary').addClass('"""+str(Contador_Abierto["clase"])+"""');
+                $("#Tab_Liberados").find('.badge').html("""+str(Contador_Liberados["valor"])+""").removeClass('text-bg-danger text-bg-secondary').addClass('"""+str(Contador_Liberados["clase"])+"""');
+            })
+            function Modificar_Ruteo(Accion,ID,Folio,De_Donde,Problemas){
+                Mostrar_Ventana_Cargando(false);
+                $("#Vent_1").removeClass('modal-xl modal-lg modal-sm').addClass('modal-lg')
+                $("#Vent_1").modal("show").find(".modal-body").html("<div class='w-100 text-center'><div class='spinner-grow' role='status'></div><b> Loading...</b></div>").parent().find(".modal-title").html("<i class='mdi mdi-file-document-edit'></i> Edit ["+Folio+"] "+Problemas);
+                var parametros = {"Fun":'"""+str(fernet.encrypt("Modificar_Ruteo".encode()).decode("utf-8"))+"""',"Accion":Accion,"ID":ID,"De_Donde":De_Donde};
+                $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
+                    type:  "post",
+                    success:  function (response){var Resultado = JSON.parse(response); $("#Vent_1").find(".modal-body").html(Resultado["Contenido"]);swal.close();},
+                    error: function (jqXHR, textStatus, errorThrown){$("#Vent_1").find(".modal-body").html("<span style='color:red;'><b>ERROR</b></span> <hr>"+textStatus);}
+                });
+            }
+        </script>
+        """
+
+        
+    except:
+        Resultado["Contenido"] = str(sys.exc_info())
+    Cur += json.dumps(Resultado)
+    return Cur
+
 
 def Direccionar(Datos):
     try:
