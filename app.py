@@ -11,6 +11,7 @@ import sys
 app = Flask(__name__)
 import Inicio
 from ToDo import Inicio as TODO
+from YMS import Inicio as YMS
 
 app.secret_key = LibDM_2023.Compartido().Dame_K()
 fernet = Fernet(LibDM_2023.Compartido().Dame_K2())
@@ -59,3 +60,15 @@ def ToDo_root():
             for K in request.form.keys():
                 Datos[K] = escape(request.form[K]).striptags()
             return render_template_string(TODO.Direccionar(Datos))
+@app.route("/YMS",methods=['GET','POST'])
+def YMS_root():
+    if "IDu" not in session:
+        return render_template_string("<script>window.location= '"+str(request.url_root)+"';</script>")
+    else:
+        if request.method == "GET":
+            return render_template_string(YMS.Inicio())
+        else:
+            Datos = {}
+            for K in request.form.keys():
+                Datos[K] = escape(request.form[K]).striptags()
+            return render_template_string(YMS.Direccionar(Datos))

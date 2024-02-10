@@ -2132,39 +2132,39 @@ class Menu:
         #         }
         
         Menu["YMS"] ={
-                    "Link": str(Raiz)+"ODC",
+                    "Link": str(Raiz)+"YMS",
                     "Items":{
                         "Container Control":{
                             "Icono":"mdi mdi-truck-trailer",
                             "Items":{
-                                "Container":{"Icono":"mdi mdi-truck-trailer","Link":"/ODC/Container_Control","P":"Yard","Fun":"Inicio","ID":1501},
-                                "Container Manager":{"Icono":"mdi mdi-truck-trailer","Link":"/ODC/Container_Manager","P":"Yard","Fun":"Inicio","ID":1502},
+                                "Container":{"Icono":"mdi mdi-truck-trailer","Link":"/YMS/Container_Control","P":"Yard","Fun":"Inicio","ID":1501},
+                                "Container Manager":{"Icono":"mdi mdi-truck-trailer","Link":"/YMS/Container_Manager","P":"Yard","Fun":"Inicio","ID":1502},
                             }
                         },
                         "Outbound Status":{
                             "Icono":"mdi mdi-progress-upload",
                             "Items":{
-                                "Outbound Status":{"Icono":"mdi mdi-progress-upload","Link":"/ODC/OutBound/Status","P":"Yard","Fun":"Inicio","ID":1501},
-                                "Reporte":{"Icono":"mdi mdi-projector-screen","Link":"/ODC/OutBound/Report","P":"Yard","Fun":"Inicio","ID":1501}
+                                "Outbound Status":{"Icono":"mdi mdi-progress-upload","Link":"/YMS/OutBound/Status","P":"Yard","Fun":"Inicio","ID":1501},
+                                "Reporte":{"Icono":"mdi mdi-projector-screen","Link":"/YMS/OutBound/Report","P":"Yard","Fun":"Inicio","ID":1501}
                             }
                         },
-                        "OS&D":{"Icono":"mdi mdi-alert","Link":"/ODC/OSyD","Fun":"Inicio","ID":1508},
+                        "OS&D":{"Icono":"mdi mdi-alert","Link":"/YMS/OSyD","Fun":"Inicio","ID":1508},
                         "Reports":{
                             "Icono":"mdi mdi-book",
                             "Items":{
-                                "Container Search":{"Icono":"mdi mdi-feature-search","Link":"/ODC/Report/Container","P":"Yard","Fun":"Inicio","ID":1509},
-                                "Daily":{"Icono":"mdi mdi-book","Link":"/ODC/Report/Daily","P":"Yard","Fun":"Inicio","ID":1510},
-                                "Carrier":{"Icono":"mdi mdi-book","Link":"/ODC/Report/Carrier","P":"Yard","Fun":"Inicio","ID":1511},
-                                "Aging Report":{"Icono":"mdi mdi-book","Link":"/ODC/Report/Aging","P":"Yard","Fun":"Inicio","ID":1512}
+                                "Container Search":{"Icono":"mdi mdi-feature-search","Link":"/YMS/Report/Container","P":"Yard","Fun":"Inicio","ID":1509},
+                                "Daily":{"Icono":"mdi mdi-book","Link":"/YMS/Report/Daily","P":"Yard","Fun":"Inicio","ID":1510},
+                                "Carrier":{"Icono":"mdi mdi-book","Link":"/YMS/Report/Carrier","P":"Yard","Fun":"Inicio","ID":1511},
+                                "Aging Report":{"Icono":"mdi mdi-book","Link":"/YMS/Report/Aging","P":"Yard","Fun":"Inicio","ID":1512}
                             }
                         },
                         "Configuration":{
                             "Icono":"mdi mdi-cog",
                             "Items":{
-                                "Suppliers Master":{"Icono":"mdi mdi-card-bulleted","Link":"/ODC/Conf/Suppliers","P":"Yard","Fun":"Inicio","ID":1505},
-                                "Route Master":{"Icono":"mdi mdi-swap-vertical-variant","Link":"/ODC/Conf/Routes","P":"Yard","Fun":"Inicio","ID":1506},
-                                "Docks Master":{"Icono":"mdi mdi-sign-caution","Link":"/ODC/Conf/Docks","P":"Yard","Fun":"Inicio","ID":1507},
-                                "Destinos":{"Icono":"mdi mdi-card-bulleted","Link":"/ODC/Conf/Destination","P":"Yard","Fun":"Inicio","ID":1507}
+                                "Suppliers Master":{"Icono":"mdi mdi-card-bulleted","Link":"/YMS/Conf/Suppliers","P":"Yard","Fun":"Inicio","ID":1505},
+                                "Route Master":{"Icono":"mdi mdi-swap-vertical-variant","Link":"/YMS/Conf/Routes","P":"Yard","Fun":"Inicio","ID":1506},
+                                "Docks Master":{"Icono":"mdi mdi-sign-caution","Link":"/YMS/Conf/Docks","P":"Yard","Fun":"Inicio","ID":1507},
+                                "Destinos":{"Icono":"mdi mdi-card-bulleted","Link":"/YMS/Conf/Destination","P":"Yard","Fun":"Inicio","ID":1507}
                             }
                         },
 
