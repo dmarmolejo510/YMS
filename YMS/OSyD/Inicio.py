@@ -1232,7 +1232,7 @@ def Modificar_Ruteo(Datos):
                 {
                     Mostrar_Ventana_Cargando(false);
                     var parametros = {"Fun":'"""+str(fernet.encrypt("Guardar_Modificar_Ruteo".encode()).decode("utf-8"))+"""',"Info":JSON.stringify(Info),"ID":ID};
-                        $.ajax({data:  parametros,url:\""""+str(request.user_agent)+"""\",type:  "post",
+                        $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
                             success:  function (response){
                                 var obj = JSON.parse(response);
                                 if(obj["Estado"] == 1)
@@ -1692,6 +1692,247 @@ def Cargar_Liberados(Datos):
         
     except:
         Resultado["Contenido"] = str(sys.exc_info())
+    Cur += json.dumps(Resultado)
+    return Cur
+def Cargar_Menu_Reporte(Datos):
+    if "K" in session.keys():
+        fernet = Fernet(session["K"])
+    DB = LibDM_2023.DataBase()
+    Compartido_2023 = LibDM_2023.Compartido()
+    Cur = ""
+    Resultado = {"Contenido":"","Estado":0}
+    try:
+        Resultado["Contenido"] += "<div class='h3 text-center mt-2'>OS&D Reporte</div>"
+        Resultado["Contenido"] += """
+        <div class='col-12'>
+        """
+        Formulario = {"Col":"", "Campos": [],"Clase": "Reporte" }
+        Formulario["Campos"].append({"tipo":"fecha-rango","campo":"Rango de fechas","titulo":"Rango de fechas","Requerido":1,"Col":12,"valor":"","editable":True})
+        Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
+        Resultado["Contenido"] += "<div class='w-100 text-center mb-3'><button class='btn btn-primary w-75' onclick='Reporte()'><i class='mdi mdi-download'></i> Cargar</button></div>"
+        Resultado["Contenido"] += """
+                <div id='Reporte' class='w-100 mb-5 p-1' style='height:600px; background:#e6e6e6'></div>
+            </div
+        </div>
+        <script>
+            function Reporte()
+            {
+                var Info = Dame_Formulario(".Reporte",true);
+                if(Info != null)
+                {
+                    $("#Reporte").html("<div class='w-100 text-center'><div class='spinner-grow' role='status'></div><b> Loading...</b></div>");
+                    var parametros = {"Fun":'"""+str(fernet.encrypt("Cargar_Reporte".encode()).decode("utf-8"))+"""',"Info":JSON.stringify(Info)};
+                    $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
+                        success:  function (response){ var Resultado = JSON.parse(response); $("#Reporte").html(Resultado["Contenido"]);},
+                        error: function (jqXHR, textStatus, errorThrown){$("#Reporte").html("<span style='color:red;'><b>ERROR</b></span> <hr>"+textStatus);}
+                    });   
+                }
+            }
+            $( document ).ready(function() {
+                $('.tabulator-header-contents').addClass('bg-body-secondary').find('.tabulator-col').addClass('bg-body-secondary');
+                //Reporte();
+            })
+        </script>
+        """
+
+        
+    except:
+        Resultado["Contenido"] = str(sys.exc_info())
+    Cur += json.dumps(Resultado)
+    return Cur
+def Cargar_Reporte(Datos):
+    DB = LibDM_2023.DataBase()
+    Compartido_2023 = LibDM_2023.Compartido()
+    Cur = ""
+    Resultado = {"Contenido":"","Estado":0}
+    try:
+        Info = json.loads(Datos["Info"])
+        Resultado["Contenido"] += "<h3>"+str(Info["Rango de fechas"][0])+" to "+str(Info["Rango de fechas"][1])+"</h3>"
+        Tabla_Datos_Cerrados = []
+        Proveedores = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".cproveedores")
+        PakingSplips = DB.Get_Dato("""
+        SELECT MASTER.*,PARTES.cosyd_parte,PARTES.cosyd_cantidad_asn,PARTES.cosyd_cantidad_real,PARTES.cosyd,PARTES.cosyd_comentario as Comm_Parte,PARTES.cosyd_p_pakingslip,PARTES.cosyd_p_destino,PARTES.cosyd_p_1_Damage,PARTES.cosyd_p_2_Shortage,PARTES.cosyd_p_3_Surpluse,PARTES.cosyd_p_4_ASN_Issue,PARTES.cosyd_p_5_Missing_doc_in_Prisma,PARTES.cosyd_p_6_Other FROM """+str(BD_Nombre)+""".cosyd  MASTER
+        inner join """+str(BD_Nombre)+""".cosyd_partes PARTES on MASTER.cosyd_id = PARTES.cosyd_master
+        WHERE MASTER.cosyd_alta between '"""+str(Info["Rango de fechas"][0])+""" 00:00:00' and '"""+str(Info["Rango de fechas"][1])+""" 23:59:59' and cosyd_estado > 0
+        ORDER BY cosyd_alta
+        """)
+        IDMaster = []
+        for PakingSplip in PakingSplips:
+            IDMaster.append(str(PakingSplip["cosyd_id"]))
+
+        Historicos = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".cosyd_historico WHERE cosyd_master IN ("+','.join(IDMaster)+")")
+
+        for PakingSplip in PakingSplips:
+            
+            H = []
+            for Hi in Historicos:
+                if int(Hi["cosyd_master"]) == int(PakingSplip["cosyd_id"]):
+                    H.append(Hi)
+
+            for K in PakingSplip.keys():
+                if PakingSplip[K] is None:
+                    PakingSplip[K] = ""
+            OK = 0
+            Numeros = 0
+            Aux_Datos = {}
+            Aux_Datos["Estado"] = OK
+            Opciones = """
+            <button class='btn btn-warning btn-sm p-0 ps-1 pe-1' onclick='Ver_Historico("""+str(PakingSplip["cosyd_id"])+""",\""""+str(PakingSplip["cosyd_id"]).zfill(5)+"""\");'><i class='mdi mdi-history'></i></button>
+            """
+            Aux_Datos["Folio"] = str(PakingSplip["cosyd_id"]).zfill(5)
+            Aux_Datos["Alta"] = str(PakingSplip["cosyd_alta"])
+            Aux_Datos["Ruta"] = str(PakingSplip["cosyd_ruta"])
+            Aux_Datos["Fecha de Ruta"] = str(PakingSplip["cosyd_ruta_fecha_hora"])
+
+
+            Aux_Datos["Pre-Liberado"] = "" 
+            for Hi in H:
+                if Hi["cosyd_movimiento"] == "PRE_LIBERADOS":
+                     Aux_Datos["Pre-Liberado"] = str(Hi["cosyd_fecha"])
+            
+            Aux_Datos["Liberado"] = "" 
+            for Hi in H:
+                if Hi["cosyd_movimiento"] == "LIBERADO":
+                     Aux_Datos["Liberado"] = str(Hi["cosyd_fecha"])
+            
+            Aux_Datos["Cerrado"] = "" 
+            for Hi in H:
+                if Hi["cosyd_movimiento"] == "CERRADO":
+                     Aux_Datos["Cerrado"] = str(Hi["cosyd_fecha"])
+
+
+            if int(PakingSplip["cosyd_estado"]) == 0:
+                Aux_Datos["Estado"] = "ELIMINADO"
+            elif int(PakingSplip["cosyd_estado"]) == 1:
+                Aux_Datos["Estado"] = "ABIERTO"
+            elif int(PakingSplip["cosyd_estado"]) == 2:
+                Aux_Datos["Estado"] = "LIBERADO"
+            else:
+                Aux_Datos["Estado"] = "CERRADO"
+            Aux_Datos[" "] = Opciones
+            Aux_Datos["Fecha de envío del proveedor"] = ""
+            Aux_Datos["Proveedor"] = PakingSplip["cosyd_proveedor"]
+            for P in Proveedores:
+                if str(P["crilcpr_codigo"]) ==  str(PakingSplip["cosyd_proveedor"]):
+                    Aux_Datos["Proveedor"] += " - " + str(P["crilcpr_nombre"])            
+            Aux_Datos["PackingSlip"] = str(PakingSplip["cosyd_p_pakingslip"])
+            Aux_Datos["Parte"] = str(PakingSplip["cosyd_parte"])
+            Aux_Datos["Cantidad ASN"] = str(PakingSplip["cosyd_cantidad_asn"])
+            Aux_Datos["Cantidad Real"] = str(PakingSplip["cosyd_cantidad_real"])
+            Aux_Datos["OS&D"] = str(PakingSplip["cosyd"])
+            Aux_Datos["Comentario Parte"] = str(PakingSplip["Comm_Parte"])
+
+            if PakingSplip["cosyd"] != "":
+                PakingSplip["cosyd_p_1_Damage"] = 'X' if str(PakingSplip["cosyd"]) == "1.- Damage" else ""
+                PakingSplip["cosyd_p_2_Shortage"] = 'X' if str(PakingSplip["cosyd"]) == "2.- Surplus" else ""
+                PakingSplip["cosyd_p_3_Surplus"] = 'X' if str(PakingSplip["cosyd"]) == "3.- Surplus" else ""
+                PakingSplip["cosyd_p_4_ASN_Issue"] = 'X' if str(PakingSplip["cosyd"]) == "4.- ASN Issue" else ""
+                PakingSplip["cosyd_p_5_Missing_doc_in_Prisma"] = 'X' if str(PakingSplip["cosyd"]) == "5.- Missing doc. in Prisma" else ""
+                if PakingSplip["cosyd_p_1_Damage"] == "" and PakingSplip["cosyd_p_2_Shortage"] == "" and PakingSplip["cosyd_p_3_Surplus"] == "" and PakingSplip["cosyd_p_4_ASN_Issue"] == "" and PakingSplip["cosyd_p_5_Missing_doc_in_Prisma"] == "":
+                    PakingSplip["cosyd_p_6_Other"] = "["+str(PakingSplip["cosyd"])+"] - " + str(PakingSplip["cosyd_comentario"])
+            else:
+                PakingSplip["cosyd_p_1_Damage"] = 'X' if int(PakingSplip["cosyd_p_1_Damage"]) == 1 else ""
+                PakingSplip["cosyd_p_2_Shortage"] = 'X' if int(PakingSplip["cosyd_p_2_Shortage"]) == 1 else ""
+                PakingSplip["cosyd_p_3_Surplus"] = 'X' if int(PakingSplip["cosyd_p_3_Surplus"]) == 1 else ""
+                PakingSplip["cosyd_p_4_ASN_Issue"] = 'X' if int(PakingSplip["cosyd_p_4_ASN_Issue"]) == 1 else ""
+                PakingSplip["cosyd_p_5_Missing_doc_in_Prisma"] = 'X' if int(PakingSplip["cosyd_p_5_Missing_doc_in_Prisma"]) == 1 else ""
+                PakingSplip["cosyd_p_6_Other"] = str(PakingSplip["cosyd_p_6_Other"]) if PakingSplip["cosyd_p_6_Other"] is not None else ""
+
+            Aux_Datos["1 Damage"] = str(PakingSplip["cosyd_p_1_Damage"])
+            Aux_Datos["2 Shortage"] = str(PakingSplip["cosyd_p_2_Shortage"])
+            Aux_Datos["3 Surplus"] = str(PakingSplip["cosyd_p_3_Surplus"])
+            Aux_Datos["4 ASN Issue"] = str(PakingSplip["cosyd_p_4_ASN_Issue"])
+            Aux_Datos["5 Missing doc in Prisma"] = str(PakingSplip["cosyd_p_5_Missing_doc_in_Prisma"])
+            Aux_Datos["6 Other"] = str(PakingSplip["cosyd_p_6_Other"])
+
+            
+            if PakingSplip["cosyd_p_destino"] != "" and PakingSplip["cosyd_p_destino"] is not None:
+                Aux_Datos["Destino"] = PakingSplip["cosyd_p_destino"]
+            else:
+                Aux_Datos["Destino"] = PakingSplip["cosyd_destino"]
+            Aux_Datos["Contenedor"] = PakingSplip["cosyd_caja"]
+            Aux_Datos["SCAC"] = PakingSplip["cosyd_scac"]
+            Aux_Datos["Ultimo Comentario"] = PakingSplip["cosyd_comentario"]
+            Aux_Datos["Numeros"] = str(Numeros)
+            Aux_Datos["Archivos"] = ""
+            for Archivo in str(PakingSplip["cosyd_archivos"]).split(","):
+                if Archivo.strip() != "":
+                    if "pdf" in Archivo:
+                        Aux_Datos["Archivos"] += "<a href='http://10.4.7.219:8080/Portal_File/"+str(Archivo)+"' target='_blank' class='mdi mdi-file-pdf-box ms-1'></a>"
+                    else:
+                        Aux_Datos["Archivos"] += "<a href='http://10.4.7.219:8080/Portal_File/"+str(Archivo)+"' target='_blank' class='mdi mdi-image ms-1'></a>"
+            
+            if PakingSplip["cosyd_baja"] is None or str(PakingSplip["cosyd_baja"]) == "":
+                Aux_Datos["Cerrado"] = ""
+            else:
+                Aux_Datos["Cerrado"] = str(PakingSplip["cosyd_baja"])
+            Aux_Datos["Tipo"] = str(PakingSplip["cosyd_tipo"])
+            if int(PakingSplip["cosyd_estado"]) == 0: 
+                Aux_Datos["Estado"] = 3
+            Tabla_Datos_Cerrados.append(Aux_Datos)
+
+        Resultado["Contenido"] += """
+        <div class='w-100 d-flex justify-content-end'>
+            <button class='btn btn-success mb-1' id="download-xlsx-cerrados"><i class='mdi mdi-microsoft-excel'></i> Descargar Excel</button>
+        </div>
+        <div id='Tabla-Cerrados'></div>
+        <script>
+            var Col = [
+                {title: ' ', field: ' ', formatter: 'html', download: false,width:30}, 
+                /*{title: 'Cerrado', field: 'Cerrado'},
+                {title: 'Estado', field: 'Estado', headerFilter: 'input'},*/
+                {title: 'Folio', field: 'Folio', headerFilter: 'input',width:80}, 
+                {title: 'Ruta', field: 'Ruta', headerFilter: 'input',width:80}, 
+                {title: 'Fecha de Ruta', field: 'Fecha de Ruta', headerFilter: 'input'}, 
+                {title: 'Proveedor', field: 'Proveedor', headerFilter: 'input'}, 
+                {title: 'PackingSlip', field: 'PackingSlip', headerFilter: 'input'}, 
+                {title: 'Parte', field: 'Parte', headerFilter: 'input'},
+                {title: 'Cantidad ASN', field: 'Cantidad ASN', headerFilter: 'input'},
+                {title: 'Cantidad Real', field: 'Cantidad Real', headerFilter: 'input'},
+                /*{title: 'OS&D', field: 'OS&D', headerFilter: 'input'},*/
+        """
+        for D in ["1 Damage","2 Shortage","3 Surplus","4 ASN Issue","5 Missing doc in Prisma"]:
+            Resultado["Contenido"] += """{title:'"""+str(D)+"""', field:'"""+str(D)+"""', hozAlign:"center",width:100,headerSort:false,headerHozAlign:"center"},"""
+        Resultado["Contenido"] += """
+                {title:"6 Other (Explain in Comments)", field:"6 Other"},
+                /*{title: 'Comentario Parte', field: 'Comentario Parte', headerFilter: 'input'},*/
+                {title: 'Destino', field: 'Destino', headerFilter: 'input'}, 
+                /*{title: 'Numeros de Parte (Total/Cerrados)', field: 'Numeros', headerFilter: 'input'},*/
+                {title: 'Contenedor', field: 'Contenedor', headerFilter: 'input'}, 
+                /*{title: 'SCAC', field: 'SCAC', headerFilter: 'input'},*/
+                /*{title: 'Ultimo Comentario', field: 'Ultimo Comentario', headerFilter: 'input'},
+                {title: 'Archivo(s)', field: 'Archivos', formatter: 'html',download: false}*/
+                {title: 'Alta', field: 'Alta', headerFilter: 'input'}, 
+                {title: 'Pre-Liberado', field: 'Pre-Liberado', headerFilter: 'input'},
+                {title: 'Liberado', field: 'Liberado', headerFilter: 'input'}, 
+                {title: 'Cerrado', field: 'Cerrado', headerFilter: 'input'}, 
+                ];
+            var table_c = new Tabulator("#Tabla-Cerrados", {
+                minHeight:600,
+                data:"""+str(Tabla_Datos_Cerrados)+""",
+                initialSort:[
+                    {column:"Fecha Alta", dir:"desc"}
+                ],
+                layout:"fitColumns",
+                pagination:"local",
+                rowFormatter:function(row){
+                if(row.getData().Estado == 3){
+                        row.getElement().style.backgroundColor = "#ff5d5d";
+                    }
+                },
+                paginationSize:50,  
+                paginationCounter:"rows",
+                columns:Col,
+                selectable:false
+            });
+            document.getElementById("download-xlsx-cerrados").addEventListener("click", function(){
+                table_c.download("xlsx", "Cerrados.xlsx", {sheetName:"My Data"});
+            });
+        </script>
+
+        """
+    except:
+        Resultado["Contenido"] += str(sys.exc_info())
     Cur += json.dumps(Resultado)
     return Cur
 
