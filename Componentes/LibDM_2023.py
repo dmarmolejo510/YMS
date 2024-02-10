@@ -9,8 +9,6 @@ import os
 from pathlib import Path
 from http import cookies
 from cryptography.fernet import Fernet
-Direccion = str(os.path.abspath(sys.argv[0]).split("\\")[0])+ "/" + str(os.path.abspath(sys.argv[0]).split("\\")[1]) + "/" + str(os.path.abspath(sys.argv[0]).split("\\")[2]) + "/" + str(os.path.abspath(sys.argv[0]).split("\\")[3]) + "/"
-from cryptography.fernet import Fernet
 sys.dont_write_bytecode = True
 class DataBase:
     ip_PPS = "192.168.83.50"
