@@ -74,10 +74,9 @@ def Inicio():
                     Estado = "Waiting"
             else:
                 Estado = Info_Actual["Etapa"]
-                if Info_Actual["Etapa"] == "Pending Exit":
-                    pass
+                if Info_Actual["Etapa"] == "Pending Exit" and Info_Actual["cc_tipo_actual"] == "Empty" and "Return Empty" in str(Info_Actual["cc_informacion_actual"]):
                     #Opciones += "<button class='btn btn-sm btn-dark p-0 ps-1 pe-1' onclick='Imprimir_Pase("+str(Contenedor["cc_id"])+",\""+str(Contenedor["cc_contenedor"])+"\")'><i class='mdi mdi-printer'></i></button>"
-                    #Opciones += "<button class='btn btn-sm btn-danger p-0 ps-1 pe-1' onclick='Salida("+str(Contenedor["cc_id"])+",\""+str(Contenedor["cc_contenedor"])+"\")'><i class='mdi mdi-exit-to-app'></i></button>"
+                    Opciones += "<button class='btn btn-sm btn-danger p-0 ps-1 pe-1' onclick='Salida("+str(Contenedor["cc_id"])+",\""+str(Contenedor["cc_contenedor"])+"\")'><i class='mdi mdi-exit-to-app'></i></button>"
 
             Opciones += "</div>"
 
@@ -138,7 +137,7 @@ def Inicio():
         <div class='text-end mb-1'> <button class='btn btn-success' onclick='Nueva_Caja()'><i class='mdi mdi-plus'></i> New Container</button> </div>
         <div class='row'>
             <div class='col-6'>
-                <div class='h3 text-center'><i class='mdi mdi-car-brake-parking'></i> Patio</div>
+                <div class='h3 text-center'><i class='mdi mdi-car-brake-parking'></i> Yard</div>
                 <div id='Tabla_Patio' class='border border-dark bg-dark-subtle'></div>
                 <script>
                     delete Tabla_Patio;
@@ -401,7 +400,7 @@ def Tipo_Nuevo(Datos):
                     if "Sello Proveedor" in Info_Actual.keys():
                         Formulario["Campos"].append({"tipo":"texto","campo":"Sello Proveedor","titulo":"Supplier Seal","Requerido":1,"min":1,"max":150,"valor":str(Info_Actual["Sello Proveedor"])})
                     elif "Sello Temporal" in Info_Actual.keys():
-                        Formulario["Campos"].append({"tipo":"texto","campo":"Sello Proveedor","titulo":"Sello Temporal","Requerido":1,"min":1,"max":150,"valor":str(Info_Actual["Sello Temporal"])})
+                        Formulario["Campos"].append({"tipo":"texto","campo":"Sello Temporal","titulo":"Seal","Requerido":1,"min":1,"max":150,"valor":str(Info_Actual["Sello Temporal"])})
                     else:
                         Formulario["Campos"].append({"tipo":"texto","campo":"Sello Proveedor","titulo":"Supplier Seal","Requerido":1,"min":1,"max":150,"valor":""})
                 
@@ -466,18 +465,18 @@ def Tipo_Nuevo(Datos):
             if str(Datos["Tipo"]) == "Outbound":
                 if De_Donde == "Patio" and str(Datos["Donde"]) == "Patio":
                     if "Sello Temporal" in Info_Actual.keys():
-                        Formulario["Campos"].append({"tipo":"texto","campo":"Sello Temporal","titulo":"Temporary Seal","Requerido":1,"min":1,"max":150,"valor":str(Info_Actual["Sello Temporal"])})
+                        Formulario["Campos"].append({"tipo":"texto","campo":"Sello Temporal","titulo":"Seal","Requerido":1,"min":1,"max":150,"valor":str(Info_Actual["Sello Temporal"])})
                     else:
-                        Formulario["Campos"].append({"tipo":"texto","campo":"Sello Temporal","titulo":"Temporary Seal","Requerido":1,"min":1,"max":150,"valor":""})
+                        Formulario["Campos"].append({"tipo":"texto","campo":"Sello Temporal","titulo":"Seal","Requerido":1,"min":1,"max":150,"valor":""})
                     Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Photos","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
                 if De_Donde == "Patio" and str(Datos["Donde"]) == "Dock":
                     Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Photos","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
                 if De_Donde == "Dock" and str(Datos["Donde"]) == "Dock":
                     Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Photos","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
                 if "Fecha_Salida" in Info_Actual.keys():
-                    Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Fecha de Salida","Requerido":1,"valor":str(Info_Actual["Fecha_Salida"]),"editable":False})
+                    Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Departure date","Requerido":1,"valor":str(Info_Actual["Fecha_Salida"]),"editable":False})
                 else:
-                    Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Fecha de Salida","Requerido":1,"valor":""})
+                    Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Departure date","Requerido":1,"valor":""})
             Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
             
             
@@ -510,7 +509,12 @@ def Tipo_Nuevo_1(Datos):
                 if str(Datos["Nivel_1"]) == "Empty" and str(Datos["Tipo"]) == "Return Empty":
                     Formulario = {"Col":"12", "Campos": [],"Clase": "Asignar" }
                     Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Photos","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
-                    Formulario["Campos"].append({"tipo":"checkbox","campo":"Salida","titulo":"¿Lista para salir? (GENERA PASA DE SALIDA)","Requerido":1,"valor":True,"editable":False})
+                    Formulario["Campos"].append({"tipo":"checkbox","campo":"Salida","titulo":"it ready departure?","Requerido":1,"valor":True,"editable":False})
+                    Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
+                if str(Datos["Nivel_1"]) == "Outbound":
+                    Formulario = {"Col":"12", "Campos": [],"Clase": "Asignar" }
+                    Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Photos","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
+                    Formulario["Campos"].append({"tipo":"checkbox","campo":"Salida","titulo":"it ready departure?","Requerido":1,"valor":True,"editable":False})
                     Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
             if De_Donde == "Patio" and str(Datos["Donde"]) == "Dock":
                 if str(Datos["Nivel_1"]) == "Empty":
