@@ -1017,9 +1017,9 @@ def Completar_Ruteo(Datos):
                     Ok = false;
                 if(element["Cantidad de ASN"].trim() == "")
                     Ok = false;
-                if(element["Pallets"].trim() == "")
+                /*if(element["Pallets"].trim() == "")
                     Ok = false;
-                /*if(element["Cantidad Real"].trim() == "")
+                if(element["Cantidad Real"].trim() == "")
                     Ok = false;*/
                 if(element["OSD"].trim() == "")
                     Ok = false;
