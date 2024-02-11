@@ -875,7 +875,7 @@ def Opciones(Datos):
                     <button class='btn btn-dark w-100 btn-lg' onclick='Modificar_A("Return Empty","Patio","""+str(Datos["ID"])+""");'><div>Empty [Return empty]</div><div><small>(Move container to yard <span class='text-danger fw-bold'>READY TO DEPARTURE</span>)</small></div></button>
                 </div>
                 <div class='col-12 p-1'>
-                    <button class='btn btn-primary w-100 btn-lg' onclick='Modificar_A("Inbound","Patio","""+str(Datos["ID"])+""");'><div>Inbound</div><div><small>(Mover caja a patio <span class='text-warning fw-bold'>CONTAINER WITH SUPPLIER'S MATERIAL</span>)</small></div></button>
+                    <button class='btn btn-primary w-100 btn-lg' onclick='Modificar_A("Inbound","Patio","""+str(Datos["ID"])+""");'><div>Inbound</div><div><small>(Move container to yard <span class='text-warning fw-bold'>CONTAINER WITH SUPPLIER'S MATERIAL</span>)</small></div></button>
                 </div>
                 <div class='col-12 p-1'>
                     <button class='btn btn-info w-100 btn-lg' onclick='Evidencia("""+str(Datos["ID"])+""");'><div> Add evidence </div><div><small></small></div></button>
@@ -941,16 +941,16 @@ def Opciones(Datos):
             """
         if Caja["cc_tipo_actual"] == "Outbound":
             Resultado["Contenido"] = """
-            <div>Opciones de Contenedor</div>
+            <div>Container Option</div>
             <div class='row'>
                 <div class='col-12 p-1'>
-                    <button class='btn btn-dark w-100 btn-lg' onclick='Modificar_A("Ready to Load","","""+str(Datos["ID"])+""");'><div>Empty [Ready to Load]</div><div><small>(Asignación incorrecta)</small></div></button>
+                    <button class='btn btn-dark w-100 btn-lg' onclick='Modificar_A("Ready to Load","","""+str(Datos["ID"])+""");'><div>Empty [Ready to Load]</div><div><small>(Incorrect outbound route)</small></div></button>
                 </div>
                 <div class='col-12 p-1'>
-                    <button class='btn btn-warning w-100 btn-lg' onclick='Modificar_A("Outbound","Patio","""+str(Datos["ID"])+""");'><div>Outbound</div><div><small>(Mover Caja a Patio <span class='fw-bold text-danger'>AÚN FALTA MATERIAL POR CARGAR</span>)</small></div></button>
+                    <button class='btn btn-warning w-100 btn-lg' onclick='Modificar_A("Outbound","Patio","""+str(Datos["ID"])+""");'><div>Outbound</div><div><small>(Move container to yard <span class='fw-bold text-danger'>STOP MATERIAL LOADING</span>)</small></div></button>
                 </div>
                 <div class='col-12 p-1'>
-                    <button class='btn btn-warning w-100 btn-lg' onclick='Modificar_A("Outbound","Patio","""+str(Datos["ID"])+""",1);'><div>Outbound</div><div><small>(Mover Caja a Patio <span class='fw-bold text-danger'>LISTA PARA SALIR</span>)</small></div></button>
+                    <button class='btn btn-warning w-100 btn-lg' onclick='Modificar_A("Outbound","Patio","""+str(Datos["ID"])+""",1);'><div>Outbound</div><div><small>(Move container to yard <span class='fw-bold text-danger'>READY TO DEPARTURE</span>)</small></div></button>
                 </div>
                 <div class='col-12 p-1'>
                     <button class='btn btn-info w-100 btn-lg' onclick='Evidencia("""+str(Datos["ID"])+""",\""""+str(Caja["cc_contenedor"])+"""\");'><div> Add evidence </div><div><small></small></div></button>
@@ -984,13 +984,13 @@ def Opciones(Datos):
             <div>Opciones de Containedor</div>
             <div class='row'>
                 <div class='col-12 p-1'>
-                    <button class='btn btn-dark w-100 btn-lg' onclick='Modificar_A("Ready to Load","Patio","""+str(Datos["ID"])+""");'><div>Empty [Ready to Load]</div><div><small>(Mover caja a patio)</small></div></button>
+                    <button class='btn btn-dark w-100 btn-lg' onclick='Modificar_A("Ready to Load","Patio","""+str(Datos["ID"])+""");'><div>Empty [Ready to Load]</div><div><small>(Move container to yard)</small></div></button>
                 </div>
                 <div class='col-12 p-1'>
-                    <button class='btn btn-dark w-100 btn-lg' onclick='Modificar_A("Return Empty","Patio","""+str(Datos["ID"])+""");'><div>Empty [Return empty]</div><div><small>(Mover caja a patio <span class='text-danger fw-bold'>LISTA PARA SALIR</span>)</small></div></button>
+                    <button class='btn btn-dark w-100 btn-lg' onclick='Modificar_A("Return Empty","Patio","""+str(Datos["ID"])+""");'><div>Empty [Return empty]</div><div><small>(Move container to yard <span class='text-danger fw-bold'>READY TO DEPARTURE</span>)</small></div></button>
                 </div>
                 <div class='col-12 p-1'>
-                    <button class='btn btn-warning w-100 btn-lg' onclick='Modificar_A("Outbound","Dock","""+str(Datos["ID"])+""");'><div>Outbound</div><div><small>(Dejar en dock <span class='text-danger fw-bold'>DEFINIR RUTA OUTBOUND</span>)</small></div></button>
+                    <button class='btn btn-warning w-100 btn-lg' onclick='Modificar_A("Outbound","Dock","""+str(Datos["ID"])+""");'><div>Outbound</div><div><small>(Leave container on the dock <span class='text-danger fw-bold'>ASSIGN OUTBOUND ROUTE</span>)</small></div></button>
                 </div>
                 <div class='col-12 p-1'>
                     <button class='btn btn-info w-100 btn-lg' onclick='Evidencia("""+str(Datos["ID"])+""",\""""+str(Caja["cc_contenedor"])+"""\");'><div> Add evidence </div><div><small></small></div></button>
@@ -1484,7 +1484,7 @@ def Evidencia(Datos):
     Resultado = {"Contenido":"","Estado":0}
     try:
         Formulario = {"Col":"12", "Campos": [],"Clase": "Evidencia_Guardar" }
-        Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Fotos","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
+        Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Photo(s)","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
         Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
         Resultado["Contenido"] += """
         <hr>
