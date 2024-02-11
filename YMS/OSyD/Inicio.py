@@ -1117,7 +1117,7 @@ def Guardar_Completar_Ruteo(Datos):
         """)
         if Error == "":
             for Parte in Info["Partes"]:
-                Error += DB.Instruccion("""}
+                Error += DB.Instruccion("""
                 INSERT INTO """+str(BD_Nombre)+""".cosyd_partes
                 (cosyd_master,cosyd_parte,cosyd_cantidad_asn,cosyd_cantidad_real,cosyd,cosyd_comentario,cosyd_p_pakingslip,cosyd_p_destino)
                 VALUES
