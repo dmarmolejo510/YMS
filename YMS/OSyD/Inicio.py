@@ -1109,12 +1109,12 @@ def Guardar_Completar_Ruteo(Datos):
             cosyd_estado = 1
             WHERE cosyd_id = '"""+str(Datos["ID"])+"""'""")
 
-        # Error += DB.Instruccion("""
-        # INSERT INTO """+str(BD_Nombre)+""".cosyd_historico
-        # (cosyd_master,cosyd_usuario,cosyd_comentario,cosyd_evidencia,cosyd_movimiento,cosyd_fecha)
-        # VALUES
-        # ('"""+str(Datos["ID"])+"""','"""+str(Datos["ID_User"])+"""','"""+str(Info["Comentario"])+"""','"""+str(','.join(Info["Archivos"]))+"""','COMPLETAR',NOW())
-        # """)
+        Error += DB.Instruccion("""
+        INSERT INTO """+str(BD_Nombre)+""".cosyd_historico
+        (cosyd_master,cosyd_usuario,cosyd_comentario,cosyd_evidencia,cosyd_movimiento,cosyd_fecha)
+        VALUES
+        ('"""+str(Datos["ID"])+"""','"""+str(Datos["ID_User"])+"""','"""+str(Info["Comentario"])+"""','"""+str(','.join(Info["Archivos"]))+"""','COMPLETAR',NOW())
+        """)
         # if Error == "":
         #     for Parte in Info["Partes"]:
         #         Error += DB.Instruccion("""s
