@@ -13,25 +13,23 @@ def Inicio():
         fernet = Fernet(session["K"])
     Cur = ""
     try:
-        Cur += "Hola"
         Activo = "YMS"
         Compartido = LibDM_2023.Compartido()
         Menu = LibDM_2023.Menu().Menu(Activo,request.url_root,session["IDu"])
         Titulo = LibDM_2023.Menu().Get_Titulo(Activo)
         Contenido = ""
-        # Contenido += "<div class='h2 fw-lighter mt-1 mb-1 text-center border-bottom'><i class='mdi mdi-feature-search'></i> Container Search</div>"
-        # Formulario = {"Col":"12", "Campos": [],"Clase": "Buscar" }
-        # Formulario["Campos"].append({"tipo":"texto","campo":"Container","titulo":"Container","Requerido":1,"min":1,"max":150,"valor":"","Col":4})
-        # Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha de Rura","titulo":"In Date","Requerido":0,"Col":4,"valor":"","editable":True})
-        # Formulario["Campos"].append({"tipo":"seleccion","campo":"Carrier","titulo":"Carrier","Requerido":0,"Tipo_Opciones":"Query","Opciones":"SELECT cca_nombre as Valor, cca_nombre as Texto FROM wtc_slp_test.ccarrier ","valor":"","Col":4})
-        
-        # Contenido += "<div class='container'>"
-        # Contenido += str(Compartido.Formulario(Formulario))
-        # Contenido += """
-        # <div class='w-100 text-center mt-2'><button class='btn btn-primary w-75' onclick='Buscar_Caja()'><i class='mdi mdi-cloud-download'></i> Download</button></div>
-        # <hr>
-        # <div id='Res'></div>
-        # """
+        Contenido += "<div class='h2 fw-lighter mt-1 mb-1 text-center border-bottom'><i class='mdi mdi-feature-search'></i> Container Search</div>"
+        Formulario = {"Col":"12", "Campos": [],"Clase": "Buscar" }
+        Formulario["Campos"].append({"tipo":"texto","campo":"Container","titulo":"Container","Requerido":1,"min":1,"max":150,"valor":"","Col":4})
+        Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha de Rura","titulo":"In Date","Requerido":0,"Col":4,"valor":"","editable":True})
+        Formulario["Campos"].append({"tipo":"seleccion","campo":"Carrier","titulo":"Carrier","Requerido":0,"Tipo_Opciones":"Query","Opciones":"SELECT cca_nombre as Valor, cca_nombre as Texto FROM wtc_slp_test.ccarrier ","valor":"","Col":4})
+        Contenido += "<div class='container'>"
+        Contenido += str(Compartido.Formulario(Formulario))
+        Contenido += """
+        <div class='w-100 text-center mt-2'><button class='btn btn-primary w-75' onclick='Buscar_Caja()'><i class='mdi mdi-cloud-download'></i> Download</button></div>
+        <hr>
+        <div id='Res'></div>
+        """
         # Contenido += """
         # </div>
         # <script>
