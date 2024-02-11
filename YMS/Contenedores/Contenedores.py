@@ -132,10 +132,10 @@ def Inicio():
                     Contenedor[K] = ""
 
             Dock.append({"Dock":str(Contenedor["cc_dock"]),"Tiempo":"<span class='tiempo' tiempo='"+str(Contenedor["cc_ultimo_mov"])+"'></span>","Caja":str(Contenedor["cc_contenedor"]),"Carrier":Info_Actual["Carrier"],"Tipo":Contenedor["cc_tipo_actual"],"Estado":Estado,"Ruta":Ruta,"Opciones":"<div class='text-center'>"+str(Opciones)+"</div>"})
-        Contenido += """<div class='text-end pe-1 pt-1'><small class='link-primary' style='cursor:pointer' onclick='Llamar_Funcion(\""""+str(request.url)+"""\");'>Actualizar <i class='mdi mdi-refresh'></i></small></div>"""
-        Contenido += "<div class='h2 fw-lighter mt-1 mb-1 text-center border-bottom'><i class='mdi mdi-truck-trailer'></i> Contenedores</div>"
+        Contenido += """<div class='text-end pe-1 pt-1'><small class='link-primary' style='cursor:pointer' onclick='Llamar_Funcion(\""""+str(request.url)+"""\");'>Update <i class='mdi mdi-refresh'></i></small></div>"""
+        Contenido += "<div class='h2 fw-lighter mt-1 mb-1 text-center border-bottom'><i class='mdi mdi-truck-trailer'></i> Container</div>"
         Contenido += """
-        <div class='text-end mb-1'> <button class='btn btn-success' onclick='Nueva_Caja()'><i class='mdi mdi-plus'></i> Nuevo Contenedor</button> </div>
+        <div class='text-end mb-1'> <button class='btn btn-success' onclick='Nueva_Caja()'><i class='mdi mdi-plus'></i> New Container</button> </div>
         <div class='row'>
             <div class='col-6'>
                 <div class='h3 text-center'><i class='mdi mdi-car-brake-parking'></i> Patio</div>
@@ -147,13 +147,13 @@ def Inicio():
                         layout:"fitColumns",
                         data:"""+str(Patio)+""",
                         columns:[
-                            {field:"Tiempo","title":"Ultimo Movement",formatter:"html"},
-                            {field:"Caja","title":"Contenedor/Caja",headerFilter:"input"},
+                            {field:"Tiempo","title":"Last Movement",formatter:"html"},
+                            {field:"Caja","title":"Container",headerFilter:"input"},
                             {field:"Carrier","title":"Carrier"},
-                            {field:"Tipo","title":"Tipo"},
-                            {field:"Ruta","title":"Ruta",formatter:"html"},
-                            {field:"Sello","title":"Sello",formatter:"html"},
-                            {field:"Estado","title":"Estado",formatter:"html"},
+                            {field:"Tipo","title":"Type"},
+                            {field:"Ruta","title":"Route",formatter:"html"},
+                            {field:"Sello","title":"Seal",formatter:"html"},
+                            {field:"Estado","title":"Status",formatter:"html"},
                             {field:"Opciones","title":"Op",formatter:"html"}
                         ]
                     });
@@ -176,11 +176,11 @@ def Inicio():
                         data:"""+str(Dock)+""",
                         columns:[
                             {field:"Dock","title":"Dock"},
-                            {field:"Tiempo","title":"Ultimo Movement",formatter:"html"},
-                            {field:"Caja","title":"Contenedor/Caja",headerFilter:"input"},
+                            {field:"Tiempo","title":"Last Movement",formatter:"html"},
+                            {field:"Caja","title":"Container",headerFilter:"input"},
                             {field:"Carrier","title":"Carrier"},
-                            {field:"Tipo","title":"Tipo"},
-                            {field:"Ruta","title":"Ruta",formatter:"html"},
+                            {field:"Tipo","title":"Type"},
+                            {field:"Ruta","title":"Route",formatter:"html"},
                             {field:"Opciones","title":"Op",formatter:"html"}
                         ]
                     });
