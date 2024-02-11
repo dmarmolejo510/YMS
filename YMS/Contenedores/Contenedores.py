@@ -1894,6 +1894,7 @@ def Nueva_Caja(Datos):
         Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
         Resultado["Contenido"] += "<div class='w-100 text-center'><button class='btn btn-success w-75' onclick='Guardar_Caja()'><i class='mdi mdi-floppy'></i> Save</button></div>"
         Resultado["Contenido"] += """
+        TEST
         <script>
             Actualizar_Cambia_Texto();
             function Guardar_Caja(){
