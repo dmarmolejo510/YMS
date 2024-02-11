@@ -863,37 +863,37 @@ def Opciones(Datos):
         De_Donde = Caja["cc_ubicacion"]
         if Caja["cc_tipo_actual"] == "Inbound":
             Resultado["Contenido"] = """
-            <div>Opciones de Contenedor/Caja</div>
+            <div>Container Option</div>
             <div class='row'>
                 <div class='col-12 p-1'>
-                    <button class='btn btn-dark w-100 btn-lg' onclick='Modificar_A("Ready to Load","","""+str(Datos["ID"])+""");'><div>Empty [Ready to Load]</div><div><small>(Dejar caja en Dock)</small></div></button>
+                    <button class='btn btn-dark w-100 btn-lg' onclick='Modificar_A("Ready to Load","","""+str(Datos["ID"])+""");'><div>Empty [Ready to Load]</div><div><small>(Leave container on the dock)</small></div></button>
                 </div>
                 <div class='col-12 p-1'>
-                    <button class='btn btn-dark w-100 btn-lg' onclick='Modificar_A("Ready to Load","Patio","""+str(Datos["ID"])+""");'><div>Empty [Ready to Load]</div><div><small>(Mover caja a patio)</small></div></button>
+                    <button class='btn btn-dark w-100 btn-lg' onclick='Modificar_A("Ready to Load","Patio","""+str(Datos["ID"])+""");'><div>Empty [Ready to Load]</div><div><small>(Move container to yard)</small></div></button>
                 </div>
                 <div class='col-12 p-1'>
-                    <button class='btn btn-dark w-100 btn-lg' onclick='Modificar_A("Return Empty","Patio","""+str(Datos["ID"])+""");'><div>Empty [Return empty]</div><div><small>(Mover caja a patio <span class='text-danger fw-bold'>LISTA PARA SALIR</span>)</small></div></button>
+                    <button class='btn btn-dark w-100 btn-lg' onclick='Modificar_A("Return Empty","Patio","""+str(Datos["ID"])+""");'><div>Empty [Return empty]</div><div><small>(Move container to yard <span class='text-danger fw-bold'>READY TO DEPARTURE</span>)</small></div></button>
                 </div>
                 <div class='col-12 p-1'>
-                    <button class='btn btn-primary w-100 btn-lg' onclick='Modificar_A("Inbound","Patio","""+str(Datos["ID"])+""");'><div>Inbound</div><div><small>(Mover caja a patio <span class='text-warning fw-bold'>CAJA AUN CON MATERIAL DE PROVEEDOR</span>)</small></div></button>
+                    <button class='btn btn-primary w-100 btn-lg' onclick='Modificar_A("Inbound","Patio","""+str(Datos["ID"])+""");'><div>Inbound</div><div><small>(Mover caja a patio <span class='text-warning fw-bold'>CONTAINER WITH SUPPLIER'S MATERIAL</span>)</small></div></button>
                 </div>
                 <div class='col-12 p-1'>
                     <button class='btn btn-info w-100 btn-lg' onclick='Evidencia("""+str(Datos["ID"])+""");'><div> Add evidence </div><div><small></small></div></button>
                 </div>
             </div>
-            <div>Opciones de Material</div>
+            <div>Material Option (OS&D)</div>
             <div class='row'>
                 <div class='col-6 p-1'>
-                    <button class='btn btn-warning w-100 btn-lg' onclick='Generar_OSyD("Exceso de Material","""+str(Datos["ID"])+""")'>Exceso de Material</button>
+                    <button class='btn btn-warning w-100 btn-lg' onclick='Generar_OSyD("Surplus material","""+str(Datos["ID"])+""")'>Surplus material</button>
                 </div>
                 <div class='col-6 p-1'>
-                    <button class='btn btn-warning w-100 btn-lg' onclick='Generar_OSyD("Faltante de Material","""+str(Datos["ID"])+""")'>Faltante de Material</button>
+                    <button class='btn btn-warning w-100 btn-lg' onclick='Generar_OSyD("Shortage material","""+str(Datos["ID"])+""")'>Shortage material</button>
                 </div>
                 <div class='col-6 p-1'>
-                    <button class='btn btn-warning w-100 btn-lg' onclick='Generar_OSyD("Material Dañado","""+str(Datos["ID"])+""")'>Material Dañado</button>
+                    <button class='btn btn-warning w-100 btn-lg' onclick='Generar_OSyD("Damage material","""+str(Datos["ID"])+""")'>Damage material</button>
                 </div>
                 <div class='col-6 p-1'>
-                    <button class='btn btn-warning w-100 btn-lg' onclick='Generar_OSyD("Otra Discrepancia","""+str(Datos["ID"])+""")'>Otra Discrepancia</button>
+                    <button class='btn btn-warning w-100 btn-lg' onclick='Generar_OSyD("Otra Discrepancia","""+str(Datos["ID"])+""")'>Other</button>
                 </div>
             </div>
             <script>
@@ -1101,7 +1101,7 @@ def Modificar_A(Datos):
             if Caja["cc_tipo_actual"] == "Empty" and "Fotos" in Info_Actual.keys():
                 pass
             else:
-                Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Fotos","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
+                Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Photo(s)","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
 
             Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
             Resultado["Contenido"] += """
@@ -1118,34 +1118,34 @@ def Modificar_A(Datos):
                 </script>
                 """
             else:
-                Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Photos","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
+                Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Photo(s)","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
                 Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
                 Resultado["Contenido"] += """
                 <hr>
                 <div class='w-100 text-center'><button class='btn btn-success w-75' onclick='Modificar_A_Guardar(\""""+str(Datos["Poner_En"])+"""\",\""""+str(Datos["A_Donde"])+"""\","""+str(Datos["ID"])+""")'><i class='mdi mdi-floppy'></i> Save</button></div>
                 """
         if Datos["Poner_En"] == "Return Empty":
-            Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Photos","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
+            Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Photo(s)","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
             Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
             Resultado["Contenido"] += """
             <hr>
             <div class='w-100 text-center'><button class='btn btn-success w-75' onclick='Modificar_A_Guardar(\""""+str(Datos["Poner_En"])+"""\",\""""+str(Datos["A_Donde"])+"""\","""+str(Datos["ID"])+""")'><i class='mdi mdi-floppy'></i> Save</button></div>
             """
         if Datos["Poner_En"] == "Inbound":
-            Formulario["Campos"].append({"tipo":"texto","campo":"Sello Temporal","titulo":"Temporary Seal","Requerido":1,"min":1,"max":150,"valor":""})
-            Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Photos","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
+            Formulario["Campos"].append({"tipo":"texto","campo":"Sello Temporal","titulo":"Seal","Requerido":1,"min":1,"max":150,"valor":""})
+            Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Photo(s)","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
             Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
             Resultado["Contenido"] += """
             <hr>
             <div class='w-100 text-center'><button class='btn btn-success w-75' onclick='Modificar_A_Guardar(\""""+str(Datos["Poner_En"])+"""\",\""""+str(Datos["A_Donde"])+"""\","""+str(Datos["ID"])+""")'><i class='mdi mdi-floppy'></i> Save</button></div>
             """
         if Datos["Poner_En"] == "Outbound" and Datos["A_Donde"] == "Patio":
-            Formulario["Campos"].append({"tipo":"texto","campo":"Sello Temporal","titulo":"Sello Termporal","Requerido":1,"min":1,"max":150,"valor":""})
-            Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Fotos","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
+            Formulario["Campos"].append({"tipo":"texto","campo":"Sello Temporal","titulo":"Seal","Requerido":1,"min":1,"max":150,"valor":""})
+            Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Photo(s)","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
             if "Fecha_Salida" in Info_Actual.keys():
-                Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Fecha de Salida","Requerido":1,"valor":str(Info_Actual["Fecha_Salida"]),"editable":False})
+                Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Departure date","Requerido":1,"valor":str(Info_Actual["Fecha_Salida"]),"editable":False})
             else:
-                Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Fecha de Salida","Requerido":1,"valor":""})
+                Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Departure date","Requerido":1,"valor":""})
             Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
             Resultado["Contenido"] += """
             <hr>
@@ -1166,9 +1166,9 @@ def Modificar_A(Datos):
                 Dock_Ya = Info_Actual["Dock"]
             Formulario["Campos"].append({"tipo":"seleccion","campo":"Dock","titulo":"Dock","Requerido":1,"Tipo_Opciones":"Opciones","Opciones":Dock,"valor":Dock_Ya,"Col":12})
             if "Fecha_Salida" in Info_Actual.keys():
-                Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Fecha de Salida","Requerido":1,"valor":str(Info_Actual["Fecha_Salida"]),"editable":False})
+                Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Departure date","Requerido":1,"valor":str(Info_Actual["Fecha_Salida"]),"editable":False})
             else:
-                Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Fecha de Salida","Requerido":1,"valor":""})
+                Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Departure date","Requerido":1,"valor":""})
             Info = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".crutas WHERE cr_tipo = 'Outbound'")[0]["cr_niveles"]
             if Info is not None:
                 Info = json.loads(Info)
@@ -1200,7 +1200,7 @@ def Modificar_A(Datos):
                     } );
                 </script>
                 """
-            Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Fotos","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
+            Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Photo(s)","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
             # if "Fecha_Salida" in Info_Actual.keys():
             #     Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Fecha de Salida","Requerido":1,"min":1,"max":30,"valor":Info_Actual["Fecha_Salida"],"editable":False})
             Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
@@ -1894,7 +1894,6 @@ def Nueva_Caja(Datos):
         Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
         Resultado["Contenido"] += "<div class='w-100 text-center'><button class='btn btn-success w-75' onclick='Guardar_Caja()'><i class='mdi mdi-floppy'></i> Save</button></div>"
         Resultado["Contenido"] += """
-        TEST
         <script>
             Actualizar_Cambia_Texto();
             function Guardar_Caja(){
