@@ -1115,14 +1115,14 @@ def Guardar_Completar_Ruteo(Datos):
         VALUES
         ('"""+str(Datos["ID"])+"""','"""+str(Datos["ID_User"])+"""','"""+str(Info["Comentario"])+"""','"""+str(','.join(Info["Archivos"]))+"""','COMPLETAR',NOW())
         """)
-        # if Error == "":
-        #     for Parte in Info["Partes"]:
-        #         Error += DB.Instruccion("""s
-        #         INSERT INTO """+str(BD_Nombre)+""".cosyd_partes
-        #         (cosyd_master,cosyd_parte,cosyd_cantidad_asn,cosyd_cantidad_real,cosyd,cosyd_comentario,cosyd_p_pallets,cosyd_p_pakingslip,cosyd_p_destino)
-        #         VALUES
-        #         ('"""+str(Datos["ID"])+"""','"""+str(Parte["Numero de Parte"])+"""','"""+str(Parte["Cantidad de ASN"])+"""','"""+str(Parte["Cantidad Real"])+"""','"""+str(Parte["OSD"])+"""','"""+str(Parte["Comentario"])+"""','"""+str(Parte["Pallets"])+"""','"""+str(Info["Packing Slip"])+"""','"""+str(Info["Destino"])+"""')
-        #         """)
+        if Error == "":
+            for Parte in Info["Partes"]:
+                Error += DB.Instruccion("""s
+                INSERT INTO """+str(BD_Nombre)+""".cosyd_partes
+                (cosyd_master,cosyd_parte,cosyd_cantidad_asn,cosyd_cantidad_real,cosyd,cosyd_comentario,cosyd_p_pakingslip,cosyd_p_destino)
+                VALUES
+                ('"""+str(Datos["ID"])+"""','"""+str(Parte["Numero de Parte"])+"""','"""+str(Parte["Cantidad de ASN"])+"""','"""+str(Parte["Cantidad Real"])+"""','"""+str(Parte["OSD"])+"""','"""+str(Parte["Comentario"])+"""','"""+str(Info["Packing Slip"])+"""','"""+str(Info["Destino"])+"""')
+                """)
 
         if Error == "":
             Resultado["Estado"] = 1
