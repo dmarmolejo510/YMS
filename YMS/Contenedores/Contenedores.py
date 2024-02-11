@@ -522,7 +522,21 @@ def Tipo_Nuevo_1(Datos):
                         $(document).ready(function() {
                                 $('#checkbox_1').change(function() {
                                     if(this.checked) {
-                                        $("#info_salida").html('Entra');
+                                        Mostrar_Ventana_Cargando(false);
+                                        var parametros = {"Fun":'"""+str(fernet.encrypt("Lista_Para_Salir".encode()).decode("utf-8"))+"""'};
+                                        $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
+                                            success:  function (response)
+                                            {
+                                                var Resultado = JSON.parse(response);
+                                                $("#info_salida").html(Resultado["Contenido"]);
+                                                swal.close();
+                                            },
+                                            error: function (jqXHR, textStatus, errorThrown )
+                                            {
+                                                $("#info_salida").html("<i class='mdi mdi-alert'></i> "+ textStatus);
+                                                swal.close();
+                                            }
+                                        });
                                     }else{
                                         $("#info_salida").html('');
                                     }
@@ -2080,6 +2094,23 @@ def Caja_Danada_Guardar(Datos):
             Resultado["Contenido"] += str(Error)
     except:
         Resultado["Contenido"] = str(sys.exc_info())
+    Cur += json.dumps(Resultado)
+    return Cur
+
+def Lista_Para_Salir(Datos):
+    if "K" in session.keys():
+        fernet = Fernet(session["K"])
+    DB = LibDM_2023.DataBase()
+    Compartido_2023 = LibDM_2023.Compartido()
+    Cur = ""
+    Resultado = {"Contenido":"","Estado":0}
+    try:
+        Formulario = {"Col":"12", "Campos": [],"Clase": "Asignar" }
+        Formulario["Campos"].append({"tipo":"texto","campo":"Sello Temporal","titulo":"Seal","Requerido":1,"min":1,"max":150,"valor":""})
+        Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha_Salida","titulo":"Departure Date","Requerido":1,"valor":""})
+        Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
+    except:
+         Resultado["Contenido"] = str(sys.exc_info())
     Cur += json.dumps(Resultado)
     return Cur
 
