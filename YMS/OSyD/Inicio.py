@@ -1015,17 +1015,8 @@ def Completar_Ruteo(Datos):
                 tabledata.forEach((element) => {
                 if(element["Numero de Parte"].trim() == "")
                     Ok = false;
-                if(element["Cantidad de ASN"].trim() == "")
-                    Ok = false;
-                /*if(element["Pallets"].trim() == "")
-                    Ok = false;
-                if(element["Cantidad Real"].trim() == "")
-                    Ok = false;*/
                 if(element["OSD"].trim() == "")
                     Ok = false;
-                /*if(element["Packing Slip"].trim() == "")
-                    Ok = false;
-                });*/
                 if(tabledata.length == 0)
                     Ok = false;
                 var Info = Dame_Formulario(".Formato",true);
