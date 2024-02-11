@@ -200,7 +200,7 @@ def Nueva_Proveedor_Guardar(Datos):
     Resultado = {"Contenido":"","Estado":0}
     try:
         Info_Datos = json.loads(str(Datos["Info"]))
-        Existe = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".cproveedores WHERE crilcpr_codigo = '"+str(Info_Datos["Codigo"])+"'  ")
+        Existe = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".cproveedores WHERE crilcpr_codigo = '"+str(Info_Datos["Codigo"])+"' and crilcpr_activo = 1 ")
         if len(Existe) == 0:
             Error = DB.Instruccion("""
             INSERT INTO """+str(BD_Nombre)+""".cproveedores 
