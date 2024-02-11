@@ -514,8 +514,22 @@ def Tipo_Nuevo_1(Datos):
                 if str(Datos["Nivel_1"]) == "Outbound":
                     Formulario = {"Col":"12", "Campos": [],"Clase": "Asignar" }
                     Formulario["Campos"].append({"tipo":"archivo","campo":"Fotos","titulo":"Photos","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["image/*"],"valor":""})
-                    Formulario["Campos"].append({"tipo":"checkbox","campo":"Salida","titulo":"it ready departure?","Requerido":1,"valor":True,"editable":False})
+                    Formulario["Campos"].append({"tipo":"checkbox","campo":"Salida","titulo":"it ready departure?","Requerido":0,"valor":False,"editable":False})
                     Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
+                    Resultado["Contenido"] += """
+                    <div id='info_salida'></div>
+                    <script>
+                        $(document).ready(function() {
+                                $('#checkbox_1').change(function() {
+                                    if(this.checked) {
+                                        $("#info_salida").html('Entra');
+                                    }else{
+                                        $("#info_salida").html('');
+                                    }
+                                });
+                            });
+                    </script>
+                    """
             if De_Donde == "Patio" and str(Datos["Donde"]) == "Dock":
                 if str(Datos["Nivel_1"]) == "Empty":
                     Formulario = {"Col":"12", "Campos": [],"Clase": "Asignar" }
