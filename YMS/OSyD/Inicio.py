@@ -858,9 +858,9 @@ def Guardar_Nueva_Ruteo(Datos):
         Error = ""
         Error += DB.Instruccion("""
         INSERT INTO """+str(BD_Nombre)+""".cosyd
-        (cosyd_tipo,cosyd_proveedor,cosyd_usuario,cosyd_alta,cosyd_caja,cosyd_scac,cosyd_comentario,cosyd_correo,cosyd_archivos,cosyd_ruta,cosyd_ruta_fecha_hora)
+        (cosyd_tipo,cosyd_proveedor,cosyd_usuario,cosyd_alta,cosyd_caja,cosyd_scac,cosyd_comentario,cosyd_correo,cosyd_archivos,cosyd_ruta,cosyd_ruta_fecha_hora,cosyd_packingslip)
         VALUES
-        ('RUTEO','"""+str(Info["Proveedor"])+"""','"""+str(Datos["ID_User"])+"""',NOW(),'"""+str(Info["Contenedor-Caja"])+"""','"""+str(Info["SCAC"])+"""','"""+str(Info["Comentario"])+"""','"""+str(Info["Lista_distribucion"])+"""','"""+str(','.join(Info["Archivos"]))+"""','"""+str(Info["Ruta"])+"""','"""+str(Info["Fecha de Rura"])+"""')
+        ('RUTEO','"""+str(Info["Proveedor"])+"""','"""+str(Datos["ID_User"])+"""',NOW(),'"""+str(Info["Contenedor-Caja"])+"""','"""+str(Info["SCAC"])+"""','"""+str(Info["Comentario"])+"""','"""+str(Info["Lista_distribucion"])+"""','"""+str(','.join(Info["Archivos"]))+"""','"""+str(Info["Ruta"])+"""','"""+str(Info["Fecha de Rura"])+"""','"""+str(Info["Packing Slip"])+"""')
         """)
         if Error == "":
             Error += DB.Instruccion("UPDATE "+str(BD_Nombre)+".cproveedores SET crilcpr_email_s = '"+str(Info["Lista_distribucion"])+"' WHERE crilcpr_codigo = '"+str(Info["Proveedor"])+"'")
@@ -914,7 +914,7 @@ def Completar_Ruteo(Datos):
     try:
 
 
-        Info_Gen = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".cosyd inner join "+str(BD_Nombre)+".cosyd_historico  WHERE  cosyd_id = '"+str(Datos["ID"])+"' ")[0]
+        Info_Gen = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".cosyd inner join "+str(BD_Nombre)+".cosyd_historico on  public.cosyd.cosyd_id = public.cosyd_historico.cosyd_master WHERE  cosyd_id = '"+str(Datos["ID"])+"' ")[0]
 
         Formulario_2 = {"Col":"", "Campos": [],"Clase": "Formulario_2" }
         Formulario_2["Campos"].append({"tipo":"texto","campo":"Usuario","titulo":"Usuario","editable":False,"Requerido":1,"min":1,"max":50,"valor":DB.Dame_Nombre_IDUsuario(Info_Gen["cosyd_usuario"]),"Col":12})
@@ -1110,9 +1110,9 @@ def Guardar_Completar_Ruteo(Datos):
 
         Error += DB.Instruccion("""
         INSERT INTO """+str(BD_Nombre)+""".cosyd_historico
-        (cosyd_master,cosyd_usuario,cosyd_comentario,cosyd_evidencia,cosyd_movimiento,cosyd_fecha)
+        (cosyd_master,cosyd_usuario,cosyd_comentario,cosyd_evidencia,cosyd_movimiento,cosyd_fecha,cosyd_packingslip)
         VALUES
-        ('"""+str(Datos["ID"])+"""','"""+str(Datos["ID_User"])+"""','"""+str(Info["Comentario"])+"""','"""+str(','.join(Info["Archivos"]))+"""','COMPLETAR',NOW())
+        ('"""+str(Datos["ID"])+"""','"""+str(Datos["ID_User"])+"""','"""+str(Info["Comentario"])+"""','"""+str(','.join(Info["Archivos"]))+"""','COMPLETAR',NOW(),'"""+str(Parte["Packing Slip"])+"""')
         """)
         if Error == "":
             for Parte in Info["Partes"]:
