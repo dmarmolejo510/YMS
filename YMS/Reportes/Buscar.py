@@ -22,7 +22,7 @@ def Inicio():
         Formulario = {"Col":"12", "Campos": [],"Clase": "Buscar" }
         Formulario["Campos"].append({"tipo":"texto","campo":"Container","titulo":"Container","Requerido":1,"min":1,"max":150,"valor":"","Col":4})
         Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha de Rura","titulo":"In Date","Requerido":0,"Col":4,"valor":"","editable":True})
-        Formulario["Campos"].append({"tipo":"seleccion","campo":"Carrier","titulo":"Carrier","Requerido":0,"Tipo_Opciones":"Query","Opciones":"SELECT cca_nombre as Valor, cca_nombre as Texto FROM wtc_slp_test.ccarrier ","valor":"","Col":4})
+        Formulario["Campos"].append({"tipo":"seleccion","campo":"Carrier","titulo":"Carrier","Requerido":0,"Tipo_Opciones":"Query","Opciones":"SELECT cca_nombre as Valor, cca_nombre as Texto FROM "+str(BD_Nombre)+".ccarrier ","valor":"","Col":4})
         Contenido += "<div class='container'>"
         Contenido += str(Compartido.Formulario(Formulario))
         Contenido += """
@@ -30,52 +30,52 @@ def Inicio():
         <hr>
         <div id='Res'></div>
         """
-        # Contenido += """
-        # </div>
-        # <script>
-        #     function Buscar_Caja(){
-        #         var Info = Dame_Formulario(".Buscar",true);
-        #         if(Info != null)
-        #         {
-        #             Mostrar_Ventana_Cargando(false);
-        #             var parametros = {"Fun":'"""+str(fernet.encrypt("Buscar_Caja".encode()).decode("utf-8"))+"""',"Info":JSON.stringify(Info)};
-        #             $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
-        #                 success:  function (response)
-        #                 {
-        #                     var Resultado = JSON.parse(response);
-        #                     $("#Res").html(Resultado["Contenido"]);
-        #                     swal.close();
+        Contenido += """
+        </div>
+        <script>
+            function Buscar_Caja(){
+                var Info = Dame_Formulario(".Buscar",true);
+                if(Info != null)
+                {
+                    Mostrar_Ventana_Cargando(false);
+                    var parametros = {"Fun":'"""+str(fernet.encrypt("Buscar_Caja".encode()).decode("utf-8"))+"""',"Info":JSON.stringify(Info)};
+                    $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
+                        success:  function (response)
+                        {
+                            var Resultado = JSON.parse(response);
+                            $("#Res").html(Resultado["Contenido"]);
+                            swal.close();
                                 
-        #                 },
-        #                 error: function (jqXHR, textStatus, errorThrown )
-        #                 {
-        #                     Mensaje(0,textStatus);
-        #                 }
-        #             });
-        #         }
-        #     }
-        #     function Ver_Historico(ID,Contenedor){
-        #         Mostrar_Ventana_Cargando(false);
-        #         $("#Vent_1").find(".modal-title").html("<i class='mdi mdi-history'></i> History ["+Contenedor+"]");
-        #         $("#Vent_1").removeClass('modal-xl modal-lg modal-sm').addClass('modal-xl');
-        #         var parametros = {"Fun":'"""+str(fernet.encrypt("Ver_Historico".encode()).decode("utf-8"))+"""',"ID":ID};
-        #         $.ajax({data:  parametros,url:\""""+str(request.url_root)+"""/YMS/Container_Control\",type:  "post",
-        #             success:  function (response)
-        #             {
-        #                 var Resultado = JSON.parse(response);
-        #                 $("#Vent_1").modal("show").find(".modal-body").html(Resultado["Contenido"]);
-        #                 $("#Vent_1").find(".modal-footer").find("button").attr('onclick',"$('#Vent_1').modal('hide'); delete table; ")
-        #                 swal.close();
-        #             },
-        #             error: function (jqXHR, textStatus, errorThrown )
-        #             {
-        #                 $("#Vent_1").modal("show").find(".modal-body").html("<i class='mdi mdi-alert'></i> "+ textStatus);
-        #                 swal.close();
-        #             }
-        #         });
-        #     }
-        # </script>
-        # """
+                        },
+                        error: function (jqXHR, textStatus, errorThrown )
+                        {
+                            Mensaje(0,textStatus);
+                        }
+                    });
+                }
+            }
+            function Ver_Historico(ID,Contenedor){
+                Mostrar_Ventana_Cargando(false);
+                $("#Vent_1").find(".modal-title").html("<i class='mdi mdi-history'></i> History ["+Contenedor+"]");
+                $("#Vent_1").removeClass('modal-xl modal-lg modal-sm').addClass('modal-xl');
+                var parametros = {"Fun":'"""+str(fernet.encrypt("Ver_Historico".encode()).decode("utf-8"))+"""',"ID":ID};
+                $.ajax({data:  parametros,url:\""""+str(request.url_root)+"""/YMS/Container_Control\",type:  "post",
+                    success:  function (response)
+                    {
+                        var Resultado = JSON.parse(response);
+                        $("#Vent_1").modal("show").find(".modal-body").html(Resultado["Contenido"]);
+                        $("#Vent_1").find(".modal-footer").find("button").attr('onclick',"$('#Vent_1').modal('hide'); delete table; ")
+                        swal.close();
+                    },
+                    error: function (jqXHR, textStatus, errorThrown )
+                    {
+                        $("#Vent_1").modal("show").find(".modal-body").html("<i class='mdi mdi-alert'></i> "+ textStatus);
+                        swal.close();
+                    }
+                });
+            }
+        </script>
+        """
         Cur += render_template("general.html",Contenido=Contenido,Componentes=Compartido.Complementos(None),Menu=Menu,Titulo=Titulo)
     except:
         Cur += str(sys.exc_info())
