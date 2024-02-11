@@ -302,7 +302,7 @@ def Inicio():
             }
             function Nueva_Caja(){
                 Mostrar_Ventana_Cargando(false);
-                $("#Vent_1").find(".modal-title").html("<i class='mdi mdi-plus'></i> Nuevo Contenedor");
+                $("#Vent_1").find(".modal-title").html("<i class='mdi mdi-plus'></i> New Container");
                 $("#Vent_1").removeClass('modal-xl modal-lg modal-sm');
                 var parametros = {"Fun":'"""+str(fernet.encrypt("Nueva_Caja".encode()).decode("utf-8"))+"""'};
                 $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
@@ -667,14 +667,14 @@ def Modificar(Datos):
         Info_Actual = json.loads(str(Caja["cc_informacion_actual"]))
         De_Donde = Caja["cc_ubicacion"]
         Formulario = {"Col":"12", "Campos": [],"Clase": "Asignar" }
-        Formulario["Campos"].append({"tipo":"texto","campo":"Container","titulo":"Contenedor","Requerido":1,"min":1,"max":150,"valor":str(Caja["cc_contenedor"])})
+        Formulario["Campos"].append({"tipo":"texto","campo":"Container","titulo":"Container","Requerido":1,"min":1,"max":150,"valor":str(Caja["cc_contenedor"])})
         Formulario["Campos"].append({"tipo":"seleccion","campo":"Carrier","titulo":"Carrier","Requerido":1,"Tipo_Opciones":"Query","Opciones":"SELECT cca_nombre as Valor, cca_nombre as Texto FROM "+str(BD_Nombre)+".ccarrier WHERE cca_activo = '1'","valor":str(Info_Actual["Carrier"]),"Col":12})
-        Formulario["Campos"].append({"tipo":"seleccion","id":"Donde_Nuevo","campo":"Donde","titulo":"Ubicacion","Requerido":1,"Tipo_Opciones":"Opciones","Opciones":["Patio","Dock"],"valor":str(De_Donde),"Col":12})
-        Formulario["Campos"].append({"tipo":"seleccion","id":"Tipo_Nuevo","campo":"Tipo","titulo":"Tipo","Requerido":1,"Tipo_Opciones":"Query","Opciones":"SELECT cr_tipo as Valor,cr_tipo as Texto FROM "+str(BD_Nombre)+".crutas","valor":"","Col":12})
+        Formulario["Campos"].append({"tipo":"seleccion","id":"Donde_Nuevo","campo":"Donde","titulo":"Location","Requerido":1,"Tipo_Opciones":"Opciones","Opciones":["Patio","Dock"],"valor":str(De_Donde),"Col":12})
+        Formulario["Campos"].append({"tipo":"seleccion","id":"Tipo_Nuevo","campo":"Tipo","titulo":"Type","Requerido":1,"Tipo_Opciones":"Query","Opciones":"SELECT cr_tipo as Valor,cr_tipo as Texto FROM "+str(BD_Nombre)+".crutas","valor":"","Col":12})
         
         if Caja["cc_tipo_actual"] is None:
             Resultado["Contenido"] += """
-            <div class='text-center w-100'><button class='btn btn-warning' onclick='Error_Ingreso("""+str(Datos["ID"])+""",\""""+str(Caja["cc_contenedor"])+"""\")'><i class='mdi mdi-alert'></i> Error de ingreso (<span class='text-danger fw-bold'>GENERAR PASE DE SALIDA</span>)</button></div>
+            <div class='text-center w-100'><button class='btn btn-warning' onclick='Error_Ingreso("""+str(Datos["ID"])+""",\""""+str(Caja["cc_contenedor"])+"""\")'><i class='mdi mdi-alert'></i> Incorrect arrival (<span class='text-danger fw-bold'>Container ready for departure</span>)</button></div>
             <hr>
             """
         
@@ -1888,11 +1888,11 @@ def Nueva_Caja(Datos):
     Resultado = {"Contenido":"","Estado":0}
     try:
         Formulario = {"Col":"12", "Campos": [],"Clase": "Alta_Caja" }
-        Formulario["Campos"].append({"tipo":"texto","campo":"Container","titulo":"Contenedor","Requerido":1,"min":1,"max":150,"valor":""})
+        Formulario["Campos"].append({"tipo":"texto","campo":"Container","titulo":"Container","Requerido":1,"min":1,"max":150,"valor":""})
         Formulario["Campos"].append({"tipo":"seleccion","campo":"Carrier","titulo":"Carrier","Requerido":1,"Tipo_Opciones":"Query","Opciones":"SELECT cca_nombre as valor, cca_nombre as texto FROM "+str(BD_Nombre)+".ccarrier WHERE cca_activo = '1'","valor":"","Col":12})
-        Formulario["Campos"].append({"tipo":"texto","campo":"Sello Proveedor","titulo":"Sello Proveedor","Requerido":1,"min":0,"max":20,"valor":""})
+        Formulario["Campos"].append({"tipo":"texto","campo":"Sello Proveedor","titulo":"Supplier Seal","Requerido":1,"min":0,"max":20,"valor":""})
         Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
-        Resultado["Contenido"] += "<div class='w-100 text-center'><button class='btn btn-success w-75' onclick='Guardar_Caja()'><i class='mdi mdi-floppy'></i> Guardar</button></div>"
+        Resultado["Contenido"] += "<div class='w-100 text-center'><button class='btn btn-success w-75' onclick='Guardar_Caja()'><i class='mdi mdi-floppy'></i> Save</button></div>"
         Resultado["Contenido"] += """
         <script>
             Actualizar_Cambia_Texto();
