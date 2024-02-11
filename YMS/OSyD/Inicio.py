@@ -936,6 +936,11 @@ def Completar_Ruteo(Datos):
 
         Resultado["Contenido"] += """
         <hr>
+        """
+        Formulario = {"Col":"", "Campos": [],"Clase": "Formato" }
+        Formulario["Campos"].append({"tipo":"texto","campo":"Packing Slip","titulo":"Packing Slip","editable":True,"Requerido":1,"min":1,"max":50,"valor":"","Col":6})
+        Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
+        Resultado["Contenido"] += """
         <div class='mb-1'>
             <button id="reactivity-add" class='btn btn-success btn-sm'><i class='mdi mdi-plus'></i> Add New Number Part</button>
             <button id="reactivity-delete" class='btn btn-danger btn-sm'><i class='mdi mdi-close'></i> Remove Last Number Part</button>
@@ -949,7 +954,7 @@ def Completar_Ruteo(Datos):
                 reactiveData:true, //turn on data reactivity
                 data:tabledata,
                 columns:[
-                    {title:"Packing Slip", field:"Packing Slip", editor:"input"},
+                    /*{title:"Packing Slip", field:"Packing Slip", editor:"input"},*/
                     {title:"Numero de Parte", field:"Numero de Parte", editor:"input"},
                     {title:"Cantidad de ASN", field:"Cantidad de ASN", sorter:"number", editor:"input"},
                     {title:"Cantidad Real", field:"Cantidad Real", sorter:"number", editor:"input"},
@@ -1091,7 +1096,8 @@ def Guardar_Completar_Ruteo(Datos):
             cosyd_archivos = '"""+str(','.join(Info["Archivos"]))+"""',
             cosyd_ruta = '"""+str(Info["Ruta"])+"""',
             cosyd_ruta_fecha_hora = '"""+str(Info["Fecha de Rura"])+"""',
-            cosyd_estado = 2
+            cosyd_estado = 2,
+            cosyd_packingslip = '"""+str(Info["Packing Slip"])+"""'
             WHERE cosyd_id = '"""+str(Datos["ID"])+"""'""")
         else:
             Error += DB.Instruccion("""
@@ -1105,22 +1111,23 @@ def Guardar_Completar_Ruteo(Datos):
             cosyd_archivos = '"""+str(','.join(Info["Archivos"]))+"""',
             cosyd_ruta = '"""+str(Info["Ruta"])+"""',
             cosyd_ruta_fecha_hora = '"""+str(Info["Fecha de Rura"])+"""',
+            cosyd_packingslip = '"""+str(Parte["Packing Slip"])+"""',
             cosyd_estado = 1
             WHERE cosyd_id = '"""+str(Datos["ID"])+"""'""")
 
         Error += DB.Instruccion("""
         INSERT INTO """+str(BD_Nombre)+""".cosyd_historico
-        (cosyd_master,cosyd_usuario,cosyd_comentario,cosyd_evidencia,cosyd_movimiento,cosyd_fecha,cosyd_packingslip)
+        (cosyd_master,cosyd_usuario,cosyd_comentario,cosyd_evidencia,cosyd_movimiento,cosyd_fecha)
         VALUES
-        ('"""+str(Datos["ID"])+"""','"""+str(Datos["ID_User"])+"""','"""+str(Info["Comentario"])+"""','"""+str(','.join(Info["Archivos"]))+"""','COMPLETAR',NOW(),'"""+str(Parte["Packing Slip"])+"""')
+        ('"""+str(Datos["ID"])+"""','"""+str(Datos["ID_User"])+"""','"""+str(Info["Comentario"])+"""','"""+str(','.join(Info["Archivos"]))+"""','COMPLETAR',NOW())
         """)
         if Error == "":
             for Parte in Info["Partes"]:
-                Error += DB.Instruccion("""
+                Error += DB.Instruccion("""s
                 INSERT INTO """+str(BD_Nombre)+""".cosyd_partes
                 (cosyd_master,cosyd_parte,cosyd_cantidad_asn,cosyd_cantidad_real,cosyd,cosyd_comentario,cosyd_p_pallets,cosyd_p_pakingslip,cosyd_p_destino)
                 VALUES
-                ('"""+str(Datos["ID"])+"""','"""+str(Parte["Numero de Parte"])+"""','"""+str(Parte["Cantidad de ASN"])+"""','"""+str(Parte["Cantidad Real"])+"""','"""+str(Parte["OSD"])+"""','"""+str(Parte["Comentario"])+"""','"""+str(Parte["Pallets"])+"""','"""+str(Parte["Packing Slip"])+"""','"""+str(Info["Destino"])+"""')
+                ('"""+str(Datos["ID"])+"""','"""+str(Parte["Numero de Parte"])+"""','"""+str(Parte["Cantidad de ASN"])+"""','"""+str(Parte["Cantidad Real"])+"""','"""+str(Parte["OSD"])+"""','"""+str(Parte["Comentario"])+"""','"""+str(Parte["Pallets"])+"""','"""+str(Info["Packing Slip"])+"""','"""+str(Info["Destino"])+"""')
                 """)
 
         if Error == "":
