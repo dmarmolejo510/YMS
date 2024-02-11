@@ -561,7 +561,10 @@ def Tipo_Nuevo_1(Datos):
                 """
         else:
             for K in Info[Datos["Tipo"]].keys():
-                Opciones.append(K)
+                if De_Donde == "Patio" and str(Datos["Donde"]) == "Dock" and Datos["Tipo"] == "Empty" and K == "Return Emory":
+                    pass
+                else:
+                    Opciones.append(K)
             Formulario = {"Col":"12", "Campos": [],"Clase": "Asignar" }
             Formulario["Campos"].append({"tipo":"seleccion","id":"Tipo_Nuevo_2","campo":str(Datos["Tipo"]),"titulo":str(Datos["Tipo"]),"Requerido":1,"Tipo_Opciones":"Opciones","Opciones":Opciones,"valor":""})
             Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
