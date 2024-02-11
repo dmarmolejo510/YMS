@@ -74,7 +74,7 @@ def Inicio():
                     Estado = "Waiting"
             else:
                 Estado = Info_Actual["Etapa"]
-                if Info_Actual["Etapa"] == "Pending Exit" and Info_Actual["cc_tipo_actual"] == "Empty" and "Return Empty" in str(Info_Actual["cc_informacion_actual"]):
+                if Info_Actual["Etapa"] == "Pending Exit" and Contenedor["cc_tipo_actual"] == "Empty" and "Return Empty" in str(Contenedor["cc_informacion_actual"]):
                     #Opciones += "<button class='btn btn-sm btn-dark p-0 ps-1 pe-1' onclick='Imprimir_Pase("+str(Contenedor["cc_id"])+",\""+str(Contenedor["cc_contenedor"])+"\")'><i class='mdi mdi-printer'></i></button>"
                     Opciones += "<button class='btn btn-sm btn-danger p-0 ps-1 pe-1' onclick='Salida("+str(Contenedor["cc_id"])+",\""+str(Contenedor["cc_contenedor"])+"\")'><i class='mdi mdi-exit-to-app'></i></button>"
 
