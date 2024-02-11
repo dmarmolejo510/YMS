@@ -160,7 +160,6 @@ def Inicio():
                             $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
                                 success:  function (response)
                                 {
-                                    alert(response);
                                     var Resultado = JSON.parse(response);
                                     if(Resultado["Estado"] == 1)
                                     {

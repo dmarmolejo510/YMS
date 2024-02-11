@@ -19,7 +19,7 @@ def Inicio():
         Menu = LibDM_2023.Menu().Menu(Activo,request.url_root,session["IDu"])
         Titulo = LibDM_2023.Menu().Get_Titulo(Activo)
         Contenido = ""
-        Destinos = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccarrier where cactivo = 1")
+        Destinos = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccarrier where cca_activo = 1")
         Patio = []
         for Destino in Destinos:
             Opciones = "<div class='text-center'><div class='btn-group' role='group' aria-label='Basic mixed styles example'>"
