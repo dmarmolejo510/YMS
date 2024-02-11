@@ -279,7 +279,7 @@ def Eliminar(Datos):
 def Asignar(Datos):
     DB = LibDM_2023.DataBase()
     Compartido_2023 = LibDM_2023.Compartido()
-    Cur = "content-type: text/html;charset=ISO-8859-1\n\n "
+    Cur = ""
     Resultado = {"Contenido":"","Estado":0}
     Error = ""
     try:
