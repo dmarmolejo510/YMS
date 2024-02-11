@@ -1023,9 +1023,9 @@ def Completar_Ruteo(Datos):
                     Ok = false;*/
                 if(element["OSD"].trim() == "")
                     Ok = false;
-                if(element["Packing Slip"].trim() == "")
+                /*if(element["Packing Slip"].trim() == "")
                     Ok = false;
-                });
+                });*/
                 if(tabledata.length == 0)
                     Ok = false;
                 var Info = Dame_Formulario(".Formato",true);
