@@ -204,8 +204,8 @@ class Compartido:
         for n in range(3):
             Colores_Aro += ","+str(Colores)
         Compl = ""
-        Compl += "<link rel='icon' href=\""+str(Url_root)+"/Portal_File/static/UniversalLogo2.png\" type='image/icon type'>"
-        Compl += "<title>Portal MX</title>"
+        Compl += "<link rel='icon' href=\""+str(Url)+"/Portal_File/Media/UniversalLogo2.png\" type='image/icon type'>"
+        Compl += "<title>Universal YMS</title>"
         contenido = sorted(os.listdir(str(Path_Componentes)+'/static/Default'))
         for Arch in contenido:
             if ".js" in str(Arch):
@@ -2214,7 +2214,7 @@ class Menu:
                         <button class="navbar-toggler mt-1 mb-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
                             <span class="mdi mdi-menu"></span>
                         </button>
-                        <span class='fst-italic fw-bold text-nowrap'><i class="mdi mdi-chevron-double-right " style="color:#ED1C24"></i><span class='text-white '>Portal</span> <span style="color:#ED1C24">MX</span> <i class="mdi mdi-chevron-double-right " style="color:#ED1C24"></i> <span style='color:"""+str(Menu[Activo]["Color"])+"""'> <i class='"""+str(Menu[Activo]["Icono"])+"""'></i> """+str(Activo)+"""</span> </span>
+                        <span class='fst-italic fw-bold text-nowrap'><i class="mdi mdi-chevron-double-right " style="color:#ED1C24"></i><span class='text-white '>Universal</span> <span style="color:#ED1C24">YMS</span> <i class="mdi mdi-chevron-double-right " style="color:#ED1C24"></i> <span style='color:"""+str(Menu[Activo]["Color"])+"""'> <i class='"""+str(Menu[Activo]["Icono"])+"""'></i> """+str(Activo)+"""</span> </span>
                     </div>
                     <div>
                         <div class='row'>
