@@ -918,7 +918,7 @@ def Completar_Ruteo(Datos):
 
         Formulario_2 = {"Col":"", "Campos": [],"Clase": "Formulario_2" }
         Formulario_2["Campos"].append({"tipo":"texto","campo":"Usuario","titulo":"Usuario","editable":False,"Requerido":1,"min":1,"max":50,"valor":DB.Dame_Nombre_IDUsuario(Info_Gen["cosyd_usuario"]),"Col":12})
-        Formulario_2["Campos"].append({"tipo":"archivo","campo":"Archivos Producción","titulo":"Archivo(s) Producción","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["application/pdf","image/png","image/jpeg","image/gif"],"valor":Info_Gen["cosyd_archivos"],"editable":False})
+        Formulario_2["Campos"].append({"tipo":"archivo","campo":"Archivos Producción","titulo":"Archivo(s) Producción","Requerido":1,"Col":12,"min":0,"max":5,"tipo_archivo":["application/pdf","image/png","image/jpeg","image/gif"],"valor":Info_Gen["cosyd_archivos"],"editable":False})
         Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario_2))
 
         
@@ -938,7 +938,7 @@ def Completar_Ruteo(Datos):
         <hr>
         """
         Formulario = {"Col":"", "Campos": [],"Clase": "Formato" }
-        Formulario["Campos"].append({"tipo":"texto","campo":"Packing Slip","titulo":"Packing Slip","editable":True,"Requerido":1,"min":1,"max":50,"valor":"","Col":6})
+        Formulario["Campos"].append({"tipo":"texto","campo":"Packing Slip","titulo":"Packing Slip","editable":True,"Requerido":1,"min":1,"max":50,"valor":"","Col":12})
         Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
         Resultado["Contenido"] += """
         <div class='mb-1'>
