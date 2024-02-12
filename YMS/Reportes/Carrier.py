@@ -90,13 +90,13 @@ def Cargar_Reporte(Datos):
         Datos_Info = json.loads(str(Datos["Info"]))
         Cajas = []
         Cajas_DB = []
-        if str(Datos_Info["Fecha de Rura"]) != "":
-            Cajas_DB = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas WHERE cc_informacion_actual like '%"+str(Datos_Info["Carrier"])+"%' AND DATE(cc_fecha_hora) BETWEEN '"+str(Datos_Info["Fecha de Rura"][0])+"' and '"+str(Datos_Info["Fecha de Rura"][1])+"'")
-        else:
-            Cajas_DB = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas WHERE cc_informacion_actual like '%"+str(Datos_Info["Carrier"])+"%'")
-        H_Str = []
+        # if str(Datos_Info["Fecha de Rura"]) != "":
+        #     Cajas_DB = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas WHERE cc_informacion_actual like '%"+str(Datos_Info["Carrier"])+"%' AND DATE(cc_fecha_hora) BETWEEN '"+str(Datos_Info["Fecha de Rura"][0])+"' and '"+str(Datos_Info["Fecha de Rura"][1])+"'")
+        # else:
+        #     Cajas_DB = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas WHERE cc_informacion_actual like '%"+str(Datos_Info["Carrier"])+"%'")
+        # H_Str = []
 
-        Resultado["Contenido"] += str(Cajas_DB)
+        Resultado["Contenido"] += str(Datos_Info)
         # for C in Cajas_DB:
         #     H_Str.append("'"+str(C["cc_id"])+"'")
         #Historial = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas_moviemiento WHERE cch_master IN ("+str(','.join(H_Str))+")")
