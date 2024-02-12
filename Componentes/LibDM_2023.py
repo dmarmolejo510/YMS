@@ -2241,7 +2241,7 @@ class Menu:
                             <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
         """
         for M in Menu.keys():
-            Res += """<li class="nav-item fs-5 fst-italic fw-bold border-bottom border-opacity-50" onmousemove='animateCSS($(this).find(".flechas").get(), "fadeInLeft")' style='color:"""+str(Menu[M]["Color"])+""";cursor:pointer;' onclick='Ir_Index(\""""+str(Menu[M]["Link"])+"""\")'><a><div style='display: inline-block; color:"""+str(Menu[M]["Color"])+"""' class='flechas mdi mdi-chevron-double-right'></div> <i class='"""+str(Menu[M]["Icono"])+"""'></i> """+str(M)+"""</a></li>"""
+            Res += """<li class="nav-item fs-5 fst-italic  border-bottom border-opacity-50" onmousemove='animateCSS($(this).find(".flechas").get(), "fadeInLeft")' style='color:"""+str(Menu[M]["Color"])+""";cursor:pointer;' onclick='Ir_Index(\""""+str(Menu[M]["Link"])+"""\")'><a><div style='display: inline-block; color:"""+str(Menu[M]["Color"])+"""' class='flechas mdi mdi-chevron-double-right'></div> <i class='"""+str(Menu[M]["Icono"])+"""'></i> """+str(M)+"""</a></li>"""
         Res += """
                         </ul>
                     </div>
@@ -2257,7 +2257,7 @@ class Menu:
                 if "Items" in Menu[Activo]["Items"][Sub].keys():
                     Res += """
                       <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-decoration-none link-dark link-opacity-75 fw-bold" data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class='"""+str(Menu[Activo]["Items"][Sub]["Icono"])+"""'></i> """+str(Sub)+"""</a>
+                            <a class="nav-link dropdown-toggle text-decoration-none link-dark link-opacity-75 " data-bs-toggle="dropdown" role="button" aria-expanded="false"><i class='"""+str(Menu[Activo]["Items"][Sub]["Icono"])+"""'></i> """+str(Sub)+"""</a>
                             <ul class="dropdown-menu" style='background:"""+str(Menu[Activo]["Color"])+"""'>
                     """
                     for SubSub in Menu[Activo]["Items"][Sub]["Items"].keys():

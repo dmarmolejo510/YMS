@@ -351,6 +351,44 @@ def Inicio():
                 })
             }
         </script>
+        <script>
+            $( document ).ready(function() {
+                setInterval(Actualizar_Hora_Final, 500)
+            });
+            function Actualizar_Hora_Final()
+            {
+                $(".tiempo").each(function() {
+                    var Limite = moment($(this).attr('tiempo'));
+                    var Ahora = moment(new Date()); //todays date
+                    //var Faltan = moment.duration(Ahora.diff(Limite));
+                    var Faltan = moment.duration(Limite.diff(Ahora));
+                    var Dias = Faltan.asDays().toString().split(".")[0];
+                    if(Dias < 0)
+                        Dias = Dias*-1
+                    var Horas = Faltan.hours();
+                    if(Horas < 0)
+                        Horas = Horas*-1
+                    if(Horas.toString().length == 1)
+                        Horas = "0"+Horas;
+                    var Minutos = Faltan.minutes();
+                        if(Minutos < 0)
+                        Minutos = Minutos*-1
+                    if(Minutos.toString().length == 1)
+                        Minutos = "0"+Minutos;
+                    var Segundos = Faltan.seconds();
+                    if(Segundos < 0)
+                        Segundos = Segundos*-1
+                    if(Segundos.toString().length == 1)
+                        Segundos = "0"+Segundos;
+                    if (Dias == 0)
+                        $(this).html("<b>" + Horas +":" + Minutos +":"+ Segundos +"</b>")
+                    else
+                        $(this).html("<b>" + Dias + " Days, " + Horas +":" + Minutos +":"+ Segundos +"</b>")
+
+                });
+
+            }
+        </script>
         """
         
         Cur += render_template("general.html",Contenido=Contenido,Componentes=Compartido.Complementos(None),Menu=Menu,Titulo=Titulo)

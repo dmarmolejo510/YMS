@@ -22,12 +22,12 @@ def Inicio():
         Contenido += "<div class='h2 fw-lighter mt-1 mb-1 text-center border-bottom'><i class='mdi mdi mdi-book'></i> Daily Reports</div>"
         Formulario = {"Col":"12", "Campos": [],"Clase": "Buscar" }
         #Formulario["Campos"].append({"tipo":"texto","campo":"Container","titulo":"Container","Requerido":1,"min":1,"max":150,"valor":"","Col":6})
-        Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha de Rura","titulo":"In Date","Requerido":1,"Col":12,"valor":"","editable":True})
+        Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha de Rura","titulo":"Arrival Date","Requerido":1,"Col":12,"valor":"","editable":True})
         
         Contenido += "<div class='container'>"
         Contenido += str(Compartido.Formulario(Formulario))
         Contenido += """
-        <div class='w-100 text-center mt-2'><button class='btn btn-primary w-75' onclick='Cargar_Reporte()'><i class='mdi mdi-cloud-download'></i> Download</button></div>
+        <div class='w-100 text-center mt-2'><button class='btn btn-primary w-75' onclick='Cargar_Reporte()'><i class='mdi mdi-cloud-download'></i> Download Report</button></div>
         <hr>
         <div id='Res'></div>
         """
@@ -160,11 +160,11 @@ def Cargar_Reporte(Datos):
                 data:"""+str(Cajas)+""",
                 columns:[
                     {field:"Contenedor","title":"Container"},
-                    {field:"In Date","title":"In Date"},
+                    {field:"Arrival Date","title":"In Date"},
                     {field:"Route Type","title":"Route Type",formatter:"html"},
                     {field:"Route","title":"Route",formatter:"html"},
                     {field:"Dock","title":"Dock",formatter:"html"},
-                    {field:"In Carrier","title":"In Carrier"},
+                    {field:"Arrival Carrier","title":"In Carrier"},
                     {field:"Opciones","title":"Op",formatter:"html"}
                 ]
             });
@@ -187,11 +187,11 @@ def Cargar_Reporte(Datos):
                 data:"""+str(Cajas_2)+""",
                 columns:[
                     {field:"Contenedor","title":"Container"},
-                    {field:"Out Date","title":"Out Date"},
+                    {field:"Departure Date","title":"Out Date"},
                     {field:"Route Type","title":"Route Type",formatter:"html"},
                     {field:"Route","title":"Route",formatter:"html"},
                     {field:"Dock","title":"Dock",formatter:"html"},
-                    {field:"Out Carrier","title":"Out Carrier"},
+                    {field:"Departure Carrier","title":"Out Carrier"},
                     {field:"Opciones","title":"Op",formatter:"html"}
                 ]
             });

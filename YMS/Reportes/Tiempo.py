@@ -66,7 +66,7 @@ def Inicio():
                 },
                 columns:[
                     {field:"Tiempo","title":"Last Movement",formatter:"html"},
-                    {field:"UB","title":"UB"},
+                    /*{field:"UB","title":"UB"},*/
                     {field:"Caja","title":"Container",headerFilter:"input"},
                     {field:"Carrier","title":"Carrier"},
                     {field:"Tipo","title":"Type"},

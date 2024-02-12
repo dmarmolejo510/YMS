@@ -27,7 +27,7 @@ def Inicio():
         Contenido += "<div class='container'>"
         Contenido += str(Compartido.Formulario(Formulario))
         Contenido += """
-        <div class='w-100 text-center mt-2'><button class='btn btn-primary w-75' onclick='Cargar_Reporte()'><i class='mdi mdi-cloud-download'></i> Download</button></div>
+        <div class='w-100 text-center mt-2'><button class='btn btn-primary w-75' onclick='Cargar_Reporte()'><i class='mdi mdi-cloud-download'></i> Download Report</button></div>
         <hr>
         <div id='Res'></div>
         """
@@ -159,12 +159,12 @@ def Cargar_Reporte(Datos):
                 data:"""+str(Cajas)+""",
                 columns:[
                     {field:"Contenedor","title":"Container"},
-                    {field:"In Date","title":"In Date"},
-                    {field:"In Status","title":"In Status",formatter:"html"},
-                    {field:"In Carrier","title":"In Carrier"},
-                    {field:"Out Date","title":"Out Date"},
-                    {field:"Out Status","title":"Out Status",formatter:"html"},
-                    {field:"Out Carrier","title":"Out Carrier"},
+                    {field:"In Date","title":"Arrival Date"},
+                    {field:"In Status","title":"Arrival Status",formatter:"html"},
+                    {field:"In Carrier","title":"Arrival Carrier"},
+                    {field:"Out Date","title":"Departure Date"},
+                    {field:"Out Status","title":"Departure Status",formatter:"html"},
+                    {field:"Out Carrier","title":"Departure Carrier"},
                     {field:"Opciones","title":"Op",formatter:"html"}
                 ]
             });

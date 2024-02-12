@@ -142,13 +142,13 @@ def Inicio():
                         layout:"fitColumns",
                         data:"""+str(Patio)+""",
                         columns:[
-                            {field:"Tiempo","title":"Ultimo Movement",formatter:"html"},
-                            {field:"Caja","title":"Contenedor/Caja",headerFilter:"input"},
+                            {field:"Tiempo","title":"Last Movement",formatter:"html"},
+                            {field:"Caja","title":"Container",headerFilter:"input"},
                             {field:"Carrier","title":"Carrier"},
-                            {field:"Tipo","title":"Tipo"},
-                            {field:"Ruta","title":"Ruta",formatter:"html"},
-                            {field:"Sello","title":"Sello",formatter:"html"},
-                            {field:"Estado","title":"Estado",formatter:"html"},
+                            {field:"Tipo","title":"Type"},
+                            {field:"Ruta","title":"Route",formatter:"html"},
+                            {field:"Sello","title":"Seal",formatter:"html"},
+                            {field:"Estado","title":"Status",formatter:"html"},
                             {field:"Opciones","title":"Op",formatter:"html"}
                         ]
                     });
@@ -171,11 +171,11 @@ def Inicio():
                         data:"""+str(Dock)+""",
                         columns:[
                             {field:"Dock","title":"Dock"},
-                            {field:"Tiempo","title":"Ultimo Movement",formatter:"html"},
-                            {field:"Caja","title":"Contenedor/Caja",headerFilter:"input"},
+                            {field:"Tiempo","title":"Last Movement",formatter:"html"},
+                            {field:"Caja","title":"Container",headerFilter:"input"},
                             {field:"Carrier","title":"Carrier"},
-                            {field:"Tipo","title":"Tipo"},
-                            {field:"Ruta","title":"Ruta",formatter:"html"},
+                            {field:"Tipo","title":"Type"},
+                            {field:"Ruta","title":"Route",formatter:"html"},
                             {field:"Opciones","title":"Op",formatter:"html"}
                         ]
                     });
@@ -304,6 +304,44 @@ def Inicio():
                     
                 }
                 })
+            }
+        </script>
+        <script>
+            $( document ).ready(function() {
+                setInterval(Actualizar_Hora_Final, 500)
+            });
+            function Actualizar_Hora_Final()
+            {
+                $(".tiempo").each(function() {
+                    var Limite = moment($(this).attr('tiempo'));
+                    var Ahora = moment(new Date()); //todays date
+                    //var Faltan = moment.duration(Ahora.diff(Limite));
+                    var Faltan = moment.duration(Limite.diff(Ahora));
+                    var Dias = Faltan.asDays().toString().split(".")[0];
+                    if(Dias < 0)
+                        Dias = Dias*-1
+                    var Horas = Faltan.hours();
+                    if(Horas < 0)
+                        Horas = Horas*-1
+                    if(Horas.toString().length == 1)
+                        Horas = "0"+Horas;
+                    var Minutos = Faltan.minutes();
+                        if(Minutos < 0)
+                        Minutos = Minutos*-1
+                    if(Minutos.toString().length == 1)
+                        Minutos = "0"+Minutos;
+                    var Segundos = Faltan.seconds();
+                    if(Segundos < 0)
+                        Segundos = Segundos*-1
+                    if(Segundos.toString().length == 1)
+                        Segundos = "0"+Segundos;
+                    if (Dias == 0)
+                        $(this).html("<b>" + Horas +":" + Minutos +":"+ Segundos +"</b>")
+                    else
+                        $(this).html("<b>" + Dias + " Days, " + Horas +":" + Minutos +":"+ Segundos +"</b>")
+
+                });
+
             }
         </script>
         """
