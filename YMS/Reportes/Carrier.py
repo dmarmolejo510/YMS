@@ -100,9 +100,9 @@ def Cargar_Reporte(Datos):
         
         for Caja in Cajas_DB:
             Historial_Aqui = []
-            for H in Historial:
-                if int(H["cch_master"]) == int(Caja["cc_id"]):
-                    Historial_Aqui.append(H)
+            #for H in Historial:
+            #    if int(H["cch_master"]) == int(Caja["cc_id"]):
+            #        Historial_Aqui.append(H)
             
             Info_Actual = json.loads(str(Caja["cc_informacion_actual"]))
             Estado_IN = "Not assigned"

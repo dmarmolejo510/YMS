@@ -26,7 +26,7 @@ def Inicio():
             Opciones = ""
             UB = ""
             Estado = ""
-            if Contenedor["cc_negocio"] is None:
+            if Contenedor["cc_tipo_actual"] is None:
                 Opciones = "<div class='text-center'><button class='btn btn-primary btn-sm p-0 ps-1 pe-1' onclick='Asignar(\"ODC\","+str(Contenedor["cc_id"])+");'><i class='mdi mdi-hand-front-right'></i></button></div>"
                 Contenedor["cc_tipo_actual"] = ""
                 Estado = "Not assigned"
