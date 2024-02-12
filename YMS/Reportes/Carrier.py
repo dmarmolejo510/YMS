@@ -97,6 +97,7 @@ def Cargar_Reporte(Datos):
         # H_Str = []
 
         Resultado["Contenido"] += str(Datos_Info)
+        
         # for C in Cajas_DB:
         #     H_Str.append("'"+str(C["cc_id"])+"'")
         #Historial = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas_moviemiento WHERE cch_master IN ("+str(','.join(H_Str))+")")

@@ -16,8 +16,6 @@ def Inicio_Sesion():
     try:
         Activo = "YMS"
         Compartido = LibDM_2023.Compartido()
-        Menu = LibDM_2023.Menu().Menu(Activo,request.url_root,session["IDu"])
-        Titulo = LibDM_2023.Menu().Get_Titulo(Activo)
         Contenido = ""
         Contenido += """
         <body style='height:90%;'>
@@ -70,8 +68,8 @@ def Inicio_Sesion():
                 }
                 else{
                     Mostrar_Ventana_Cargando(false);
-                    var parametros = {"Fun":"Entrar","Usuario":$("#User").val().trim(),"Pass":$("#Pwr").val().trim()};
-                    $.ajax({data:  parametros,url:\""""+str(os.path.basename(__file__))+"""\",type:  "post",
+                    var parametros = {"Fun":'"""+str(fernet.encrypt("Entrar".encode()).decode("utf-8"))+"""',"Usuario":$("#User").val().trim(),"Pass":$("#Pwr").val().trim()};
+                    $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
                         success:  function (response)
                         {
                             if(response*1 == 0){
@@ -100,41 +98,41 @@ def Inicio_Sesion():
             });
         </script>
         """
-        Cur += render_template("general.html",Contenido=Contenido,Componentes=Compartido.Complementos(None),Menu=Menu,Titulo=Titulo)
+        Cur += render_template("general_APP.html",Contenido=Contenido,Componentes=Compartido.Complementos(None),Menu="",Titulo="")
     except:
         Cur += str(sys.exc_info())
     return Cur
 
-def Inicio_Sesion_old():
-    try:
-        Compartido = LibDM_2023.Compartido()
-        C = cookies.SimpleCookie()
-        C["K_Portal_U"] = ""
-        C["K_Portal_U"]["path"] = "/"
-        C["K_Portal_U"]["expires"] = "Thu, 01 Jan 1970 00:00:00 GMT"
-        C["Update_Portal_U"] = ""
-        C["Update_Portal_U"]["path"] = "/"
-        C["Update_Portal_U"]["expires"] = "Thu, 01 Jan 1970 00:00:00 GMT"
-        Cur = str(C.output())+"\n"
-        Compartido = LibDM_2023.Compartido()
-        Cur += "content-type: text/html;charset=ISO-8859-1\n\n"
-        Cur += """
-        <!DOCTYPE html>
-        <html class='h-100 w-100'>
-            <head>
-                <meta name="viewport" content="width=device-width, initial-scale=1">
-                <title>APP MX ["""+str(Menu_Activo)+"""]</title>
-        """
-        Cur += str(Compartido.Complementos("../../",["07","15","04"]))
-        Cur += """
-            </head>
+# def Inicio_Sesion_old():
+#     try:
+#         Compartido = LibDM_2023.Compartido()
+#         C = cookies.SimpleCookie()
+#         C["K_Portal_U"] = ""
+#         C["K_Portal_U"]["path"] = "/"
+#         C["K_Portal_U"]["expires"] = "Thu, 01 Jan 1970 00:00:00 GMT"
+#         C["Update_Portal_U"] = ""
+#         C["Update_Portal_U"]["path"] = "/"
+#         C["Update_Portal_U"]["expires"] = "Thu, 01 Jan 1970 00:00:00 GMT"
+#         Cur = str(C.output())+"\n"
+#         Compartido = LibDM_2023.Compartido()
+#         Cur += "content-type: text/html;charset=ISO-8859-1\n\n"
+#         Cur += """
+#         <!DOCTYPE html>
+#         <html class='h-100 w-100'>
+#             <head>
+#                 <meta name="viewport" content="width=device-width, initial-scale=1">
+#                 <title>APP MX ["""+str(Menu_Activo)+"""]</title>
+#         """
+#         Cur += str(Compartido.Complementos("../../",["07","15","04"]))
+#         Cur += """
+#             </head>
             
-        </html>
-        """
-    except:
-        Cur = "content-type: text/html;charset=ISO-8859-1\n\n "
-        Cur += str(sys.exc_info())
-    print(Cur)
+#         </html>
+#         """
+#     except:
+#         Cur = "content-type: text/html;charset=ISO-8859-1\n\n "
+#         Cur += str(sys.exc_info())
+#     print(Cur)
 def Entrar(Datos):
     try:
         Cur = ""
