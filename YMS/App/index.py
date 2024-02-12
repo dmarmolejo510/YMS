@@ -4,6 +4,7 @@ from datetime import datetime,date,timedelta
 import sys
 import json
 import os
+import hashlib
 from Componentes import LibDM_2023
 Url = ""
 fernet = Fernet(LibDM_2023.Compartido().Dame_K2())
@@ -134,31 +135,20 @@ def Inicio_Sesion():
 #         Cur += str(sys.exc_info())
 #     print(Cur)
 def Entrar(Datos):
+    Cur = ""
+    DB = LibDM_2023.DataBase()
+    Resultado = {"Estado":0, "Contenido":""}
     try:
-        Cur = ""
-        DB = LibDM_2023.DataBase()
-        Encriptar = LibDM_2023.Encriptar()
-        if "$" in str(Datos["Usuario"]):
-            Datos["Pass"] = str(Datos["Usuario"]).split('$')[1]
-            Datos["Usuario"] = str(Datos["Usuario"]).split('$')[0].replace('+','')
-        Info = DB.Get_Dato("SELECT * FROM portal.ccodigo_escaner WHERE UPPER(cce_user) = '"+str(Datos["Usuario"]).upper()+"' AND cee_ilc_saltillo = 1")
-        if len(Info) > 0:
-           if str(Info[0]["cee_pass"]) == str(Datos["Pass"]):
-                C = cookies.SimpleCookie()
-                C["K_Portal_U"] = str(Encriptar.Get_Key(str(Info[0]["cce_id"])))
-                C["K_Portal_U"]["path"] = "/"
-                C["Update_Portal_U"] = "Primero"
-                C["Update_Portal_U"]["path"] = "/"
-                Cur = str(C.output())+"\n"
-                Cur += "content-type: text/html;charset=ISO-8859-1\n\n " + "1"
-           else:
-                Cur = "content-type: text/html;charset=ISO-8859-1\n\n " + "0"
-        else:
-            Cur = "content-type: text/html;charset=ISO-8859-1\n\n " + "0"
+        Res = DB.Get_Dato("SELECT * FROM public.cuser WHERE UPPER(cususuario) = '"+str(Datos["Usuario"]).upper()+"' or UPPER(cuscorreo) = '"+str(Datos["Usuario"]).upper()+"' AND cpss_2 = '"+str(hashlib.md5(str(Datos["Pass"]).encode('utf-8')).hexdigest())+"'")
+        if len(Res) > 0:
+            Resultado["Estado"] = 1
+            session["IDu"] = str(Res[0]["cusrid"])
+            session["K"] = str(Fernet.generate_key().decode())
+        #Resultado["Contenido"] = str(Datos)
     except:
-        Cur = "content-type: text/html;charset=ISO-8859-1\n\n "
-        Cur += str(sys.exc_info())
-    print(Cur)
+        Resultado["Contenido"] = str(sys.exc_info())
+    Cur += json.dumps(Resultado)
+    return Cur
 def Inicio(Datos):
     try:
         Compartido = LibDM_2023.Compartido()
