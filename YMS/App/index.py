@@ -10,12 +10,11 @@ Url = ""
 fernet = Fernet(LibDM_2023.Compartido().Dame_K2())
 Menu_Activo = "RILC TOLUCA"
 
-def Inicio_Sesion():
+def Inicio():
     if "K" in session.keys():
         fernet = Fernet(session["K"])
     Cur = ""
     try:
-        Activo = "YMS"
         Compartido = LibDM_2023.Compartido()
         Contenido = ""
         Contenido += """
@@ -103,37 +102,6 @@ def Inicio_Sesion():
     except:
         Cur += str(sys.exc_info())
     return Cur
-
-# def Inicio_Sesion_old():
-#     try:
-#         Compartido = LibDM_2023.Compartido()
-#         C = cookies.SimpleCookie()
-#         C["K_Portal_U"] = ""
-#         C["K_Portal_U"]["path"] = "/"
-#         C["K_Portal_U"]["expires"] = "Thu, 01 Jan 1970 00:00:00 GMT"
-#         C["Update_Portal_U"] = ""
-#         C["Update_Portal_U"]["path"] = "/"
-#         C["Update_Portal_U"]["expires"] = "Thu, 01 Jan 1970 00:00:00 GMT"
-#         Cur = str(C.output())+"\n"
-#         Compartido = LibDM_2023.Compartido()
-#         Cur += "content-type: text/html;charset=ISO-8859-1\n\n"
-#         Cur += """
-#         <!DOCTYPE html>
-#         <html class='h-100 w-100'>
-#             <head>
-#                 <meta name="viewport" content="width=device-width, initial-scale=1">
-#                 <title>APP MX ["""+str(Menu_Activo)+"""]</title>
-#         """
-#         Cur += str(Compartido.Complementos("../../",["07","15","04"]))
-#         Cur += """
-#             </head>
-            
-#         </html>
-#         """
-#     except:
-#         Cur = "content-type: text/html;charset=ISO-8859-1\n\n "
-#         Cur += str(sys.exc_info())
-#     print(Cur)
 def Entrar(Datos):
     Cur = ""
     DB = LibDM_2023.DataBase()
@@ -149,7 +117,7 @@ def Entrar(Datos):
         Resultado["Contenido"] = str(sys.exc_info())
     Cur += json.dumps(Resultado)
     return Cur
-def Inicio(Datos):
+def Inicio_old(Datos):
     try:
         Compartido = LibDM_2023.Compartido()
         Cur = "content-type: text/html;charset=ISO-8859-1\n\n"

@@ -17,7 +17,7 @@ from YMS.Salidas import Estado as YMS_Salida_Estado, Reporte as YMS_Salida_Repor
 from YMS.OSyD import Inicio as YMS_OSyD
 from YMS.Reportes import Buscar as YMS_Reportes_Buscar,Diario as YMS_Reportes_Diario,Tiempo as YMS_Reportes_Tiempo, Carrier as YMS_Reportes_Carrier
 from YMS.Configuracion import Destinos as YMS_Conf_Destino,Docks as YMS_Conf_Dock, Proveedores as YMS_Conf_Proveedores,Rutas as YMS_Conf_Rutas,Carrier as YMS_Conf_Carrier
-from YMS.App import index as APP_YMS_Lib
+#from YMS.App import index as APP_YMS_Lib
 
 app.secret_key = LibDM_2023.Compartido().Dame_K()
 fernet = Fernet(LibDM_2023.Compartido().Dame_K2())
@@ -328,15 +328,15 @@ def YMS_Conf_Carriers():
             return render_template_string(YMS_Conf_Carrier.Direccionar(Datos))
 
 
-@app.route("/YMS/App",methods=['GET','POST'])
-def YMS_Conf_Carriers():
-    if "IDu" not in session:
-        return render_template_string("<script>window.location= '"+str(request.url_root)+"/YMS/App';</script>")
-    else:
-        if request.method == "GET":
-            return render_template_string(APP_YMS_Lib.Inicio_Sesion())
-        else:
-            Datos = {}
-            for K in request.form.keys():
-                Datos[K] = escape(request.form[K]).striptags()
-            return render_template_string(APP_YMS_Lib.Direccionar(Datos))
+# @app.route("/YMS/App",methods=['GET','POST'])
+# def YMS_Conf_Carriers():
+#     if "IDu" not in session:
+#         return render_template_string(APP_YMS_Lib.Inicio())
+#     else:
+#         if request.method == "GET":
+#             return render_template_string(APP_YMS_Lib.Inicio())
+#         else:
+#             Datos = {}
+#             for K in request.form.keys():
+#                 Datos[K] = escape(request.form[K]).striptags()
+#             return render_template_string(APP_YMS_Lib.Direccionar(Datos))
