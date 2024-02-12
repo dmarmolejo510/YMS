@@ -28,19 +28,19 @@ def Inicio():
         Titulo = LibDM_2023.Menu().Get_Titulo(Activo)
         Contenido = ""
 
-        Contenido += """<div class='text-end pe-1 pt-1'><small class='link-primary' style='cursor:pointer' onclick='Llamar_Funcion(\""""+str(request.url)+"""\");'>Actualizar <i class='mdi mdi-refresh'></i></small></div>"""
+        Contenido += """<div class='text-end pe-1 pt-1'><small class='link-primary' style='cursor:pointer' onclick='Llamar_Funcion(\""""+str(request.url)+"""\");'>Update <i class='mdi mdi-refresh'></i></small></div>"""
         Contenido += "<div class='h2 fw-lighter mt-1 mb-1 text-center border-bottom'><i class='mdi mdi-alert'></i> OS&D</div>"
         Contenido += """
         <div class='container-fluid'>
              <ul class="nav nav-tabs nav-fill">
                 <li class="nav-item">
-                    <a id='Tab_Abierto' class="nav-link active bg-primary fw-bold text-light" href="#" onclick='Cargar_Abiertos()'>OS&D Abiertos <span class="badge text-bg-secondary"></span></a>
+                    <a id='Tab_Abierto' class="nav-link active bg-primary fw-bold text-light" href="#" onclick='Cargar_Abiertos()'>OS&D Open <span class="badge text-bg-secondary"></span></a>
                 </li>
                 <li class="nav-item">
-                    <a id='Tab_Liberados' class="nav-link" href="#" onclick='Cargar_Liberados()'>OS&D Liberados <span class="badge text-bg-secondary"></span></a>
+                    <a id='Tab_Liberados' class="nav-link" href="#" onclick='Cargar_Liberados()'>OS&D Released <span class="badge text-bg-secondary"></span></a>
                 </li>
                 <li class="nav-item">
-                    <a id='Tab_Reporte' class="nav-link" href="#" onclick='Cargar_Menu_Reporte()'>OS&D Reporte</a>
+                    <a id='Tab_Reporte' class="nav-link" href="#" onclick='Cargar_Menu_Reporte()'>OS&D Report</a>
                 </li>
             </ul>
             <div id='Res'></div>
@@ -173,7 +173,7 @@ def Cargar_Abiertos(Datos):
         Contador_Abierto = {"valor":0,"clase":"text-bg-secondary"}
         Contador_Liberados = {"valor":0,"clase":"text-bg-secondary"}
         Contador_Pre_Liberados = {"valor":0,"clase":"text-bg-secondary"}
-        Resultado["Contenido"] += "<div class='h3 text-center mt-2'>OS&D Abiertos</div>"
+        Resultado["Contenido"] += "<div class='h3 text-center mt-2'>OS&D Open</div>"
         Tabla_Datos_Ruteo = []
 
         Proveedores = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".cproveedores")
@@ -324,10 +324,10 @@ def Cargar_Abiertos(Datos):
         Resultado["Contenido"] += """
         <div class='row'>
             <div class='col-12'>
-                <div class='h3'><i class='mdi mdi-go-kart-track'></i> Ruteo</div>
+                <div class='h3'><i class='mdi mdi-go-kart-track'></i> Office</div>
                 <div class='w-100 d-flex justify-content-end'>
-                    <button class='btn btn-success mb-1 me-1' onclick='Nueva_Ruteo()'><i class='mdi mdi-plus'></i> Nuevo</button>
-                    <button class='btn btn-primary mb-1' id="download-xlsx-ruteo"><i class='mdi mdi-microsoft-excel'></i> Descargar Excel</button>
+                    <button class='btn btn-success mb-1 me-1' onclick='Nueva_Ruteo()'><i class='mdi mdi-plus'></i> New OS&D</button>
+                    <button class='btn btn-primary mb-1' id="download-xlsx-ruteo"><i class='mdi mdi-microsoft-excel'></i> Download Excel</button>
                 </div>
                 <div id='Tabla-Ruteo' class='border border-dark bg-dark-subtle'></div>
                 <script>
@@ -336,15 +336,15 @@ def Cargar_Abiertos(Datos):
                         {title: ' ', field: ' ', formatter: 'html',download: false,width:100,headerSort:false}, 
                         {title: 'Folio', field: 'Folio', headerFilter: 'input',width:65},
                         {title: 'Packing Slip', field: 'Packing_Slip', headerFilter: 'input',width:100},
-                        {title: 'Ruta', field: 'Ruta', headerFilter: 'input',width:140}, 
-                        {title: 'Fecha Alta', field: 'Fecha Alta', headerFilter: 'input',width:100}, 
-                        {title: 'Proveedor', field: 'Proveedor', headerFilter: 'input',width:90}, 
-                        {title: 'Destino', field: 'Destino', headerFilter: 'input',width:80}, 
-                        {title: 'Numeros de Parte', field: 'Numeros', formatter: 'html',download: false,width:30,hozAlign:"center"},
-                        {title: 'Numeros_de_Parte', field: 'Numeros_de_Parte',download: true,visible:false}, 
-                        {title: 'Problema', field: 'Problema',width:150},
-                        {title: 'Ultimo Comentario', field: 'Ultimo Comentario', headerFilter: 'input',formatter:'html'}, 
-                        {title: 'Archivo(s)', field: 'Archivos', formatter: 'html',download: false,headerSort:false,width:90}];
+                        {title: 'Route', field: 'Ruta', headerFilter: 'input',width:140}, 
+                        {title: 'Date Upload', field: 'Fecha Alta', headerFilter: 'input',width:100}, 
+                        {title: 'Supplier', field: 'Proveedor', headerFilter: 'input',width:90}, 
+                        {title: 'Destination', field: 'Destino', headerFilter: 'input',width:80}, 
+                        {title: 'Part Number', field: 'Numeros', formatter: 'html',download: false,width:30,hozAlign:"center"},
+                        {title: 'Part_Number', field: 'Numeros_de_Parte',download: true,visible:false}, 
+                        {title: 'Issue', field: 'Problema',width:150},
+                        {title: 'Last comment', field: 'Ultimo Comentario', headerFilter: 'input',formatter:'html'}, 
+                        {title: 'File(s)', field: 'Archivos', formatter: 'html',download: false,headerSort:false,width:90}];
                     var table_abiertos = new Tabulator("#Tabla-Ruteo", {
                         minHeight:500,
                         data:"""+str(Tabla_Datos_Ruteo)+""",
@@ -370,7 +370,7 @@ def Cargar_Abiertos(Datos):
             </div>
             <div class='col-12'>
                 <hr>
-                <div class='h3'><i class='mdi mdi-forklift'></i> Operaciones</div>
+                <div class='h3'><i class='mdi mdi-forklift'></i> Operations</div>
                 <div class='w-100 d-flex justify-content-end'>
                     <button class='btn btn-success mb-1' id="download-xlsx-produccion"><i class='mdi mdi-microsoft-excel'></i> Descargar Excel</button>
                 </div>
@@ -381,15 +381,15 @@ def Cargar_Abiertos(Datos):
                         {title: ' ', field: ' ', formatter: 'html',download: false,width:100,headerSort:false}, 
                         {title: 'Folio', field: 'Folio', headerFilter: 'input',width:65},
                         {title: 'Packing Slip', field: 'Packing_Slip', headerFilter: 'input',width:100},
-                        {title: 'Ruta', field: 'Ruta', headerFilter: 'input',width:140}, 
-                        {title: 'Fecha Alta', field: 'Fecha Alta', headerFilter: 'input',width:100}, 
-                        {title: 'Proveedor', field: 'Proveedor', headerFilter: 'input',width:90}, 
-                        {title: 'Destino', field: 'Destino', headerFilter: 'input',width:80}, 
-                        {title: 'Numeros de Parte', field: 'Numeros', formatter: 'html',download: false,width:30,hozAlign:"center"},
-                        {title: 'Numeros_de_Parte', field: 'Numeros_de_Parte',download: true,visible:false},
-                        {title: 'Problema', field: 'Problema',width:150},
-                        {title: 'Ultimo Comentario', field: 'Ultimo Comentario', headerFilter: 'input',formatter:'html'}, 
-                        {title: 'Archivo(s)', field: 'Archivos', formatter: 'html',download: false,headerSort:false,width:90}];
+                        {title: 'Route', field: 'Ruta', headerFilter: 'input',width:140}, 
+                        {title: 'Date Upload', field: 'Fecha Alta', headerFilter: 'input',width:100}, 
+                        {title: 'Supplier', field: 'Proveedor', headerFilter: 'input',width:90}, 
+                        {title: 'Destination', field: 'Destino', headerFilter: 'input',width:80}, 
+                        {title: 'Part Number', field: 'Numeros', formatter: 'html',download: false,width:30,hozAlign:"center"},
+                        {title: 'Part_Number', field: 'Numeros_de_Parte',download: true,visible:false},
+                        {title: 'Issue', field: 'Problema',width:150},
+                        {title: 'Last comment', field: 'Ultimo Comentario', headerFilter: 'input',formatter:'html'}, 
+                        {title: 'File(s)', field: 'Archivos', formatter: 'html',download: false,headerSort:false,width:90}];
                     var table_p = new Tabulator("#Tabla-Produccion", {
                         minHeight:500,
                         data:"""+str(Tabla_Datos_Porduccion)+""",
@@ -465,8 +465,8 @@ def Cargar_Abiertos(Datos):
             }
             function Eliminar_Ruteo(ID,Folio){
                 Swal.fire({
-                title: '¿Estás seguro de eliminar el OS&D ['+Folio+']?',
-                input: 'text',buttonsStyling: false,showCancelButton: true,confirmButtonText: "<i class='mdi mdi-check'></i> Si",cancelButtonText: "<i class='mdi mdi-close'></i> No",showLoaderOnConfirm: true,
+                title: '¿Are you sure to delete OS&D ['+Folio+']?',
+                input: 'text',buttonsStyling: false,showCancelButton: true,confirmButtonText: "<i class='mdi mdi-check'></i> Yes",cancelButtonText: "<i class='mdi mdi-close'></i> No",showLoaderOnConfirm: true,
                 customClass: {confirmButton: 'btn btn-success ms-1 me-1',cancelButton: 'btn btn-danger ms-1 me-1'},
                 preConfirm: (Comentario) => {
                     
@@ -519,29 +519,29 @@ def Nueva_Ruteo(Datos):
         Formulario = {"Col":"", "Campos": [],"Clase": "Formato" }
         Formulario["Campos"].append({"tipo":"texto","campo":"Packing Slip","id":"PS","titulo":"Packing Slip","editable":True,"Requerido":1,"min":1,"max":20,"valor":"","Col":12})
         Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
-        Resultado["Contenido"] += "</div><div class='col-auto pt-4' onclick='Cargar_Tally()'> <button class='btn btn-primary mt-3'><i class='mdi mdi-upload'></i> Cargar Tally</button>"
+        #Resultado["Contenido"] += "</div><div class='col-auto pt-4' onclick='Cargar_Tally()'> <button class='btn btn-primary mt-3'><i class='mdi mdi-upload'></i> Cargar Tally</button>"
         
         Resultado["Contenido"] += "</div>"
         Resultado["Contenido"] += "</div>"
         Resultado["Contenido"] += """
         <div class='mb-1'>
-            <button id="reactivity-add" class='btn btn-success btn-sm'><i class='mdi mdi-plus'></i> Add New Number Part</button>
-            <button id="reactivity-delete" class='btn btn-danger btn-sm'><i class='mdi mdi-close'></i> Remove Last Number Part</button>
+            <button id="reactivity-add" class='btn btn-success btn-sm'><i class='mdi mdi-plus'></i> Add New Part Number</button>
+            <button id="reactivity-delete" class='btn btn-danger btn-sm'><i class='mdi mdi-close'></i> Remove Last Part Number</button>
         </div>
         <div id="example-table" class='border border-dark bg-dark-subtle'></div>
         <hr>
         """
 
         Formulario = {"Col":"", "Campos": [],"Clase": "Formato" }
-        Formulario["Campos"].append({"tipo":"texto","campo":"Ruta","titulo":"Ruta","editable":True,"Requerido":1,"min":1,"max":20,"valor":"","Col":6})
-        Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha de Rura","titulo":"Fecha de Ruta","Requerido":1,"Col":6,"valor":"","editable":True})
+        Formulario["Campos"].append({"tipo":"texto","campo":"Ruta","titulo":"Route","editable":True,"Requerido":1,"min":1,"max":20,"valor":"","Col":6})
+        Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha de Rura","titulo":"Arrival date of the route","Requerido":1,"Col":6,"valor":"","editable":True})
         Formulario["Campos"].append({"tipo":"seleccion","campo":"SCAC","titulo":"SCAC","Tipo_Opciones":"Query","Opciones":"SELECT cca_nombre as Valor, cca_nombre as Texto FROM "+str(BD_Nombre)+".ccarrier WHERE cca_activo = 1","Requerido":1,"Col":6,"valor":"","editable":True})
-        Formulario["Campos"].append({"tipo":"texto","campo":"Contenedor-Caja","titulo":"Contenedor-Caja","editable":True,"Requerido":1,"min":1,"max":100,"valor":"","Col":6})
-        Formulario["Campos"].append({"tipo":"texto","campo":"Destino","titulo":"Destino","editable":True,"Requerido":1,"min":1,"max":50,"valor":"","Col":6})
-        Formulario["Campos"].append({"tipo":"seleccion","campo":"Proveedor","id":"Proveedor_Nuevo","titulo":"Proveedor","Tipo_Opciones":"Query","Opciones":"SELECT crilcpr_codigo as Valor, CONCAT(crilcpr_codigo,' - ',crilcpr_nombre) AS Texto FROM "+str(BD_Nombre)+".cproveedores WHERE crilcpr_activo = '1' ORDER BY crilcpr_codigo","Requerido":1,"Col":6,"valor":"","editable":True})
-        Formulario["Campos"].append({"tipo":"multitexto","campo":"Comentario","titulo":"Comentario","editable":True,"Requerido":1,"min":1,"max":1500,"valor":"","Col":12})
-        Formulario["Campos"].append({"tipo":"multitexto","campo":"Lista_distribucion","id":"Lista_distribucion_Nuevo","titulo":"Lista de distribución (Correos) separado por ´;´","editable":True,"Requerido":0,"min":0,"max":1500,"valor":"","Col":12})
-        Formulario["Campos"].append({"tipo":"archivo","campo":"Archivos","titulo":"Archivo(s)","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["application/pdf","image/png","image/jpeg","image/gif"],"valor":"","editable":True})
+        Formulario["Campos"].append({"tipo":"texto","campo":"Contenedor-Caja","titulo":"Container","editable":True,"Requerido":1,"min":1,"max":100,"valor":"","Col":6})
+        Formulario["Campos"].append({"tipo":"texto","campo":"Destino","titulo":"Destination","editable":True,"Requerido":1,"min":1,"max":50,"valor":"","Col":6})
+        Formulario["Campos"].append({"tipo":"seleccion","campo":"Proveedor","id":"Proveedor_Nuevo","titulo":"Supplier","Tipo_Opciones":"Query","Opciones":"SELECT crilcpr_codigo as Valor, CONCAT(crilcpr_codigo,' - ',crilcpr_nombre) AS Texto FROM "+str(BD_Nombre)+".cproveedores WHERE crilcpr_activo = '1' ORDER BY crilcpr_codigo","Requerido":1,"Col":6,"valor":"","editable":True})
+        Formulario["Campos"].append({"tipo":"multitexto","campo":"Comentario","titulo":"Comment","editable":True,"Requerido":1,"min":1,"max":1500,"valor":"","Col":12})
+        Formulario["Campos"].append({"tipo":"multitexto","campo":"Lista_distribucion","id":"Lista_distribucion_Nuevo","titulo":"Distribution list (emails) separated by ´;´","editable":True,"Requerido":0,"min":0,"max":1500,"valor":"","Col":12})
+        Formulario["Campos"].append({"tipo":"archivo","campo":"Archivos","titulo":"File(s)","Requerido":1,"Col":12,"min":1,"max":5,"tipo_archivo":["application/pdf","image/png","image/jpeg","image/gif"],"valor":"","editable":True})
         #Resultado["Contenido"] += "<div class='text-end mb-1'><button onclick='Nuevo_Proveedor()' class='btn btn-sm btn-success'><i class='mdi mdi-plus'></i> Agregar nuevo proveedor</button></div>"
         Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
         Resultado["Contenido"] += """
@@ -554,9 +554,9 @@ def Nueva_Ruteo(Datos):
                 reactiveData:true, //turn on data reactivity
                 data:tabledata,
                 columns:[
-                    {title:"Numero de Parte", field:"Numero de Parte", editor:"input"},
-                    {title:"Cantidad de ASN", field:"Cantidad de ASN", sorter:"number", editor:"input"},
-                    {title:"Cantidad Real", field:"Cantidad Real", sorter:"number", editor:"input"},
+                    {title:"Part number", field:"Numero de Parte", editor:"input"},
+                    {title:"ASN Quantity", field:"Cantidad de ASN", sorter:"number", editor:"input"},
+                    {title:"Actual Quantity", field:"Cantidad Real", sorter:"number", editor:"input"},
         """
         for D in ["1 Damage","2 Shortage","3 Surplus","4 ASN Issue","5 Missing doc in Prisma"]:
             Resultado["Contenido"] += """{title:'"""+str(D)+"""', field:'"""+str(D)+"""', hozAlign:"center", editor:true, formatter:"tickCross",width:100,headerSort:false,headerHozAlign:"center"},"""
@@ -849,6 +849,7 @@ def Cargar_Lista_distribucion(Datos):
         Resultado["Contenido"] = str(sys.exc_info())
     Cur += json.dumps(Resultado)
     return Cur
+
 def Guardar_Nueva_Ruteo(Datos):
     DB = LibDM_2023.DataBase()
     Cur = ""
@@ -923,15 +924,15 @@ def Completar_Ruteo(Datos):
 
         
         Formulario = {"Col":"", "Campos": [],"Clase": "Formato" }
-        Formulario["Campos"].append({"tipo":"texto","campo":"Ruta","titulo":"Ruta","editable":True,"Requerido":1,"min":1,"max":20,"valor":"","Col":6})
-        Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha de Rura","titulo":"Fecha de Ruta","Requerido":1,"Col":6,"valor":"","editable":True})
+        Formulario["Campos"].append({"tipo":"texto","campo":"Ruta","titulo":"Route","editable":True,"Requerido":1,"min":1,"max":20,"valor":"","Col":6})
+        Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha de Rura","titulo":"Arrival date of the route","Requerido":1,"Col":6,"valor":"","editable":True})
         Formulario["Campos"].append({"tipo":"seleccion","campo":"SCAC","titulo":"SCAC","Tipo_Opciones":"Query","Opciones":"SELECT cca_nombre as Valor, cca_nombre as Texto FROM "+str(BD_Nombre)+".ccarrier WHERE cca_activo = 1","Requerido":1,"Col":6,"valor":"","editable":True})
-        Formulario["Campos"].append({"tipo":"texto","campo":"Contenedor-Caja","titulo":"Contenedor-Caja","editable":True,"Requerido":1,"min":1,"max":100,"valor":str(Info_Gen["cosyd_caja"]),"Col":6})
-        Formulario["Campos"].append({"tipo":"texto","campo":"Destino","titulo":"Destino","editable":True,"Requerido":1,"min":1,"max":50,"valor":"","Col":6})
-        Formulario["Campos"].append({"tipo":"seleccion","campo":"Proveedor","id":"Proveedor_Nuevo","titulo":"Proveedor","Tipo_Opciones":"Query","Opciones":"SELECT crilcpr_codigo as Valor, CONCAT(crilcpr_codigo,' - ',crilcpr_nombre) AS Texto FROM "+str(BD_Nombre)+".cproveedores WHERE crilcpr_activo = '1' ORDER BY crilcpr_codigo","Requerido":1,"Col":6,"valor":"","editable":True})
-        Formulario["Campos"].append({"tipo":"multitexto","campo":"Comentario","titulo":"Comentario","editable":True,"Requerido":1,"min":1,"max":1500,"valor":"","Col":12})
-        Formulario["Campos"].append({"tipo":"multitexto","campo":"Lista_distribucion","titulo":"Lista de distribución (Correos) separado por ´;´;","editable":True,"Requerido":0,"min":0,"max":1500,"valor":"","Col":12})
-        Formulario["Campos"].append({"tipo":"archivo","campo":"Archivos","titulo":"Archivo(s)","Requerido":0,"Col":12,"min":0,"max":5,"tipo_archivo":["application/pdf","image/png","image/jpeg","image/gif"],"valor":"","editable":True})
+        Formulario["Campos"].append({"tipo":"texto","campo":"Contenedor-Caja","titulo":"Container","editable":True,"Requerido":1,"min":1,"max":100,"valor":str(Info_Gen["cosyd_caja"]),"Col":6})
+        Formulario["Campos"].append({"tipo":"texto","campo":"Destino","titulo":"Destination","editable":True,"Requerido":1,"min":1,"max":50,"valor":"","Col":6})
+        Formulario["Campos"].append({"tipo":"seleccion","campo":"Proveedor","id":"Proveedor_Nuevo","titulo":"Supplier","Tipo_Opciones":"Query","Opciones":"SELECT crilcpr_codigo as Valor, CONCAT(crilcpr_codigo,' - ',crilcpr_nombre) AS Texto FROM "+str(BD_Nombre)+".cproveedores WHERE crilcpr_activo = '1' ORDER BY crilcpr_codigo","Requerido":1,"Col":6,"valor":"","editable":True})
+        Formulario["Campos"].append({"tipo":"multitexto","campo":"Comentario","titulo":"Comment","editable":True,"Requerido":1,"min":1,"max":1500,"valor":"","Col":12})
+        Formulario["Campos"].append({"tipo":"multitexto","campo":"Lista_distribucion","titulo":"Distribution list (emails) separated by ´;´","editable":True,"Requerido":0,"min":0,"max":1500,"valor":"","Col":12})
+        Formulario["Campos"].append({"tipo":"archivo","campo":"Archivos","titulo":"File(s)","Requerido":0,"Col":12,"min":0,"max":5,"tipo_archivo":["application/pdf","image/png","image/jpeg","image/gif"],"valor":"","editable":True})
         Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
 
         Resultado["Contenido"] += """
@@ -955,12 +956,12 @@ def Completar_Ruteo(Datos):
                 data:tabledata,
                 columns:[
                     /*{title:"Packing Slip", field:"Packing Slip", editor:"input"},*/
-                    {title:"Numero de Parte", field:"Numero de Parte", editor:"input"},
-                    {title:"Cantidad de ASN", field:"Cantidad de ASN", sorter:"number", editor:"input"},
-                    {title:"Cantidad Real", field:"Cantidad Real", sorter:"number", editor:"input"},
+                    {title:"Part number", field:"Numero de Parte", editor:"input"},
+                    {title:"ASN Quantity", field:"Cantidad de ASN", sorter:"number", editor:"input"},
+                    {title:"Actual Quantity", field:"Cantidad Real", sorter:"number", editor:"input"},
                     /*{title:"Pallets", field:"Pallets", sorter:"number", editor:"input"},*/
                     {title:"OS&D", field:"OSD", editor:"list", editorParams:{values:{"1.- Damage":"1.- Damage","2.- Shortage":"2.- Shortage","3.- Surplus":"3.- Surplus","4.- ASN Issue":"4.- ASN Issue","5.- Missing doc. in Prisma":"5.- Missing doc. in Prisma","6.- Other (Explain in Comments)":"6.- Other (Explain in Comments)"}}},
-                    {title:"Comentario", field:"Comentario",editor:"input"},
+                    /*{title:"Comment", field:"Comentario",editor:"input"},*/
                 ],
             });
             document.getElementById("reactivity-add").addEventListener("click", function(){
@@ -1143,12 +1144,12 @@ def Modificar_Ruteo(Datos):
 
         Info_Gen = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".cosyd inner join "+str(BD_Nombre)+".cosyd_historico on public.cosyd.cosyd_id = public.cosyd_historico.cosyd_master  WHERE  cosyd_id = '"+str(Datos["ID"])+"' ")[0]
 
-        Formulario["Campos"].append({"tipo":"texto","campo":"Ruta","titulo":"Ruta","editable":False,"Requerido":1,"min":1,"max":20,"valor":Info_Gen["cosyd_ruta"],"Col":6})
-        Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha de Rura","titulo":"Fecha de Ruta","Requerido":1,"Col":6,"valor":Info_Gen["cosyd_ruta_fecha_hora"],"editable":False})
+        Formulario["Campos"].append({"tipo":"texto","campo":"Ruta","titulo":"Route","editable":False,"Requerido":1,"min":1,"max":20,"valor":Info_Gen["cosyd_ruta"],"Col":6})
+        Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha de Rura","titulo":"Arrival date of the route","Requerido":1,"Col":6,"valor":Info_Gen["cosyd_ruta_fecha_hora"],"editable":False})
         Formulario["Campos"].append({"tipo":"texto","campo":"SCAC","titulo":"SCAC","editable":False,"Requerido":1,"min":1,"max":20,"valor":Info_Gen["cosyd_scac"],"Col":6})
-        Formulario["Campos"].append({"tipo":"texto","campo":"Contenedor-Caja","titulo":"Contenedor","editable":False,"Requerido":1,"min":0,"max":100,"valor":Info_Gen["cosyd_caja"],"Col":6})
-        Formulario["Campos"].append({"tipo":"texto","campo":"Destino","titulo":"Destino","editable":False,"Requerido":0,"min":0,"max":50,"valor":Info_Gen["cosyd_destino"],"Col":6})
-        Formulario["Campos"].append({"tipo":"seleccion","campo":"Proveedor","titulo":"Proveedor","editable":False,"Tipo_Opciones":"Query","Opciones":"SELECT crilcpr_codigo as Valor, CONCAT(crilcpr_codigo,' - ',crilcpr_nombre) AS Texto FROM "+str(BD_Nombre)+".cproveedores ORDER BY crilcpr_codigo","Requerido":1,"Col":6,"valor":Info_Gen["cosyd_proveedor"]})
+        Formulario["Campos"].append({"tipo":"texto","campo":"Contenedor-Caja","titulo":"Container","editable":False,"Requerido":1,"min":0,"max":100,"valor":Info_Gen["cosyd_caja"],"Col":6})
+        Formulario["Campos"].append({"tipo":"texto","campo":"Destino","titulo":"Destination","editable":False,"Requerido":0,"min":0,"max":50,"valor":Info_Gen["cosyd_destino"],"Col":6})
+        Formulario["Campos"].append({"tipo":"seleccion","campo":"Proveedor","titulo":"Supplier","editable":False,"Tipo_Opciones":"Query","Opciones":"SELECT crilcpr_codigo as Valor, CONCAT(crilcpr_codigo,' - ',crilcpr_nombre) AS Texto FROM "+str(BD_Nombre)+".cproveedores ORDER BY crilcpr_codigo","Requerido":1,"Col":6,"valor":Info_Gen["cosyd_proveedor"]})
         Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
         Historico = DB.Get_Dato("select MASTER.cosyd_id,MASTER.cosyd_tipo,MASTER.cosyd_proveedor,MASTER.cosyd_packingslip,MASTER.cosyd_estado,MASTER.cosyd_alta,MASTER.cosyd_baja,MASTER.cosyd_caja,MASTER.cosyd_destino,MASTER.cosyd_scac,MASTER.cosyd_fecha_envio,MASTER.cosyd_correo,MASTER.cosyd_archivos,MASTER.cosyd_ruta,MASTER.cosyd_ruta_fecha_hora,HISTORICO.cosyd_master,HISTORICO.cosyd_usuario,HISTORICO.cosyd_comentario,HISTORICO.cosyd_evidencia,HISTORICO.cosyd_movimiento,HISTORICO.cosyd_fecha from "+str(BD_Nombre)+".cosyd MASTER inner join "+str(BD_Nombre)+".cosyd_historico HISTORICO on MASTER.cosyd_id = HISTORICO.cosyd_master  where MASTER.cosyd_id = '"+str(Datos["ID"])+"'")
         Tabla_Datos = []
@@ -1205,26 +1206,26 @@ def Modificar_Ruteo(Datos):
         """
 
         Formulario = {"Col":"", "Campos": [],"Clase": "Formato" }
-        Formulario["Campos"].append({"tipo":"multitexto","campo":"Nuevo Comentario","titulo":"Nuevo Comentario","Requerido":1,"min":1,"max":1500,"valor":"","Col":12})
-        Formulario["Campos"].append({"tipo":"archivo","campo":"Nuevo Archivos","titulo":"Nuevo Archivo(s)","Requerido":0,"Col":12,"min":0,"max":5,"tipo_archivo":["application/pdf","image/png","image/jpeg","image/gif"],"valor":""})
+        Formulario["Campos"].append({"tipo":"multitexto","campo":"Nuevo Comentario","titulo":"New Comment","Requerido":1,"min":1,"max":1500,"valor":"","Col":12})
+        Formulario["Campos"].append({"tipo":"archivo","campo":"Nuevo Archivos","titulo":"New File(s)","Requerido":0,"Col":12,"min":0,"max":5,"tipo_archivo":["application/pdf","image/png","image/jpeg","image/gif"],"valor":""})
         Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
 
             
         Resultado["Contenido"] += """
         <br>
         <div class='w-100 text-center'>
-            <button class='btn btn-warning w-75 mb-1' onclick='Guardar_Modificar_Ruteo("""+str(Datos["ID"])+""")'><i class='mdi mdi-message-alert'></i> Agregar Comentario/Evidencia OS&D</button>
+            <button class='btn btn-warning w-75 mb-1' onclick='Guardar_Modificar_Ruteo("""+str(Datos["ID"])+""")'><i class='mdi mdi-message-alert'></i> Add new Comment/File(s) OS&D</button>
         """
         
         if Datos["De_Donde"] == "ABIERTOS":
-            Resultado["Contenido"] += """<button class='btn btn-success w-75' onclick='Cerrar_OSyD("""+str(Datos["ID"])+""",\"ABIERTOS\")'><i class='mdi mdi-check-bold'></i> Liberar OS&D</button>"""
+            Resultado["Contenido"] += """<button class='btn btn-success w-75' onclick='Cerrar_OSyD("""+str(Datos["ID"])+""",\"ABIERTOS\")'><i class='mdi mdi-check-bold'></i> Release OS&D</button>"""
         if Datos["De_Donde"] == "LIBERADOS":
-            Resultado["Contenido"] += """<button class='btn btn-danger w-75 mb-1' onclick='Cerrar_OSyD("""+str(Datos["ID"])+""",\"REGRESAR\")'><i class='mdi mdi-arrow-left-bold'></i> Regresar a Abiertos</button>"""
+            Resultado["Contenido"] += """<button class='btn btn-danger w-75 mb-1' onclick='Cerrar_OSyD("""+str(Datos["ID"])+""",\"REGRESAR\")'><i class='mdi mdi-arrow-left-bold'></i> Return to Open</button>"""
             Resultado["Contenido"] += """<button class='btn btn-success w-75' onclick='Cerrar_OSyD("""+str(Datos["ID"])+""",\"CERRAR\")'><i class='mdi mdi-check-bold'></i> Cerrar OS&D</button>"""
         
         if Datos["De_Donde"] == "PRE_LIBERADO":
-            Resultado["Contenido"] += """<button class='btn btn-danger w-75 mb-1' onclick='Cerrar_OSyD("""+str(Datos["ID"])+""",\"REGRESAR\")'><i class='mdi mdi-arrow-left-bold'></i> Regresar a Abiertos</button>"""
-            Resultado["Contenido"] += """<button class='btn btn-success w-75' onclick='Cerrar_OSyD("""+str(Datos["ID"])+""",\"LIBERAR\")'><i class='mdi mdi-check-bold'></i> Liberar OS&D</button>"""
+            Resultado["Contenido"] += """<button class='btn btn-danger w-75 mb-1' onclick='Cerrar_OSyD("""+str(Datos["ID"])+""",\"REGRESAR\")'><i class='mdi mdi-arrow-left-bold'></i> Return to Open</button>"""
+            Resultado["Contenido"] += """<button class='btn btn-success w-75' onclick='Cerrar_OSyD("""+str(Datos["ID"])+""",\"LIBERAR\")'><i class='mdi mdi-check-bold'></i> Close OS&D</button>"""
 
         Resultado["Contenido"] += """
         </div>
@@ -1402,11 +1403,11 @@ def Ver_Historico(Datos):
         Historico = DB.Get_Dato("select MASTER.cosyd_id,MASTER.cosyd_tipo,MASTER.cosyd_proveedor,MASTER.cosyd_packingslip,MASTER.cosyd_estado,MASTER.cosyd_alta,MASTER.cosyd_baja,MASTER.cosyd_caja,MASTER.cosyd_destino,MASTER.cosyd_scac,MASTER.cosyd_fecha_envio,MASTER.cosyd_correo,MASTER.cosyd_archivos,MASTER.cosyd_ruta,MASTER.cosyd_ruta_fecha_hora,HISTORICO.cosyd_master,HISTORICO.cosyd_usuario,HISTORICO.cosyd_comentario,HISTORICO.cosyd_evidencia,HISTORICO.cosyd_movimiento,HISTORICO.cosyd_fecha from "+str(BD_Nombre)+".cosyd MASTER inner join "+str(BD_Nombre)+".cosyd_historico HISTORICO on MASTER.cosyd_id = HISTORICO.cosyd_master  where MASTER.cosyd_id = '"+str(Datos["ID"])+"'")
         Tabla_Datos = []
         Columnas = []
-        Columnas.append({"title":"Fecha y Hora", "field":"Fecha y Hora"})
-        Columnas.append({"title":"Usuario", "field":"Usuario"})
-        Columnas.append({"title":"Tipo", "field":"Tipo"})
-        Columnas.append({"title":"Comentario", "field":"Comentario"})
-        Columnas.append({"title":"Archivo(s)", "field":"Archivos","formatter":"html"})
+        Columnas.append({"title":"Date", "field":"Fecha y Hora"})
+        Columnas.append({"title":"User", "field":"Usuario"})
+        Columnas.append({"title":"Type", "field":"Tipo"})
+        Columnas.append({"title":"Comment", "field":"Comentario"})
+        Columnas.append({"title":"File(s)", "field":"Archivos","formatter":"html"})
         for H in Historico:
             Aux_Datos ={}
             Aux_Datos["Fecha y Hora"] = H["cosyd_fecha"].strftime("%Y-%m-%d %H:%M:%S")
@@ -1466,10 +1467,10 @@ def Ver_Detalle(Datos):
         Tabla_Datos = []
         Columnas = []
         Columnas.append({"title":"Packing Slip", "field":"Packing Slip","headerFilter":"input"})
-        Columnas.append({"title":"Numero de Parte", "field":"Numero de Parte","headerFilter":"input"})
-        Columnas.append({"title":"Destino", "field":"Destino","headerFilter":"input"})
-        Columnas.append({"title":"Cantidad de ASN", "field":"Cantidad de ASN","headerFilter":"input"})
-        Columnas.append({"title":"Cantidad Real", "field":"Cantidad Real","headerFilter":"input"})
+        Columnas.append({"title":"Part number", "field":"Numero de Parte","headerFilter":"input"})
+        Columnas.append({"title":"Destination", "field":"Destino","headerFilter":"input"})
+        Columnas.append({"title":"ASN Quantity", "field":"Cantidad de ASN","headerFilter":"input"})
+        Columnas.append({"title":"Real Quantity", "field":"Cantidad Real","headerFilter":"input"})
         for D in ["1 Damage","2 Shortage","3 Surplus","4 ASN Issue","5 Missing doc in Prisma"]:
             Columnas.append({"title":str(D),"field":str(D),"hozAlign":"center","width":50,"headerSort":0,"headerHozAlign":"center"})
         Columnas.append({"title":"6 Other (Explain in Comments)","field":"6 Other","hozAlign":"center","width":100,"headerSort":0,"headerHozAlign":"center"})
@@ -1586,7 +1587,7 @@ def Cargar_Liberados(Datos):
     try:
         Contador_Abierto = {"valor":0,"clase":"text-bg-secondary"}
         Contador_Liberados = {"valor":0,"clase":"text-bg-secondary"}
-        Resultado["Contenido"] += "<div class='h3 text-center mt-2'>OS&D Liberados</div>"
+        Resultado["Contenido"] += "<div class='h3 text-center mt-2'>OS&D Released</div>"
 
         Tabla_Datos_Liberados = []
         for PakingSplip in DB.Get_Dato("""
@@ -1714,18 +1715,18 @@ def Cargar_Liberados(Datos):
                         {title: ' ', field: ' ', formatter: 'html',download: false,width:120}, 
                         {title: 'Packing Slip', field: 'Packing Slip', formatter: 'html'}, 
                         {title: 'Folio', field: 'Folio', headerFilter: 'input'}, 
-                        {title: 'Ruta', field: 'Ruta', headerFilter: 'input'}, 
-                        {title: 'Fecha de Ruta', field: 'Fecha de Ruta', headerFilter: 'input'}, 
-                        {title: 'Fecha Alta', field: 'Fecha Alta', headerFilter: 'input'}, 
-                        {title: 'Proveedor', field: 'Proveedor', headerFilter: 'input'}, 
-                        {title: 'Destino', field: 'Destino', headerFilter: 'input'}, 
-                        {title: 'Numeros de Parte', field: 'Numeros', formatter: 'html',download: false,width:50},
-                        {title: 'Numeros_de_Parte', field: 'Numeros_de_Parte',download: true,visible:false,width:50}, 
+                        {title: 'Route', field: 'Ruta', headerFilter: 'input'}, 
+                        {title: 'Arrival date of the route', field: 'Fecha de Ruta', headerFilter: 'input'}, 
+                        {title: 'Date Upload', field: 'Fecha Alta', headerFilter: 'input'}, 
+                        {title: 'Supplier', field: 'Proveedor', headerFilter: 'input'}, 
+                        {title: 'Destination', field: 'Destino', headerFilter: 'input'}, 
+                        {title: 'Part Number', field: 'Numeros', formatter: 'html',download: false,width:50},
+                        {title: 'Part_Number', field: 'Numeros_de_Parte',download: true,visible:false,width:50}, 
                         {title: 'Problema', field: 'Problema',width:150},
-                        {title: 'Contenedor', field: 'Contenedor', headerFilter: 'input'}, 
+                        {title: 'Issue', field: 'Contenedor', headerFilter: 'input'}, 
                         {title: 'SCAC', field: 'SCAC', headerFilter: 'input'}, 
-                        {title: 'Ultimo Comentario', field: 'Ultimo Comentario', headerFilter: 'input'}, 
-                        {title: 'Archivo(s)', field: 'Archivos', formatter: 'html',download: false}];
+                        {title: 'Last comment', field: 'Ultimo Comentario', headerFilter: 'input'}, 
+                        {title: 'Fil(s)', field: 'Archivos', formatter: 'html',download: false}];
                     var table_liberados = new Tabulator("#Tabla-Ruteo", {
                         minHeight:800,
                         data:"""+str(Tabla_Datos_Liberados)+""",
@@ -1756,16 +1757,16 @@ def Cargar_Liberados(Datos):
                     var Col = [
                         {title: 'Packing Slip', field: 'Packing Slip'}, 
                         {title: 'Folio', field: 'Folio', headerFilter: 'input'}, 
-                        {title: 'Ruta', field: 'Ruta', headerFilter: 'input'}, 
-                        {title: 'Fecha de Ruta', field: 'Fecha de Ruta', headerFilter: 'input'}, 
-                        {title: 'Fecha Alta', field: 'Fecha Alta', headerFilter: 'input'}, 
-                        {title: 'Proveedor', field: 'Proveedor', headerFilter: 'input'}, 
-                        {title: 'Destino', field: 'Destino', headerFilter: 'input'}, 
-                        {title: 'Numero de Parte', field: 'Numero de Parte'},
-                        {title: 'Cantidad', field: 'Cantidad'},
-                        {title: 'Contenedor', field: 'Contenedor', headerFilter: 'input'}, 
+                        {title: 'Route', field: 'Ruta', headerFilter: 'input'}, 
+                        {title: 'Arrival date of the route', field: 'Fecha de Ruta', headerFilter: 'input'}, 
+                        {title: 'Date Upload', field: 'Fecha Alta', headerFilter: 'input'}, 
+                        {title: 'Supplier', field: 'Proveedor', headerFilter: 'input'}, 
+                        {title: 'Destination', field: 'Destino', headerFilter: 'input'}, 
+                        {title: 'Part number', field: 'Numero de Parte'},
+                        {title: 'Quantity', field: 'Cantidad'},
+                        {title: 'Comment', field: 'Contenedor', headerFilter: 'input'}, 
                         {title: 'SCAC', field: 'SCAC', headerFilter: 'input'}, 
-                        {title: 'Ultimo Comentario', field: 'Ultimo Comentario', headerFilter: 'input'}];
+                        {title: 'Last Comment', field: 'Ultimo Comentario', headerFilter: 'input'}];
                     var table_liberados_Partes = new Tabulator("#Tabla-Ruteo-Partes", {
                         minHeight:800,
                         data:"""+str(Tabla_Datos_Liberados_Partes)+""",
@@ -1829,14 +1830,14 @@ def Cargar_Menu_Reporte(Datos):
     Cur = ""
     Resultado = {"Contenido":"","Estado":0}
     try:
-        Resultado["Contenido"] += "<div class='h3 text-center mt-2'>OS&D Reporte</div>"
+        Resultado["Contenido"] += "<div class='h3 text-center mt-2'>OS&D Report</div>"
         Resultado["Contenido"] += """
         <div class='col-12'>
         """
         Formulario = {"Col":"", "Campos": [],"Clase": "Reporte" }
-        Formulario["Campos"].append({"tipo":"fecha-rango","campo":"Rango de fechas","titulo":"Rango de fechas","Requerido":1,"Col":12,"valor":"","editable":True})
+        Formulario["Campos"].append({"tipo":"fecha-rango","campo":"Rango de fechas","titulo":"Date Range","Requerido":1,"Col":12,"valor":"","editable":True})
         Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
-        Resultado["Contenido"] += "<div class='w-100 text-center mb-3'><button class='btn btn-primary w-75' onclick='Reporte()'><i class='mdi mdi-download'></i> Cargar</button></div>"
+        Resultado["Contenido"] += "<div class='w-100 text-center mb-3'><button class='btn btn-primary w-75' onclick='Reporte()'><i class='mdi mdi-download'></i> Download report</button></div>"
         Resultado["Contenido"] += """
                 <div id='Reporte' class='w-100 mb-5 p-1' style='height:600px; background:#e6e6e6'></div>
             </div
@@ -2007,15 +2008,15 @@ def Cargar_Reporte(Datos):
             var Col = [
                 {title: ' ', field: ' ', formatter: 'html', download: false,width:30}, 
                 /*{title: 'Cerrado', field: 'Cerrado'},
-                {title: 'Estado', field: 'Estado', headerFilter: 'input'},*/
+                {title: 'Status', field: 'Estado', headerFilter: 'input'},*/
                 {title: 'Folio', field: 'Folio', headerFilter: 'input',width:80}, 
-                {title: 'Ruta', field: 'Ruta', headerFilter: 'input',width:80}, 
-                {title: 'Fecha de Ruta', field: 'Fecha de Ruta', headerFilter: 'input'}, 
-                {title: 'Proveedor', field: 'Proveedor', headerFilter: 'input'}, 
+                {title: 'Route', field: 'Ruta', headerFilter: 'input',width:80}, 
+                {title: 'Arrival date of the route', field: 'Fecha de Ruta', headerFilter: 'input'}, 
+                {title: 'Supplier', field: 'Proveedor', headerFilter: 'input'}, 
                 {title: 'PackingSlip', field: 'PackingSlip', headerFilter: 'input'}, 
-                {title: 'Parte', field: 'Parte', headerFilter: 'input'},
-                {title: 'Cantidad ASN', field: 'Cantidad ASN', headerFilter: 'input'},
-                {title: 'Cantidad Real', field: 'Cantidad Real', headerFilter: 'input'},
+                {title: 'Part', field: 'Parte', headerFilter: 'input'},
+                {title: 'ASN Quantity', field: 'Cantidad ASN', headerFilter: 'input'},
+                {title: 'Actual Quantity', field: 'Cantidad Real', headerFilter: 'input'},
                 /*{title: 'OS&D', field: 'OS&D', headerFilter: 'input'},*/
         """
         for D in ["1 Damage","2 Shortage","3 Surplus","4 ASN Issue","5 Missing doc in Prisma"]:
@@ -2023,16 +2024,16 @@ def Cargar_Reporte(Datos):
         Resultado["Contenido"] += """
                 {title:"6 Other (Explain in Comments)", field:"6 Other"},
                 /*{title: 'Comentario Parte', field: 'Comentario Parte', headerFilter: 'input'},*/
-                {title: 'Destino', field: 'Destino', headerFilter: 'input'}, 
+                {title: 'Destination', field: 'Destino', headerFilter: 'input'}, 
                 /*{title: 'Numeros de Parte (Total/Cerrados)', field: 'Numeros', headerFilter: 'input'},*/
-                {title: 'Contenedor', field: 'Contenedor', headerFilter: 'input'}, 
+                {title: 'Container', field: 'Contenedor', headerFilter: 'input'}, 
                 /*{title: 'SCAC', field: 'SCAC', headerFilter: 'input'},*/
                 /*{title: 'Ultimo Comentario', field: 'Ultimo Comentario', headerFilter: 'input'},
-                {title: 'Archivo(s)', field: 'Archivos', formatter: 'html',download: false}*/
-                {title: 'Alta', field: 'Alta', headerFilter: 'input'}, 
-                {title: 'Pre-Liberado', field: 'Pre-Liberado', headerFilter: 'input'},
-                {title: 'Liberado', field: 'Liberado', headerFilter: 'input'}, 
-                {title: 'Cerrado', field: 'Cerrado', headerFilter: 'input'}, 
+                {title: 'File(s)', field: 'Archivos', formatter: 'html',download: false}*/
+                {title: 'Date Upload', field: 'Alta', headerFilter: 'input'}, 
+                /*{title: 'Pre-Liberado', field: 'Pre-Liberado', headerFilter: 'input'},*/
+                {title: 'Date Released', field: 'Liberado', headerFilter: 'input'}, 
+                {title: 'Date Close', field: 'Cerrado', headerFilter: 'input'}, 
                 ];
             var table_c = new Tabulator("#Tabla-Cerrados", {
                 minHeight:600,
@@ -2086,10 +2087,10 @@ def Generar_Archivo(Datos):
                     "OS&D": Partes["cosyd"],
                     "Folio": str(Partes["cosyd_id"]).zfill(5),
                     "Paking Slip": str(Partes["cosyd_p_pakingslip"]),
-                    "Caja":str(Partes["cosyd_caja"]),
-                    "Parte": str(Partes["cosyd_parte"]),
-                    "Cantidad ASN" : str(Partes["cosyd_cantidad_asn"]),
-                    "Ruta / Fecha" : str(Partes["cosyd_ruta"]) + " / " + str(Partes["cosyd_ruta_fecha_hora"])
+                    "Container":str(Partes["cosyd_caja"]),
+                    "Part": str(Partes["cosyd_parte"]),
+                    "ASN Quantity" : str(Partes["cosyd_cantidad_asn"]),
+                    "Route / Date" : str(Partes["cosyd_ruta"]) + " / " + str(Partes["cosyd_ruta_fecha_hora"])
                 }
             
                 Formato(a,sheet_obj,Datos)
