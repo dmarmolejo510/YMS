@@ -143,7 +143,7 @@ def Agregar_Nivel(Datos):
             Formulario["Campos"].append({"tipo":"texto","campo":"Nombre","titulo":"Name","Requerido":1,"min":1,"max":30,"valor":""})
             Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
         if str(Datos["Nivel"]) == "N2":
-            Resultado["Contenido"] += "<div class='w-100 text-center'><button class='btn btn-primary' onclick='Descargar_Excel(\""+str(Datos["Direccion"])+"\")'><i class='mdi mdi-cloud-download'></i> Descargar Excel Rutas</button></div>"
+            Resultado["Contenido"] += "<div class='w-100 text-center'><button class='btn btn-primary' onclick='Descargar_Excel(\""+str(Datos["Direccion"])+"\")'><i class='mdi mdi-cloud-download'></i> Download configuration file (Excel)</button></div>"
             Formulario = {"Col":"12", "Campos": [],"Clase": "Alta_Ruta" }
             Formulario["Campos"].append({"tipo":"archivo","campo":"Nueva Rutas","titulo":"New route","Requerido":1,"Col":12,"min":1,"max":1,"tipo_archivo":["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"],"valor":""})
             Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
@@ -437,7 +437,57 @@ def Descargar_Excel(Datos):
         Info_Ahora = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".crutas WHERE cr_tipo = '"+str(Tipo)+"'")[0]
         Info_Ruta = json.loads(str(Info_Ahora["cr_niveles"]))
         if Info_Ruta[str(Datos["Direccion"]).split('/')[1]] == 0 or "NOMBRE" in Info_Ruta[str(Datos["Direccion"]).split('/')[1]].keys():
-            pass
+
+            ws = wb.create_sheet(str(N1))
+            ws['A1'] = "NOMBRE"
+            ws['B1'].fill = PatternFill("solid", fgColor="fffd00")
+            ws['B1'].border = Border(bottom=Side(border_style="thin", color="000000"))
+            ws['B1'] = ""
+
+            ws['A2'] = "ZONA"
+            ws['B2'].fill = PatternFill("solid", fgColor="fffd00")
+            ws['B2'].border = Border(bottom=Side(border_style="thin", color="000000"))
+            ws['B2'] = ""
+
+            ws['A3'] = "SCAC"
+            ws['B3'].fill = PatternFill("solid", fgColor="fffd00")
+            ws['B3'].border = Border(bottom=Side(border_style="thin", color="000000"))
+            ws['B3'] = ""
+            
+            index = 6
+            if len(Docks) == 0:
+                for r in range(0,10):
+                    ws['A'+str(index)].fill = PatternFill("solid", fgColor="fffd00")
+                    ws['A'+str(index)].border = Border(bottom=Side(border_style="thin", color="000000"))
+                    ws['A'+str(index)] = ""
+                    index += 1
+            
+            ws['D5'] = "RUTA"
+            ws['D6'] = "DUNS"
+            ws['E6'] = "INICIA"
+            ws['F6'] = "FIN"
+
+            index = 7
+            for r in range(0,10):
+                ws['D'+str(index)].fill = PatternFill("solid", fgColor="fffd00")
+                ws['D'+str(index)].border = Border(bottom=Side(border_style="thin", color="000000"))
+                ws['D'+str(index)] = ""
+                ws['E'+str(index)].fill = PatternFill("solid", fgColor="fffd00")
+                ws['E'+str(index)].border = Border(bottom=Side(border_style="thin", color="000000"))
+                ws['E'+str(index)] = ""
+                ws['F'+str(index)].fill = PatternFill("solid", fgColor="fffd00")
+                ws['F'+str(index)].border = Border(bottom=Side(border_style="thin", color="000000"))
+                ws['F'+str(index)] = ""
+                index += 1
+            
+            ws['H5'] = "DL"
+
+            index = 6
+            for r in range(0,10):
+                ws['H'+str(index)].fill = PatternFill("solid", fgColor="fffd00")
+                ws['H'+str(index)].border = Border(bottom=Side(border_style="thin", color="000000"))
+                ws['H'+str(index)] = ""
+                index += 1
         else:
             for N1 in Info_Ruta[str(Datos["Direccion"]).split('/')[1]].keys():
                 
