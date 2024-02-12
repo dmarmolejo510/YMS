@@ -372,7 +372,7 @@ def Cargar_Abiertos(Datos):
                 <hr>
                 <div class='h3'><i class='mdi mdi-forklift'></i> Operations</div>
                 <div class='w-100 d-flex justify-content-end'>
-                    <button class='btn btn-success mb-1' id="download-xlsx-produccion"><i class='mdi mdi-microsoft-excel'></i> Descargar Excel</button>
+                    <button class='btn btn-primary mb-1' id="download-xlsx-produccion"><i class='mdi mdi-microsoft-excel'></i> Download Excel</button>
                 </div>
                 <div id='Tabla-Produccion' class='border border-dark bg-dark-subtle'></div>
                 <script>
@@ -1154,11 +1154,11 @@ def Modificar_Ruteo(Datos):
         Historico = DB.Get_Dato("select MASTER.cosyd_id,MASTER.cosyd_tipo,MASTER.cosyd_proveedor,MASTER.cosyd_packingslip,MASTER.cosyd_estado,MASTER.cosyd_alta,MASTER.cosyd_baja,MASTER.cosyd_caja,MASTER.cosyd_destino,MASTER.cosyd_scac,MASTER.cosyd_fecha_envio,MASTER.cosyd_correo,MASTER.cosyd_archivos,MASTER.cosyd_ruta,MASTER.cosyd_ruta_fecha_hora,HISTORICO.cosyd_master,HISTORICO.cosyd_usuario,HISTORICO.cosyd_comentario,HISTORICO.cosyd_evidencia,HISTORICO.cosyd_movimiento,HISTORICO.cosyd_fecha from "+str(BD_Nombre)+".cosyd MASTER inner join "+str(BD_Nombre)+".cosyd_historico HISTORICO on MASTER.cosyd_id = HISTORICO.cosyd_master  where MASTER.cosyd_id = '"+str(Datos["ID"])+"'")
         Tabla_Datos = []
         Columnas = []
-        Columnas.append({"title":"Fecha y Hora", "field":"Fecha y Hora"})
-        Columnas.append({"title":"Usuario", "field":"Usuario"})
-        Columnas.append({"title":"Tipo", "field":"Tipo"})
-        Columnas.append({"title":"Comentario", "field":"Comentario","formatter":"textarea"})
-        Columnas.append({"title":"Archivo(s)", "field":"Archivos","formatter":"html"})
+        Columnas.append({"title":"Date", "field":"Fecha y Hora"})
+        Columnas.append({"title":"User", "field":"Usuario"})
+        Columnas.append({"title":"Type", "field":"Tipo"})
+        Columnas.append({"title":"Comment", "field":"Comentario","formatter":"textarea"})
+        Columnas.append({"title":"File(s)", "field":"Archivos","formatter":"html"})
         for H in Historico:
             Aux_Datos ={}
             Aux_Datos["Fecha y Hora"] = H["cosyd_fecha"].strftime("%Y-%m-%d %H:%M:%S")
@@ -1176,7 +1176,7 @@ def Modificar_Ruteo(Datos):
 
         Resultado["Contenido"] += """
         <br>
-        <div><i class='mdi mdi-history'></i> Historial de comentarios</div>
+        <div><i class='mdi mdi-history'></i> Comment history</div>
         <div id='Tabla-Detalles' class='border border-dark bg-dark-subtle'></div>
         <script>
             delete table;
@@ -1221,7 +1221,7 @@ def Modificar_Ruteo(Datos):
             Resultado["Contenido"] += """<button class='btn btn-success w-75' onclick='Cerrar_OSyD("""+str(Datos["ID"])+""",\"ABIERTOS\")'><i class='mdi mdi-check-bold'></i> Release OS&D</button>"""
         if Datos["De_Donde"] == "LIBERADOS":
             Resultado["Contenido"] += """<button class='btn btn-danger w-75 mb-1' onclick='Cerrar_OSyD("""+str(Datos["ID"])+""",\"REGRESAR\")'><i class='mdi mdi-arrow-left-bold'></i> Return to Open</button>"""
-            Resultado["Contenido"] += """<button class='btn btn-success w-75' onclick='Cerrar_OSyD("""+str(Datos["ID"])+""",\"CERRAR\")'><i class='mdi mdi-check-bold'></i> Cerrar OS&D</button>"""
+            Resultado["Contenido"] += """<button class='btn btn-success w-75' onclick='Cerrar_OSyD("""+str(Datos["ID"])+""",\"CERRAR\")'><i class='mdi mdi-check-bold'></i> Close OS&D</button>"""
         
         if Datos["De_Donde"] == "PRE_LIBERADO":
             Resultado["Contenido"] += """<button class='btn btn-danger w-75 mb-1' onclick='Cerrar_OSyD("""+str(Datos["ID"])+""",\"REGRESAR\")'><i class='mdi mdi-arrow-left-bold'></i> Return to Open</button>"""
@@ -1521,7 +1521,7 @@ def Ver_Detalle(Datos):
 
         Resultado["Contenido"] += """
         <div class='w-100 d-flex justify-content-around'>
-            <button class='btn btn-outline-success mb-1' id="download-xlsx-detalle"><i class='mdi mdi-microsoft-excel'></i> Descargar Excel</button>
+            <button class='btn btn-outline-primary mb-1' id="download-xlsx-detalle"><i class='mdi mdi-microsoft-excel'></i> Download excel</button>
         </div>
         <div id='Detalle-Partes' class='border border-dark bg-dark-subtle'></div>
         <script>
@@ -1705,8 +1705,8 @@ def Cargar_Liberados(Datos):
             <div class='col-12'>
                 <div class='w-100 d-flex justify-content-end'>
                     <!--<button class='btn btn-outline-primary mb-1' onclick='Nueva_Ruteo()'><i class='mdi mdi-plus'></i> Nuevo</button>-->
-                    <button class='btn btn-primary mb-1' id="download-xlsx-ruteo"><i class='mdi mdi-microsoft-excel'></i> Descargar Excel</button>
-                    <button class='btn btn-dark mb-1 ms-1' id="download-xlsx-ruteo-partes"><i class='mdi mdi-microsoft-excel'></i> Descargar Excel Partes</button>
+                    <button class='btn btn-primary mb-1' id="download-xlsx-ruteo"><i class='mdi mdi-microsoft-excel'></i> Download excel</button>
+                    <button class='btn btn-dark mb-1 ms-1' id="download-xlsx-ruteo-partes"><i class='mdi mdi-microsoft-excel'></i> Download excel (Part Number)</button>
                 </div>
                 <div id='Tabla-Ruteo' class='border border-dark bg-dark-subtle'></div>
                 <script>
@@ -2001,7 +2001,7 @@ def Cargar_Reporte(Datos):
 
         Resultado["Contenido"] += """
         <div class='w-100 d-flex justify-content-end'>
-            <button class='btn btn-success mb-1' id="download-xlsx-cerrados"><i class='mdi mdi-microsoft-excel'></i> Descargar Excel</button>
+            <button class='btn btn-primary mb-1' id="download-xlsx-cerrados"><i class='mdi mdi-microsoft-excel'></i> Download excel</button>
         </div>
         <div id='Tabla-Cerrados'></div>
         <script>
