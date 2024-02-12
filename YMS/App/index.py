@@ -79,7 +79,7 @@ def Inicio_Sesion():
                                 swal.close();
                             }
                             if(response*1 == 1){
-                                $(location).attr('href','App/Inicio');
+                                $(location).attr('href','YMS/App/Inicio');
                             }
                         },
                         error: function (jqXHR, textStatus, errorThrown )

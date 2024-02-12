@@ -2264,15 +2264,15 @@ class Menu:
                         if "Items" in Menu[Activo]["Items"][Sub]["Items"][SubSub].keys():
                              Res += "<div style='color:rgba(0, 0, 0, 0.4)' class='fw-semibold fs-6 text border-top p-0 m-0'> <i class='"+str(Menu[Activo]["Items"][Sub]["Items"][SubSub]["Icono"])+"'></i>"+str(SubSub)+"</div>"
                              for SubSubSub in Menu[Activo]["Items"][Sub]["Items"][SubSub]["Items"].keys():
-                                 Res += """<li style='cursor:pointer;' onmousemove='animateCSS($(this).find(".flechas").get(), "fadeInLeft")'><a class='p-0 m-0 p-1 dropdown-item nav-link text-decoration-none link-dark link-opacity-75 fw-bold'><div style='display: inline-block;' class='flechas mdi mdi-chevron-double-right'></div><i class='"""+str(Menu[Activo]["Items"][Sub]["Items"][SubSub]["Items"][SubSubSub]["Icono"])+"""'></i> """+str(SubSubSub)+"""</a></li>"""
+                                 Res += """<li style='cursor:pointer;' onmousemove='animateCSS($(this).find(".flechas").get(), "fadeInLeft")'><a class='p-0 m-0 p-1 dropdown-item nav-link text-decoration-none link-dark link-opacity-75'><div style='display: inline-block;' class='flechas mdi mdi-chevron-double-right'></div><i class='"""+str(Menu[Activo]["Items"][Sub]["Items"][SubSub]["Items"][SubSubSub]["Icono"])+"""'></i> """+str(SubSubSub)+"""</a></li>"""
                         else:
-                            Res += """<li onclick='Llamar_Funcion(\""""+Menu[Activo]["Items"][Sub]["Items"][SubSub]["Link"]+"""\")' style='cursor:pointer;' onmousemove='animateCSS($(this).find(".flechas").get(), "fadeInLeft")'><a class='p-0 m-0 p-1 dropdown-item nav-link text-decoration-none link-dark link-opacity-75 fw-bold'><div style='display: inline-block;' class='flechas mdi mdi-chevron-double-right'></div><i class='"""+str(Menu[Activo]["Items"][Sub]["Items"][SubSub]["Icono"])+"""'></i> """+str(SubSub)+"""</a></li>"""
+                            Res += """<li onclick='Llamar_Funcion(\""""+Menu[Activo]["Items"][Sub]["Items"][SubSub]["Link"]+"""\")' style='cursor:pointer;' onmousemove='animateCSS($(this).find(".flechas").get(), "fadeInLeft")'><a class='p-0 m-0 p-1 dropdown-item nav-link text-decoration-none link-dark link-opacity-75'><div style='display: inline-block;' class='flechas mdi mdi-chevron-double-right'></div><i class='"""+str(Menu[Activo]["Items"][Sub]["Items"][SubSub]["Icono"])+"""'></i> """+str(SubSub)+"""</a></li>"""
                     Res += """
                             </ul>
                         </li>
                     """
                 else:
-                    Res += """<li onclick='Llamar_Funcion(\""""+Menu[Activo]["Items"][Sub]["Link"]+"""\")' style='cursor:pointer;' onmousemove='animateCSS($(this).find(".flechas").get(), "fadeInLeft")' class='nav-item'><a class='nav-link text-decoration-none link-dark link-opacity-75 fw-bold'><div style='display: inline-block;' class='flechas mdi mdi-chevron-double-right'></div><i class='"""+str(Menu[Activo]["Items"][Sub]["Icono"])+"""'></i> """+str(Sub)+"""</a></li>"""
+                    Res += """<li onclick='Llamar_Funcion(\""""+Menu[Activo]["Items"][Sub]["Link"]+"""\")' style='cursor:pointer;' onmousemove='animateCSS($(this).find(".flechas").get(), "fadeInLeft")' class='nav-item'><a class='nav-link text-decoration-none link-dark link-opacity-75'><div style='display: inline-block;' class='flechas mdi mdi-chevron-double-right'></div><i class='"""+str(Menu[Activo]["Items"][Sub]["Icono"])+"""'></i> """+str(Sub)+"""</a></li>"""
             Res += """
             </ul>
             """
