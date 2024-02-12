@@ -79,7 +79,7 @@ def Inicio_Sesion():
                                 swal.close();
                             }
                             if(response*1 == 1){
-                                window.location.href = "inicio.py";
+                                $(location).attr('href','App/Inicio');
                             }
                         },
                         error: function (jqXHR, textStatus, errorThrown )

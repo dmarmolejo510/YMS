@@ -454,12 +454,11 @@ def Descargar_Excel(Datos):
             ws['B3'] = ""
             
             index = 6
-            if len(Docks) == 0:
-                for r in range(0,10):
-                    ws['A'+str(index)].fill = PatternFill("solid", fgColor="fffd00")
-                    ws['A'+str(index)].border = Border(bottom=Side(border_style="thin", color="000000"))
-                    ws['A'+str(index)] = ""
-                    index += 1
+            for r in range(0,10):
+                ws['A'+str(index)].fill = PatternFill("solid", fgColor="fffd00")
+                ws['A'+str(index)].border = Border(bottom=Side(border_style="thin", color="000000"))
+                ws['A'+str(index)] = ""
+                index += 1
             
             ws['D5'] = "RUTA"
             ws['D6'] = "DUNS"
