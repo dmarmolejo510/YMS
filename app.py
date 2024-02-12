@@ -329,7 +329,7 @@ def YMS_Conf_Carriers():
 
 
 @app.route("/YMS/App",methods=['GET','POST'])
-def YMS_Conf_Carriers():
+def YMS_APP():
     if "IDu" not in session:
         return render_template_string(APP_YMS_Lib.Inicio())
     else:

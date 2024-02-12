@@ -137,8 +137,8 @@ def Inicio():
                     }
                     function Docks(){
                         Mostrar_Ventana_Cargando(false);
-                        var parametros = {"Fun":"Docks"};
-                        $.ajax({data:  parametros,url:\""""+str(os.path.basename(__file__))+"""\",type:  "post",
+                        var parametros = {"Fun":'"""+str(fernet.encrypt("Docks".encode()).decode("utf-8"))+"""'};
+                        $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
                             success:  function (response)
                             {
                                 var Resultado = JSON.parse(response);
@@ -155,7 +155,7 @@ def Inicio():
                 </script>
             </body>
             """
-        Cur += render_template("general_APP.html",Contenido=Contenido,Componentes=Compartido.Complementos(None),Menu="",Titulo="")
+        Cur += render_template("general_APP.html",Contenido=Contenido,Componentes=Compartido.Complementos(None),Menu="",Titulo="YMS")
     except:
         Cur += str(sys.exc_info())
     return Cur
@@ -175,6 +175,148 @@ def Entrar(Datos):
     Cur += json.dumps(Resultado)
     return Cur
 
+def Docks(Datos):
+    if "K" in session.keys():
+        fernet = Fernet(session["K"])
+    DB = LibDM_2023.DataBase()
+    Compartido_2023 = LibDM_2023.Compartido()
+    Cur = ""
+    Resultado = {"Contenido":"","Estado":0}
+    try:
+        Resultado["Contenido"] += """
+        <div class='text-center display-5 fw-bold'>"""+str(Menu_Activo)+"""</div>
+            <div class='row'>
+                <div class='col'>
+                    <button class='btn btn-primary w-100 fw-bold mb-2' onclick='Docks()'>UPDATE</button>
+                </div>
+                <div class='col'>
+                    <button class='btn btn-danger w-100 fw-bold mb-2' onclick='Cerrar_Sesion()'>SIGN OUT</button>
+                </div>
+            </div>
+            
+            <div class='row'>
+        """
+        Cajas_Docks = DB.Get_Dato("SELECT * FROM rilc_toluca.ccajas WHERE cc_dock IS NOT NULL AND cc_activo = 1 ")
+        for Dock in DB.Get_Dato("SELECT * FROM rilc_toluca.cdock_asignacion WHERE cd_ub = 'RILC Toluca' AND cd_activo = 1"):
+            Caja_Aqui = None
+            Color = "#ffffff"
+            for C in Cajas_Docks:
+                if int(C["cc_dock"]) == int(Dock["cd_dock"]):
+                    Caja_Aqui = C
+                    Color = "#88ffa0"
+                    break
+            
+            if Caja_Aqui is not None:
+                Info_Actual = json.loads(str(Caja_Aqui["cc_informacion_actual"]))
+                Resultado["Contenido"] += """
+                <div class='col-6 p-1' onclick='Opciones("""+str(Caja_Aqui["cc_id"])+""",\""""+str(Caja_Aqui["cc_contenedor"])+"""\")'><div class='h-100 border border-dark ps-3 pe-3 pt-1 pb-1'>
+                    <div class='row h-100 ' style='background:"""+str(Color)+"""' >
+                        <div class='col-auto bg-dark text-white fs-1'>
+                            """+str(Dock["cd_dock"])+"""
+                        </div>
+                        <div class='col'>
+                """
+            else:
+                Resultado["Contenido"] += """
+                <div class='col-6 p-1' onclick='Dock("""+str(Dock["cd_dock"])+""")'><div class='h-100 border border-dark ps-3 pe-3 pt-1 pb-1'>
+                    <div class='row h-100 ' style='background:"""+str(Color)+"""' >
+                        <div class='col-auto bg-dark text-white fs-1'>
+                            """+str(Dock["cd_dock"])+"""
+                        </div>
+                        <div class='col'>
+                """
+            if Caja_Aqui is not None:
+                pass
+                Info_Actual = json.loads(str(Caja_Aqui["cc_informacion_actual"]))
+                Estado = ""
+                Estado += "<span class='h-100' style='width:20px; background:var(--Color_"+str(Caja_Aqui["cc_tipo_actual"])+");Color:var(--Color_"+str(Caja_Aqui["cc_tipo_actual"])+");'>__</span>"
+                try:
+                    Tipo = Info_Actual[Caja_Aqui["cc_tipo_actual"]]
+                    Estado += str(Tipo)
+                    Tipo_1 = Info_Actual[Tipo]
+                    Estado += "/"+str(Tipo_1)
+                    Tipo_2 = Info_Actual[Tipo_1]
+                    Estado += "/"+str(Tipo_2)
+                except:
+                    pass
+                Resultado["Contenido"] += "<div class='border-bottom border-dark text-center fw-bold'>"+str(Caja_Aqui["cc_contenedor"])+"</div>"
+                Resultado["Contenido"] += "<div class='text-center'>"+str(Caja_Aqui["cc_tipo_actual"])+"</div>"
+                Resultado["Contenido"] += "<div class='text-center'><small>"+str(Estado)+"</small></div>"
+                Resultado["Contenido"] += "<div class='text-center'><small class='tiempo' tiempo='"+str(Caja_Aqui["cc_ultimo_mov"])+"'></small></div>"
+            Resultado["Contenido"] += """
+                    </div>
+                </div>
+                
+            </div></div>
+            """
+        Resultado["Contenido"] += """
+            </div>
+        </div>
+        <script>
+            function Opciones(ID,Contenedor){
+                Mostrar_Ventana_Cargando(false);
+                $("#Vent_1").find(".modal-title").html("<i class='mdi mdi-menu'></i> Options ["+Contenedor+"]");
+                $("#Vent_1").removeClass('modal-xl modal-lg modal-sm')
+                var parametros = {"Fun":'"""+str(fernet.encrypt("Opciones".encode()).decode("utf-8"))+"""',"ID":ID};
+                $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
+                    success:  function (response)
+                    {
+                        var Resultado = JSON.parse(response);
+                        $("#Vent_1").modal("show").find(".modal-body").html(Resultado["Contenido"]);
+                        $("#Vent_1").find(".modal-footer").find("button").attr('onclick',"$('#Vent_1').modal('hide'); delete table; ")
+                        swal.close();
+                    },
+                    error: function (jqXHR, textStatus, errorThrown )
+                    {
+                        $("#Vent_1").modal("show").find(".modal-body").html("<i class='mdi mdi-alert'></i> "+ textStatus);
+                        swal.close();
+                    }
+                });
+            }
+            function Dock(Dock){
+                Mostrar_Ventana_Cargando(false);
+                $("#Vent_1").find(".modal-title").html("<i class='mdi mdi-menu'></i> Dock ["+Dock+"]");
+                $("#Vent_1").removeClass('modal-xl modal-lg modal-sm')
+                var parametros = {"Fun":'"""+str(fernet.encrypt("Dock".encode()).decode("utf-8"))+"""',"Dock":Dock};
+                $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
+                    success:  function (response)
+                    {
+                        var Resultado = JSON.parse(response);
+                        $("#Vent_1").modal("show").find(".modal-body").html(Resultado["Contenido"]);
+                        $("#Vent_1").find(".modal-footer").find("button").attr('onclick',"$('#Vent_1').modal('hide'); delete table; ")
+                        swal.close();
+                    },
+                    error: function (jqXHR, textStatus, errorThrown )
+                    {
+                        $("#Vent_1").modal("show").find(".modal-body").html("<i class='mdi mdi-alert'></i> "+ textStatus);
+                        swal.close();
+                    }
+                });
+            }
+            function Cerrar_Sesion(){
+                    Swal.fire({
+                        title: 'Seguro que quiere salir?',
+                        buttonsStyling: false,showCancelButton: true,confirmButtonText: "<i class='mdi mdi-check'></i> Si",cancelButtonText: "<i class='mdi mdi-close'></i> No",showLoaderOnConfirm: true,
+                        customClass: {confirmButton: 'btn btn-success ms-1 me-1',cancelButton: 'btn btn-danger ms-1 me-1'},
+                        preConfirm: () => {
+                            Mostrar_Ventana_Cargando(false);
+                            var parametros = {"Fun":'"""+str(fernet.encrypt("Cerrar_Sesion".encode()).decode("utf-8"))+"""'};
+                            $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
+                                success:  function (response)
+                                {
+                                    window.location.href = "inicio.py";
+                                },
+                                error: function (jqXHR, textStatus, errorThrown ){Mensaje(0,'Process error ['+ jqXHR.status + " | " + textStatus  + " | " + errorThrown +']');}
+                            });
+                        }
+                    })
+                }
+        </script>
+        """
+    except:
+        Resultado["Contenido"] = str(sys.exc_info())
+    Cur += json.dumps(Resultado)
+    print(Cur)
 
 # def Inicio_old(Datos):
 #     try:
@@ -251,146 +393,7 @@ def Entrar(Datos):
 #         Cur = "content-type: text/html;charset=ISO-8859-1\n\n "
 #         Cur += str(sys.exc_info())
 #     print(Cur)
-# def Docks(Datos):
-#     DB = LibDM_2023.DataBase()
-#     Compartido_2023 = LibDM_2023.Compartido()
-#     Cur = "content-type: text/html;charset=ISO-8859-1\n\n "
-#     Resultado = {"Contenido":"","Estado":0}
-#     try:
-#         Resultado["Contenido"] += """
-#         <div class='text-center display-5 fw-bold'>"""+str(Menu_Activo)+"""</div>
-#             <div class='row'>
-#                 <div class='col'>
-#                     <button class='btn btn-primary w-100 fw-bold mb-2' onclick='Docks()'>ACTUALIZAR</button>
-#                 </div>
-#                 <div class='col'>
-#                     <button class='btn btn-danger w-100 fw-bold mb-2' onclick='Cerrar_Sesion()'>CERRAR SESION</button>
-#                 </div>
-#             </div>
-            
-#             <div class='row'>
-#         """
-#         Cajas_Docks = DB.Get_Dato("SELECT * FROM rilc_toluca.ccajas WHERE cc_dock IS NOT NULL AND cc_activo = 1 ")
-#         for Dock in DB.Get_Dato("SELECT * FROM rilc_toluca.cdock_asignacion WHERE cd_ub = 'RILC Toluca' AND cd_activo = 1"):
-#             Caja_Aqui = None
-#             Color = "#ffffff"
-#             for C in Cajas_Docks:
-#                 if int(C["cc_dock"]) == int(Dock["cd_dock"]):
-#                     Caja_Aqui = C
-#                     Color = "#88ffa0"
-#                     break
-            
-#             if Caja_Aqui is not None:
-#                 Info_Actual = json.loads(str(Caja_Aqui["cc_informacion_actual"]))
-#                 Resultado["Contenido"] += """
-#                 <div class='col-6 p-1' onclick='Opciones("""+str(Caja_Aqui["cc_id"])+""",\""""+str(Caja_Aqui["cc_contenedor"])+"""\")'><div class='h-100 border border-dark ps-3 pe-3 pt-1 pb-1'>
-#                     <div class='row h-100 ' style='background:"""+str(Color)+"""' >
-#                         <div class='col-auto bg-dark text-white fs-1'>
-#                             """+str(Dock["cd_dock"])+"""
-#                         </div>
-#                         <div class='col'>
-#                 """
-#             else:
-#                 Resultado["Contenido"] += """
-#                 <div class='col-6 p-1' onclick='Dock("""+str(Dock["cd_dock"])+""")'><div class='h-100 border border-dark ps-3 pe-3 pt-1 pb-1'>
-#                     <div class='row h-100 ' style='background:"""+str(Color)+"""' >
-#                         <div class='col-auto bg-dark text-white fs-1'>
-#                             """+str(Dock["cd_dock"])+"""
-#                         </div>
-#                         <div class='col'>
-#                 """
-#             if Caja_Aqui is not None:
-#                 pass
-#                 Info_Actual = json.loads(str(Caja_Aqui["cc_informacion_actual"]))
-#                 Estado = ""
-#                 Estado += "<span class='h-100' style='width:20px; background:var(--Color_"+str(Caja_Aqui["cc_tipo_actual"])+");Color:var(--Color_"+str(Caja_Aqui["cc_tipo_actual"])+");'>__</span>"
-#                 try:
-#                     Tipo = Info_Actual[Caja_Aqui["cc_tipo_actual"]]
-#                     Estado += str(Tipo)
-#                     Tipo_1 = Info_Actual[Tipo]
-#                     Estado += "/"+str(Tipo_1)
-#                     Tipo_2 = Info_Actual[Tipo_1]
-#                     Estado += "/"+str(Tipo_2)
-#                 except:
-#                     pass
-#                 Resultado["Contenido"] += "<div class='border-bottom border-dark text-center fw-bold'>"+str(Caja_Aqui["cc_contenedor"])+"</div>"
-#                 Resultado["Contenido"] += "<div class='text-center'>"+str(Caja_Aqui["cc_tipo_actual"])+"</div>"
-#                 Resultado["Contenido"] += "<div class='text-center'><small>"+str(Estado)+"</small></div>"
-#                 Resultado["Contenido"] += "<div class='text-center'><small class='tiempo' tiempo='"+str(Caja_Aqui["cc_ultimo_mov"])+"'></small></div>"
-#             Resultado["Contenido"] += """
-#                     </div>
-#                 </div>
-                
-#             </div></div>
-#             """
-#         Resultado["Contenido"] += """
-#             </div>
-#         </div>
-#         <script>
-#             function Opciones(ID,Contenedor){
-#                 Mostrar_Ventana_Cargando(false);
-#                 $("#Vent_1").find(".modal-title").html("<i class='mdi mdi-menu'></i> Options ["+Contenedor+"]");
-#                 $("#Vent_1").removeClass('modal-xl modal-lg modal-sm')
-#                 var parametros = {"Fun":"Opciones","ID":ID};
-#                 $.ajax({data:  parametros,url:\""""+str(os.path.basename(__file__))+"""\",type:  "post",
-#                     success:  function (response)
-#                     {
-#                         var Resultado = JSON.parse(response);
-#                         $("#Vent_1").modal("show").find(".modal-body").html(Resultado["Contenido"]);
-#                         $("#Vent_1").find(".modal-footer").find("button").attr('onclick',"$('#Vent_1').modal('hide'); delete table; ")
-#                         swal.close();
-#                     },
-#                     error: function (jqXHR, textStatus, errorThrown )
-#                     {
-#                         $("#Vent_1").modal("show").find(".modal-body").html("<i class='mdi mdi-alert'></i> "+ textStatus);
-#                         swal.close();
-#                     }
-#                 });
-#             }
-#             function Dock(Dock){
-#                 Mostrar_Ventana_Cargando(false);
-#                 $("#Vent_1").find(".modal-title").html("<i class='mdi mdi-menu'></i> Dock ["+Dock+"]");
-#                 $("#Vent_1").removeClass('modal-xl modal-lg modal-sm')
-#                 var parametros = {"Fun":"Dock","Dock":Dock};
-#                 $.ajax({data:  parametros,url:\""""+str(os.path.basename(__file__))+"""\",type:  "post",
-#                     success:  function (response)
-#                     {
-#                         var Resultado = JSON.parse(response);
-#                         $("#Vent_1").modal("show").find(".modal-body").html(Resultado["Contenido"]);
-#                         $("#Vent_1").find(".modal-footer").find("button").attr('onclick',"$('#Vent_1').modal('hide'); delete table; ")
-#                         swal.close();
-#                     },
-#                     error: function (jqXHR, textStatus, errorThrown )
-#                     {
-#                         $("#Vent_1").modal("show").find(".modal-body").html("<i class='mdi mdi-alert'></i> "+ textStatus);
-#                         swal.close();
-#                     }
-#                 });
-#             }
-#             function Cerrar_Sesion(){
-#                     Swal.fire({
-#                         title: 'Seguro que quiere salir?',
-#                         buttonsStyling: false,showCancelButton: true,confirmButtonText: "<i class='mdi mdi-check'></i> Si",cancelButtonText: "<i class='mdi mdi-close'></i> No",showLoaderOnConfirm: true,
-#                         customClass: {confirmButton: 'btn btn-success ms-1 me-1',cancelButton: 'btn btn-danger ms-1 me-1'},
-#                         preConfirm: () => {
-#                             Mostrar_Ventana_Cargando(false);
-#                             var parametros = {"Fun":"Cerrar_Sesion"};
-#                             $.ajax({data:  parametros,url:\""""+str(os.path.basename(__file__))+"""\",type:  "post",
-#                                 success:  function (response)
-#                                 {
-#                                     window.location.href = "inicio.py";
-#                                 },
-#                                 error: function (jqXHR, textStatus, errorThrown ){Mensaje(0,'Process error ['+ jqXHR.status + " | " + textStatus  + " | " + errorThrown +']');}
-#                             });
-#                         }
-#                     })
-#                 }
-#         </script>
-#         """
-#     except:
-#         Resultado["Contenido"] = str(sys.exc_info())
-#     Cur += json.dumps(Resultado)
-#     print(Cur)
+
 # def Dock(Datos):
 #     DB = LibDM_2023.DataBase()
 #     Compartido_2023 = LibDM_2023.Compartido()
