@@ -322,8 +322,8 @@ def Inicio():
             }
             function Salida(ID,Contenedor){
                 Swal.fire({
-                title: '¿Estás seguro de darle salida al contenedor ['+Contenedor+']?',
-                buttonsStyling: false,showCancelButton: true,confirmButtonText: "<i class='mdi mdi-check'></i> Si",cancelButtonText: "<i class='mdi mdi-close'></i> No",showLoaderOnConfirm: true,
+                title: '¿Are you sure the container ['+Contenedor+'] is ready to departure?',
+                buttonsStyling: false,showCancelButton: true,confirmButtonText: "<i class='mdi mdi-check'></i> Yes",cancelButtonText: "<i class='mdi mdi-close'></i> No",showLoaderOnConfirm: true,
                 customClass: {confirmButton: 'btn btn-success ms-1 me-1',cancelButton: 'btn btn-danger ms-1 me-1'},
                 preConfirm: () => {
                     Mostrar_Ventana_Cargando(false);
@@ -772,7 +772,7 @@ def Modificar(Datos):
             }
             function Error_Ingreso(ID,Contenedor){
                 Swal.fire({
-                    title: '¿Estás seguro de generar el pase de salida del contenedor ['+Contenedor+']?',
+                    title: '¿Are you sure the container ['+Contenedor+'] is incorrect arrival?',
                     buttonsStyling: false,showCancelButton: true,confirmButtonText: "<i class='mdi mdi-check'></i> Yes",cancelButtonText: "<i class='mdi mdi-close'></i> No",showLoaderOnConfirm: true,
                     customClass: {confirmButton: 'btn btn-success ms-1 me-1',cancelButton: 'btn btn-danger ms-1 me-1'},
                     preConfirm: () => {

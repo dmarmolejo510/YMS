@@ -128,8 +128,8 @@ def Inicio():
                     
             Dock.append({"Dock":str(Contenedor["cc_dock"]),"Tiempo":"<span class='tiempo' tiempo='"+str(Contenedor["cc_ultimo_mov"])+"'></span>","Caja":str(Contenedor["cc_contenedor"]),"Carrier":Info_Actual["Carrier"],"Tipo":Contenedor["cc_tipo_actual"],"Estado":Estado,"Sello":Sello,"Ruta":Ruta,"Opciones":"<div class='text-center'>"+str(Opciones)+"</div>"})
 
-        Contenido += """<div class='text-end pe-1 pt-1'><small class='link-primary' style='cursor:pointer' onclick='Llamar_Funcion(\""""+str(request.url)+"""\");'>Actualizar <i class='mdi mdi-refresh'></i></small></div>"""
-        Contenido += "<div class='h2 fw-lighter mt-1 mb-1 text-center border-bottom'><i class='mdi mdi-truck'></i>Administrador de Contenedores</div>"
+        Contenido += """<div class='text-end pe-1 pt-1'><small class='link-primary' style='cursor:pointer' onclick='Llamar_Funcion(\""""+str(request.url)+"""\");'>Update <i class='mdi mdi-refresh'></i></small></div>"""
+        Contenido += "<div class='h2 fw-lighter mt-1 mb-1 text-center border-bottom'><i class='mdi mdi-truck'></i>Container Manager</div>"
         Contenido += """
         <div class='row'>
             <div class='col-6'>
@@ -271,8 +271,8 @@ def Inicio():
             }
             function Eliminar_Caja(ID,Contenedor){
                 Swal.fire({
-                title: '¿Estás seguro de eliminar el contenedor ['+Contenedor+']?',
-                input: 'text',buttonsStyling: false,showCancelButton: true,confirmButtonText: "<i class='mdi mdi-check'></i> Si",cancelButtonText: "<i class='mdi mdi-close'></i> No",showLoaderOnConfirm: true,
+                title: 'Are you sure to delete the ['+Contenedor+'] container?',
+                input: 'text',buttonsStyling: false,showCancelButton: true,confirmButtonText: "<i class='mdi mdi-check'></i> Yes",cancelButtonText: "<i class='mdi mdi-close'></i> No",showLoaderOnConfirm: true,
                 customClass: {confirmButton: 'btn btn-success ms-1 me-1',cancelButton: 'btn btn-danger ms-1 me-1'},
                 preConfirm: (Comentario) => {
                     
@@ -410,7 +410,7 @@ def Regresar(Datos):
             function Regresa_Guardar(ID,Fecha){
                 
                 Swal.fire({
-                title: '¿Estás seguro de regresar el contenedor a la fecha ['+Fecha+']?',
+                title: '¿Are you sure to move the container to date ['+Fecha+']?',
                 input: 'text',buttonsStyling: false,showCancelButton: true,confirmButtonText: "<i class='mdi mdi-check'></i> Yes",cancelButtonText: "<i class='mdi mdi-close'></i> No",showLoaderOnConfirm: true,
                 customClass: {confirmButton: 'btn btn-success ms-1 me-1',cancelButton: 'btn btn-danger ms-1 me-1'},
                 preConfirm: (Comentario) => {

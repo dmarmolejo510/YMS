@@ -21,23 +21,23 @@ def Inicio():
         Titulo = LibDM_2023.Menu().Get_Titulo(Activo)
         Contenido = ""
 
-        Contenido += """<div class='text-end pe-1 pt-1'><small class='link-primary' style='cursor:pointer' onclick='Cargar_Fecha($("#fecha").val())'>Actualizar <i class='mdi mdi-refresh'></i></small></div>"""
+        Contenido += """<div class='text-end pe-1 pt-1'><small class='link-primary' style='cursor:pointer' onclick='Cargar_Fecha($("#fecha").val())'>Update <i class='mdi mdi-refresh'></i></small></div>"""
         Contenido += """
         <div class='container'>
         <!--<div class='text-end mb-1'><button class='btn btn-primary' onclick='Agregar_Adicional()'><i class='mdi mdi-plus'></i> Agregar adicional</button> <button class='btn btn-dark' onclick='Crear_Programacion()'><i class='mdi mdi-plus'></i> Crear Programación de Día</button></div>-->
         <table class='table table-bordered table-sm table-striped table-hover'>
             <thead class='table-dark'>
                 <tr>
-                    <td>Fecha</td>
-                    <td>Ruta</td>
-                    <td>Caja</td>
+                    <td>Date</td>
+                    <td>Route</td>
+                    <td>Container</td>
                     <td>Carrier</td>
-                    <td>Entrada</td>
-                    <td>DEFINIR RUTA</span></td>
-                    <td class='text-center' style='width:40px;'><span style='writing-mode: vertical-lr;'>OPERACIONES</span></td>
-                    <td class='text-center' style='width:40px;'><span style='writing-mode: vertical-lr;'>SALIDA</span></td>
-                    <td class='text-center' style='width:40px;'><span style='writing-mode: vertical-lr;'>COMPLETO</span></td>
-                    <td>CUT TIME</td>
+                    <td>Arrival</td>
+                    <td>Outbound Selected</span></td>
+                    <td class='text-center' style='width:40px;'><span style='writing-mode: vertical-lr;'>Material Loaded</span></td>
+                    <td class='text-center' style='width:40px;'><span style='writing-mode: vertical-lr;'>Departure</span></td>
+                    <td class='text-center' style='width:40px;'><span style='writing-mode: vertical-lr;'>Complete</span></td>
+                    <td>Cut Time</td>
                 </tr>
             </thead>
             <tbody>
@@ -147,8 +147,8 @@ def Inicio():
         <script>
             function Salida(ID,Contenedor){
                 Swal.fire({
-                title: '¿Estás seguro de darle salida al contenedor ['+Contenedor+']?',
-                buttonsStyling: false,showCancelButton: true,confirmButtonText: "<i class='mdi mdi-check'></i> Si",cancelButtonText: "<i class='mdi mdi-close'></i> No",showLoaderOnConfirm: true,
+                title: '¿Are you sure the container ['+Contenedor+'] is ready to departure?',
+                buttonsStyling: false,showCancelButton: true,confirmButtonText: "<i class='mdi mdi-check'></i> Yes",cancelButtonText: "<i class='mdi mdi-close'></i> No",showLoaderOnConfirm: true,
                 customClass: {confirmButton: 'btn btn-success ms-1 me-1',cancelButton: 'btn btn-danger ms-1 me-1'},
                 preConfirm: () => {
                     Mostrar_Ventana_Cargando(false);

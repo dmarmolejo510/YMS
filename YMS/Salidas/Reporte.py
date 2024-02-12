@@ -21,17 +21,17 @@ def Inicio():
         Titulo = LibDM_2023.Menu().Get_Titulo(Activo)
         Contenido = ""
 
-        Contenido += "<div class='h2 fw-lighter mt-2 mb-2 pb-2 text-center'><i class='mdi mdi-progress-upload'></i> Reporte de Estado de Outbound</div>"
+        Contenido += "<div class='h2 fw-lighter mt-2 mb-2 pb-2 text-center'><i class='mdi mdi-progress-upload'></i>Outbound Status Report</div>"
         #Rutas = DB.Get_Dato("SELECT * FROM odc_slp.crutas WHERE cr_tipo = 'Outbound'")
         Contenido += """
         <div class='container'>
         """
         Formulario = {"Col":"12", "Campos": [],"Clase": "Estado_Cajas" }
-        Formulario["Campos"].append({"tipo":"fecha-rango","id":"fecha","campo":"Fecha","titulo":"Rango de Fecha","Requerido":1,"Col":12,"min":1,"max":10,"valor":""})
+        Formulario["Campos"].append({"tipo":"fecha-rango","id":"fecha","campo":"Fecha","titulo":"Date range","Requerido":1,"Col":12,"min":1,"max":10,"valor":""})
         Contenido += str(Compartido.Formulario(Formulario))
 
         Contenido += """
-        <div class='w-100 text-center'><button class='btn btn-success w-75' onclick='Cargar_Fecha();'><i class='mdi mdi-cloud-download'></i> Descargar</button></div>
+        <div class='w-100 text-center'><button class='btn btn-success w-75' onclick='Cargar_Fecha();'><i class='mdi mdi-cloud-download'></i> Download Report</button></div>
         <div id='Res'>
         </div>
         <script>
@@ -142,8 +142,8 @@ def Cargar_Fecha(Datos):
 
             
         Resultado["Contenido"] += """
-        <button class='btn btn-success mb-1' id="download-xlsx-ruteo"><i class='mdi mdi-microsoft-excel'></i> Descargar Excel</button>
-        <button class='btn btn-dark mb-1' onclick='Descargar_Reporte()'><i class='mdi mdi-microsoft-excel'></i> Descargar Reporte</button>
+        <button class='btn btn-success mb-1' id="download-xlsx-ruteo"><i class='mdi mdi-microsoft-excel'></i> Download Excel</button>
+        <!--<button class='btn btn-dark mb-1' onclick='Descargar_Reporte()'><i class='mdi mdi-microsoft-excel'></i> Descargar Reporte</button>-->
         <div id='Tabla_Historico' class='border border-dark bg-dark-subtle'></div>
         <script>
             delete Tabla_Historico;
@@ -152,14 +152,14 @@ def Cargar_Fecha(Datos):
                 layout:"fitColumns",
                 data:"""+str(Historico)+""",
                 columns:[
-                    {field:"Fecha","title":"Fecha de Salida"},
-                    {field:"Ruta","title":"Ruta"},
-                    {field:"Caja","title":"Caja"},
+                    {field:"Date","title":"Fecha de Salida"},
+                    {field:"Route","title":"Ruta"},
+                    {field:"Container","title":"Caja"},
                     {field:"Carrier","title":"Carrier"},
-                    {field:"Entrada","title":"Entrada"},
-                    {field:"DEFINIR RUTA","title":"Define Ruta"},
-                    {field:"OPERACIONES","title":"Material Cargado"},
-                    {field:"SALIO","title":"Salida"}
+                    {field:"Arrival","title":"Entrada"},
+                    {field:"Outbound Selected","title":"Define Ruta"},
+                    {field:"Material Loaded","title":"Material Cargado"},
+                    {field:"Departure","title":"Salida"}
                 ]
             });
             Tabla_Historico.on("tableBuilt", function(){ 
