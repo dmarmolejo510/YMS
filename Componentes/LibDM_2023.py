@@ -2141,6 +2141,7 @@ class Menu:
                                 "Container Manager":{"Icono":"mdi mdi-truck-trailer","Link":"/YMS/Container_Manager","P":"Yard","Fun":"Inicio","ID":1502},
                             }
                         },
+                        "Docks":{"Icono":"mdi mdi-sign-caution","Link":"/YMS/Docks","Fun":"Inicio","ID":1508},
                         "Outbound Status":{
                             "Icono":"mdi mdi-progress-upload",
                             "Items":{
@@ -2233,7 +2234,7 @@ class Menu:
                     <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
                         <div class="offcanvas-header">
                             <h5 class='fst-italic  text-nowrap'><i class="mdi mdi-chevron-double-right " style="color:#ED1C24"></i><span class='text-white '>Universal</span> <span style="color:#ED1C24">YMS</span></h5>
-                            <!--<div class='text-end pe-5'><img class='p-1' style='background:#212529' width='30%' height='auto'  id='Logo_Universal' src=''></img></div>--!>
+                            <!--<div class='text-end pe-5'><img class='p-1' style='background:#212529' width='30%' height='auto'  id='Logo_Universal' src=''></img></div>-->
                             <script>$("#Logo_Universal").attr('src',Logo_Univerasl);</script>
                             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                         </div>

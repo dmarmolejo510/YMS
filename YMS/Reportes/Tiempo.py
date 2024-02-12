@@ -88,7 +88,7 @@ def Inicio():
             {
                 $(".tiempo").each(function() {
                     var Limite = moment($(this).attr('tiempo'));
-                    var Ahora = moment(new Date()); //todays date
+                    var Ahora = moment('"""+str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))+"""','YYYY-MM-DD hh:mm:ss'); //todays date
                     //var Faltan = moment.duration(Ahora.diff(Limite));
                     var Faltan = moment.duration(Limite.diff(Ahora));
                     var Dias = Faltan.asDays().toString().split(".")[0];
