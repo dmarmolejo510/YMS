@@ -82,7 +82,7 @@ def Cargar_Fecha(Datos):
 
         Likes = []
         for F in lista_fechas:
-            Likes.append(" cc_informacion_actual LIKE '%"+str(F.strftime("%Y-%m-%d"))+"%' ")
+            Likes.append(" cc_informacion_actual LIKE '% \"Fecha_Salida\": \""+str(F.strftime("%Y-%m-%d"))+"\"%' ")
 
         Programacion_Abiertos = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas WHERE " + str("OR".join(Likes)) )
 
