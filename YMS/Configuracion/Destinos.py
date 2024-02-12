@@ -27,7 +27,7 @@ def Inicio():
             Opciones += "<button class='btn btn-sm btn-danger p-0 ps-1 pe-1' onclick='Eliminar(\""+str(Destino["cdestino"])+"\")'><i class='mdi mdi-trash-can'></i></button>"
             Opciones += "</div></div>"
             Patio.append({"Codigo":str(Destino["cdestino"]),"Lista":str(Destino["ccorreos"]),"Opciones":Opciones})
-        Contenido += "<div class='h2 fw-lighter mt-1 mb-1 text-center border-bottom'><i class='mdi mdi-card-bulleted'></i> Configuración de Destinos</div>"
+        Contenido += "<div class='h2 fw-lighter mt-1 mb-1 text-center border-bottom'><i class='mdi mdi-card-bulleted'></i> Destination Master</div>"
         Contenido += """
         <div class='container'>
         <div class='row'>

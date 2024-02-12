@@ -438,7 +438,6 @@ def Descargar_Excel(Datos):
         Info_Ruta = json.loads(str(Info_Ahora["cr_niveles"]))
         if Info_Ruta[str(Datos["Direccion"]).split('/')[1]] == 0 or "NOMBRE" in Info_Ruta[str(Datos["Direccion"]).split('/')[1]].keys():
 
-            ws = wb.create_sheet(str(N1))
             ws['A1'] = "NOMBRE"
             ws['B1'].fill = PatternFill("solid", fgColor="fffd00")
             ws['B1'].border = Border(bottom=Side(border_style="thin", color="000000"))
