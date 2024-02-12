@@ -167,7 +167,7 @@ def Buscar_Caja(Datos):
                     {field:"In Date","title":"Arrival Date"},
                     {field:"In Status","title":"Arrival Status",formatter:"html"},
                     {field:"In Carrier","title":"Arrival Carrier"},
-                    {field:"Out Date","title":Departure Date"},
+                    {field:"Out Date","title":"Departure Date"},
                     {field:"Out Status","title":"Departure Status",formatter:"html"},
                     {field:"Out Carrier","title":"Departure Carrier"},
                     {field:"Opciones","title":"Op",formatter:"html"}

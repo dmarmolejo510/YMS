@@ -160,11 +160,11 @@ def Cargar_Reporte(Datos):
                 data:"""+str(Cajas)+""",
                 columns:[
                     {field:"Contenedor","title":"Container"},
-                    {field:"Arrival Date","title":"In Date"},
+                    {field:"In Date","title":"Arrival Date"},
                     {field:"Route Type","title":"Route Type",formatter:"html"},
                     {field:"Route","title":"Route",formatter:"html"},
                     {field:"Dock","title":"Dock",formatter:"html"},
-                    {field:"Arrival Carrier","title":"In Carrier"},
+                    {field:"In Carrier","title":"Arrival Carrier"},
                     {field:"Opciones","title":"Op",formatter:"html"}
                 ]
             });
@@ -187,11 +187,11 @@ def Cargar_Reporte(Datos):
                 data:"""+str(Cajas_2)+""",
                 columns:[
                     {field:"Contenedor","title":"Container"},
-                    {field:"Departure Date","title":"Out Date"},
+                    {field:"Out Date","title":"Departure Date"},
                     {field:"Route Type","title":"Route Type",formatter:"html"},
                     {field:"Route","title":"Route",formatter:"html"},
                     {field:"Dock","title":"Dock",formatter:"html"},
-                    {field:"Departure Carrier","title":"Out Carrier"},
+                    {field:"Out Carrier","title":"Departure Carrier"},
                     {field:"Opciones","title":"Op",formatter:"html"}
                 ]
             });

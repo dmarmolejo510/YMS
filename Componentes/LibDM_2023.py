@@ -2214,11 +2214,11 @@ class Menu:
                         <button class="navbar-toggler mt-1 mb-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
                             <span class="mdi mdi-menu"></span>
                         </button>
-                        <span class='fst-italic fw-bold text-nowrap'><i class="mdi mdi-chevron-double-right " style="color:#ED1C24"></i><span class='text-white '>Universal</span> <span style="color:#ED1C24">YMS</span> <i class="mdi mdi-chevron-double-right " style="color:#ED1C24"></i> <span style='color:"""+str(Menu[Activo]["Color"])+"""'> <i class='"""+str(Menu[Activo]["Icono"])+"""'></i> """+str(Activo)+"""</span> </span>
+                        <span class='fst-italic  text-nowrap'><i class="mdi mdi-chevron-double-right " style="color:#ED1C24"></i><span class='text-white '>Universal</span> <span style="color:#ED1C24">YMS</span> <i class="mdi mdi-chevron-double-right " style="color:#ED1C24"></i> <span style='color:"""+str(Menu[Activo]["Color"])+"""'> <i class='"""+str(Menu[Activo]["Icono"])+"""'></i> """+str(Activo)+"""</span> </span>
                     </div>
                     <div>
                         <div class='row'>
-                            <div class='col text-white fw-bold'>
+                            <div class='col text-white '>
                                 <i class='mdi mdi-account-box'></i> """+str(Info_User["Nombre"])+"""
                             </div>
                             <div class='col-auto'>
@@ -2232,7 +2232,7 @@ class Menu:
                     </div>
                     <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
                         <div class="offcanvas-header">
-                            <h5 class='fst-italic fw-bold text-nowrap'><i class="mdi mdi-chevron-double-right " style="color:#ED1C24"></i><span class='text-white '>Portal</span> <span style="color:#ED1C24">MX</span></h5>
+                            <h5 class='fst-italic  text-nowrap'><i class="mdi mdi-chevron-double-right " style="color:#ED1C24"></i><span class='text-white '>Portal</span> <span style="color:#ED1C24">MX</span></h5>
                             <!--<div class='text-end pe-5'><img class='p-1' style='background:#212529' width='30%' height='auto'  id='Logo_Universal' src=''></img></div>--!>
                             <script>$("#Logo_Universal").attr('src',Logo_Univerasl);</script>
                             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
