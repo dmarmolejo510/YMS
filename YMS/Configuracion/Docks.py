@@ -20,7 +20,7 @@ def Inicio():
         Titulo = LibDM_2023.Menu().Get_Titulo(Activo)
         Contenido = ""
         Docks = []
-        for Dock in DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".cdock_asignacion"):
+        for Dock in DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".cdock_asignacion ORDER BY cd_dock"):
             if Dock["cd_etiqueta"] is None:
                 Dock["cd_etiqueta"] = ""
             if int(Dock["cd_activo"]) == 1:
@@ -47,6 +47,7 @@ def Inicio():
         <div class='container'>
         <div class='row'>
             <div class='col-12'>
+                <div class='text-end mb-1'> <button class='btn btn-success' onclick='Nuevo_Dock()'><i class='mdi mdi-plus'></i> New Dock</button> </div>
                 <div id='Tabla_Proveedores' class='border border-dark bg-dark-subtle'></div>
                 <script>
                     delete Tabla_Proveedores;
@@ -180,12 +181,108 @@ def Inicio():
                     }
                 })
             }
+            function Nuevo_Dock(){
+                Mostrar_Ventana_Cargando(false);
+                $("#Vent_1").find(".modal-title").html("<i class='mdi mdi-plus'></i> New Suppliers");
+                $("#Vent_1").removeClass('modal-xl modal-lg modal-sm');
+                var parametros = {"Fun":'"""+str(fernet.encrypt("Nuevo_Dock".encode()).decode("utf-8"))+"""'};
+                $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
+                    success:  function (response)
+                    {
+                        var Resultado = JSON.parse(response);
+                        $("#Vent_1").modal("show").find(".modal-body").html(Resultado["Contenido"]);
+                        $("#Vent_1").find(".modal-footer").find("button").attr('onclick',"$('#Vent_1').modal('hide'); delete table; ")
+                        swal.close();
+                    },
+                    error: function (jqXHR, textStatus, errorThrown )
+                    {
+                        $("#Vent_1").modal("show").find(".modal-body").html("<i class='mdi mdi-alert'></i> "+ textStatus);
+                        swal.close();
+                    }
+                });
+            }
         </script>
         """
         Cur += render_template("general.html",Contenido=Contenido,Componentes=Compartido.Complementos(None),Menu=Menu,Titulo=Titulo)
     except:
         Cur += str(sys.exc_info())
     return Cur
+def Nuevo_Dock(Datos):
+    if "K" in session.keys():
+        fernet = Fernet(session["K"])
+    DB = LibDM_2023.DataBase()
+    Compartido_2023 = LibDM_2023.Compartido()
+    Cur = ""
+    Resultado = {"Contenido":"","Estado":0}
+    try:
+        Formulario = {"Col":"12", "Campos": [],"Clase": "Alta_Proveedor" }
+        Formulario["Campos"].append({"tipo":"numero","campo":"Numero","titulo":"Number","Requerido":1,"min":1,"max":30,"valor":""})
+        Resultado["Contenido"] += str(Compartido_2023.Formulario(Formulario))
+        Resultado["Contenido"] += """
+        <hr>
+        <div class='w-100 text-center'><button class='btn btn-success w-75' onclick='Nuevo_Dock_Guardar()'><i class='mdi mdi-floppy'></i> Save</button></div>
+        """
+        Resultado["Contenido"] += """
+        <script>
+            function Nuevo_Dock_Guardar(){
+                var Info = Dame_Formulario(".Alta_Proveedor",true);
+                if(Info != null)
+                {
+                    Mostrar_Ventana_Cargando(false);
+                    var parametros = {"Fun":'"""+str(fernet.encrypt("Nuevo_Dock_Guardar".encode()).decode("utf-8"))+"""',"Info":JSON.stringify(Info)};
+                    $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
+                        success:  function (response)
+                        {
+                            var Resultado = JSON.parse(response);
+                            if(Resultado["Estado"] == 1)
+                            {
+                                $("#Vent_1").modal("hide");
+                                Mensaje(2);
+                                Llamar_Funcion(\""""+str(request.url)+"""\");
+                            }
+                            else
+                                Mensaje(0,Resultado["Contenido"]);
+                                
+                        },
+                        error: function (jqXHR, textStatus, errorThrown )
+                        {
+                            Mensaje(0,textStatus);
+                        }
+                    });
+                }
+            }
+        </script>
+        """
+    except:
+         Resultado["Contenido"] = str(sys.exc_info())
+    Cur += json.dumps(Resultado)
+    return Cur
+def Nuevo_Dock_Guardar(Datos):
+    DB = LibDM_2023.DataBase()
+    Compartido_2023 = LibDM_2023.Compartido()
+    Cur = ""
+    Resultado = {"Contenido":"","Estado":0}
+    try:
+        Info_Datos = json.loads(str(Datos["Info"]))
+        Existe = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".cdock_asignacion WHERE cd_dock = '"+str(Info_Datos["Numero"])+"'")
+        if len(Existe) == 0:
+            Error = DB.Instruccion("""
+            INSERT INTO """+str(BD_Nombre)+""".cdock_asignacion
+            (cd_dock)
+            VALUES
+            ('"""+str(Info_Datos["Numero"])+"""')
+            """)
+            if Error == "":
+                Resultado["Estado"] = 1
+            else:
+                Resultado["Contenido"] += str(Error)
+        else:
+            Resultado["Contenido"] += "the dock ["+str(Info_Datos["Numero"])+"] already exists!"
+    except:
+        Resultado["Contenido"] = str(sys.exc_info())
+    Cur += json.dumps(Resultado)
+    return Cur
+
 def Modificar(Datos):
     if "K" in session.keys():
         fernet = Fernet(session["K"])

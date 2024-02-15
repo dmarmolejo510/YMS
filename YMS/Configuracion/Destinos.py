@@ -32,7 +32,7 @@ def Inicio():
         <div class='container'>
         <div class='row'>
             <div class='col-12'>
-                <div class='text-end mb-1'> <button class='btn btn-success' onclick='Nuevo_Destino()'><i class='mdi mdi-plus'></i> Nuevo Destino</button> </div>
+                <div class='text-end mb-1'> <button class='btn btn-success' onclick='Nuevo_Destino()'><i class='mdi mdi-plus'></i> New Destination</button> </div>
                 <div id='Tabla_Proveedores' class='border border-dark bg-dark-subtle'></div>
                 <script>
                     delete Tabla_Proveedores;
@@ -208,7 +208,7 @@ def Nuevo_Destino_Guardar(Datos):
             else:
                 Resultado["Contenido"] += str(Error)
         else:
-            Resultado["Contenido"] += "Este proveedor ya existe!"
+            Resultado["Contenido"] += "the supplier ["+str(Info_Datos["Nombre"])+"] already exists!"
     except:
         Resultado["Contenido"] = str(sys.exc_info())
     Cur += json.dumps(Resultado)

@@ -23,17 +23,20 @@ def Inicio():
         Contenido += """<div class='text-end pe-1 pt-1'><small class='link-primary' style='cursor:pointer' onclick='Llamar_Funcion(\""""+str(request.url)+"""\");'>Update <i class='mdi mdi-refresh'></i></small></div>"""
         Contenido += "<div class='h2 fw-lighter mt-1 mb-1 text-center border-bottom'><i class='mdi mdi-sign-caution'></i> Docks</div>"
         Contenido += """
-        <script>
+        <style>
             .Dock:hover{
                 background:blue;
                 color:#ffffff;
                 cursor:pointer;
             }
-        </script>    
+        </style>    
         <div class='row'>
         """
         Cajas_Docks = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas WHERE cc_dock IS NOT NULL AND cc_activo = 1 ")
-        for Dock in DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".cdock_asignacion WHERE cd_ub = '"+str(Bandera_Dock)+"' AND cd_activo = 1"):
+        for Dock in DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".cdock_asignacion WHERE cd_ub = '"+str(Bandera_Dock)+"' AND cd_activo = 1 ORDER BY cd_dock"):
+            Etiqueta = ""
+            if Dock["cd_etiqueta"] is not None:
+                Etiqueta = str(Dock["cd_etiqueta"] )
             Caja_Aqui = None
             Color = "#ffffff"
             for C in Cajas_Docks:
@@ -45,8 +48,9 @@ def Inicio():
             if Caja_Aqui is not None:
                 Info_Actual = json.loads(str(Caja_Aqui["cc_informacion_actual"]))
                 Contenido += """
-                <div class='col-sm-4 col-md-3 col-xl-2 p-1'  onclick='Opciones("""+str(Caja_Aqui["cc_id"])+""",\""""+str(Caja_Aqui["cc_contenedor"])+"""\")'><div class='h-100 border border-dark ps-3 pe-3 pt-1 pb-1'>
-                    <div class='row h-100 Dock' style='background:"""+str(Color)+"""' >
+                <div class='col-sm-4 col-md-3 col-xl-2 p-1'  onclick='Opciones("""+str(Caja_Aqui["cc_id"])+""",\""""+str(Caja_Aqui["cc_contenedor"])+"""\")'><div class='h-100 border border-dark ps-3 pe-3 pt-1 pb-1 position-relative Dock'>
+                    <div class='position-absolute top-50 start-0 translate-middle-y text-dark' style='writing-mode: vertical-lr; -webkit-text-stroke: 0.4px #ffffff;'><small>"""+str(Etiqueta)+"""</small></div>
+                    <div class='row h-100' style='background:"""+str(Color)+"""' >
                         <div class='col-auto bg-dark text-white fs-1'>
                             """+str(Dock["cd_dock"])+"""
                         </div>
@@ -54,7 +58,8 @@ def Inicio():
                 """
             else:
                 Contenido += """
-                <div class='col-sm-4 col-md-3 col-xl-2 p-1' onclick='Dock("""+str(Dock["cd_dock"])+""")'><div class='h-100 border border-dark ps-3 pe-3 pt-1 pb-1'>
+                <div class='col-sm-4 col-md-3 col-xl-2 p-1' onclick='Dock("""+str(Dock["cd_dock"])+""")'><div class='h-100 border border-dark ps-3 pe-3 pt-1 pb-1 position-relative Dock'>
+                    <div class='position-absolute top-50 start-0 translate-middle-y text-dark' style='writing-mode: vertical-lr; -webkit-text-stroke: 0.4px #ffffff;'><small>"""+str(Etiqueta)+"""</small></div>
                     <div class='row h-100 ' style='background:"""+str(Color)+"""' >
                         <div class='col-auto bg-dark text-white fs-1'>
                             """+str(Dock["cd_dock"])+"""
