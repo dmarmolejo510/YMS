@@ -13,7 +13,7 @@ from io import BytesIO
 import openpyxl
 Url = ""
 fernet = Fernet(LibDM_2023.Compartido().Dame_K2())
-BD_Nombre = "public"
+BD_Nombre = LibDM_2023.Compartido().Dame_Base_Datos("YMS")
 Bandera_Dock = "YMS"
 def Inicio():
     if "K" in session.keys():
@@ -74,7 +74,7 @@ def Inicio():
                     Estado = "Waiting"
             else:
                 Estado = Info_Actual["Etapa"]
-                if Info_Actual["Etapa"] == "Pending Exit" and Contenedor["cc_tipo_actual"] == "Empty" and "Return Empty" in str(Contenedor["cc_informacion_actual"]):
+                if Info_Actual["Etapa"] == "Pending Exit" and "Fecha_Salida" not in Info_Actual.keys():
                     #Opciones += "<button class='btn btn-sm btn-dark p-0 ps-1 pe-1' onclick='Imprimir_Pase("+str(Contenedor["cc_id"])+",\""+str(Contenedor["cc_contenedor"])+"\")'><i class='mdi mdi-printer'></i></button>"
                     Opciones += "<button class='btn btn-sm btn-danger p-0 ps-1 pe-1' onclick='Salida("+str(Contenedor["cc_id"])+",\""+str(Contenedor["cc_contenedor"])+"\")'><i class='mdi mdi-exit-to-app'></i></button>"
 
@@ -523,7 +523,10 @@ def Tipo_Nuevo(Datos):
             <div class='w-100 text-center'><button class='btn btn-success w-75' onclick='Modificar_Guardar("""+str(Datos["ID"])+""")'><i class='mdi mdi-floppy'></i> Save</button></div>
             """
     except:
-         Resultado["Contenido"] = str(sys.exc_info())
+        if "KeyError('-1')" in str(sys.exc_info()):
+            Resultado["Contenido"] = ""
+        else:
+            Resultado["Contenido"] = str(sys.exc_info())
     Cur += json.dumps(Resultado)
     return Cur
 def Tipo_Nuevo_1(Datos):
@@ -639,7 +642,10 @@ def Tipo_Nuevo_1(Datos):
             </script>
             """
     except:
-         Resultado["Contenido"] = str(sys.exc_info())
+        if "KeyError('-1')" in str(sys.exc_info()):
+            Resultado["Contenido"] = ""
+        else:
+            Resultado["Contenido"] = str(sys.exc_info())
     Cur += json.dumps(Resultado)
     return Cur
 def Tipo_Nuevo_2(Datos):
@@ -721,7 +727,10 @@ def Tipo_Nuevo_2(Datos):
                 <div class='w-100 text-center'><button class='btn btn-success w-75' onclick='Modificar_Guardar("""+str(Datos["ID"])+""")'><i class='mdi mdi-floppy'></i> Save</button></div>
                 """
     except:
-         Resultado["Contenido"] = str(sys.exc_info())
+        if "KeyError('-1')" in str(sys.exc_info()):
+            Resultado["Contenido"] = ""
+        else:
+            Resultado["Contenido"] = str(sys.exc_info())
     Cur += json.dumps(Resultado)
     return Cur
 def Modificar(Datos):

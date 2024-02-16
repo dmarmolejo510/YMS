@@ -5,7 +5,7 @@ import sys
 import json
 import os
 from Componentes import LibDM_2023
-BD_Nombre = "public"
+BD_Nombre = LibDM_2023.Compartido().Dame_Base_Datos("YMS")
 Bandera_Dock = "YMS"
 fernet = Fernet(LibDM_2023.Compartido().Dame_K2())
 def Inicio():

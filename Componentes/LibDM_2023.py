@@ -1987,6 +1987,9 @@ class Compartido:
         return "HbAHa3PZrpKinCOcJAlWTM-Yj3nx6QFbHW5SG6DLmRI="
     def Dame_K2(self):
         return "Kz2P2Oih49uGkKV4LHrpIr-65WHgy8yFuaBvQ75boLE="
+    def Dame_Base_Datos(self,Negocio):
+        if Negocio == "YMS":
+            return "public"
 class Encriptar:
     def __init__(self):
         return;

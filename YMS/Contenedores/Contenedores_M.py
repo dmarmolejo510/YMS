@@ -7,7 +7,7 @@ import os
 from Componentes import LibDM_2023
 Url = ""
 fernet = Fernet(LibDM_2023.Compartido().Dame_K2())
-BD_Nombre = "public"
+BD_Nombre = LibDM_2023.Compartido().Dame_Base_Datos("YMS")
 Bandera_Dock = "YMS"
 def Inicio():
     if "K" in session.keys():
@@ -369,8 +369,14 @@ def Regresar(Datos):
         """)
         for D in DOCK_DISPONIBLES:
             Dock.append(str(D["cd_dock"]))
-
-        for H in DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas_moviemiento WHERE cch_master = '"+str(Datos["ID"])+"' ORDER BY cch_fecha_hora"):
+        Index = 0
+        Historico_A = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas_moviemiento WHERE cch_master = '"+str(Datos["ID"])+"' ORDER BY cch_fecha_hora")
+        for H in Historico_A:
+            Opciones_Mover = "<div class='text-center'><button class='btn btn-primary btn-sm p-0 ps-1 pe-1' onclick='Regresa_Guardar("+str(Datos["ID"])+",\""+str(H["cch_fecha_hora"].strftime("%Y-%m-%d %H:%M:%S"))+"\")'><i class='mdi mdi-forward'></i></button</div>"
+            if "ASIGNAR" in str(H["cch_movimiento"]) or "ERROR DE INGRESO" in str(H["cch_movimiento"]) or "REGRESO" in str(H["cch_movimiento"]):
+               Opciones_Mover = ""
+            if Index == len(Historico_A)-1:
+                Opciones_Mover = ""
             Info_Actual = json.loads(str(H["cch_informacion_actual"]))
             Usr_Aqui = None
             for U in Usuarios:
@@ -411,12 +417,13 @@ def Regresar(Datos):
             if "Sello Rojo" in Info_Actual.keys():
                 Sello = "<span style='color:#ff0000'><i class='mdi mdi-label'></i></span> "+str(Info_Actual["Sello Temporal"])
             if Dock_Aqui is None:
-                Historico.append({"Fecha":H["cch_fecha_hora"].strftime("%Y-%m-%d %H:%M:%S"),"Usuario":str(Usuario),"Ubicacion":str(Ubicacion),"Carrier":Info_Actual["Carrier"],"Tipo":Tipo_Gen,"Estado":Estado,"Movimiento":str(H["cch_movimiento"]),"Archivos":Archivos,"Sello":Sello,'Move':"<div class='text-center'><button class='btn btn-primary btn-sm p-0 ps-1 pe-1' onclick='Regresa_Guardar("+str(Datos["ID"])+",\""+str(H["cch_fecha_hora"].strftime("%Y-%m-%d %H:%M:%S"))+"\")'><i class='mdi mdi-forward'></i></button</div>"})
+                Historico.append({"Fecha":H["cch_fecha_hora"].strftime("%Y-%m-%d %H:%M:%S"),"Usuario":str(Usuario),"Ubicacion":str(Ubicacion),"Carrier":Info_Actual["Carrier"],"Tipo":Tipo_Gen,"Estado":Estado,"Movimiento":str(H["cch_movimiento"]),"Archivos":Archivos,"Sello":Sello,'Move':Opciones_Mover})
             else:
                 if str(Dock_Aqui) in Dock:
-                    Historico.append({"Fecha":H["cch_fecha_hora"].strftime("%Y-%m-%d %H:%M:%S"),"Usuario":str(Usuario),"Ubicacion":str(Ubicacion),"Carrier":Info_Actual["Carrier"],"Tipo":Tipo_Gen,"Estado":Estado,"Movimiento":str(H["cch_movimiento"]),"Archivos":Archivos,"Sello":Sello,'Move':"<div class='text-center'><button class='btn btn-primary btn-sm p-0 ps-1 pe-1' onclick='Regresa_Guardar("+str(Datos["ID"])+",\""+str(H["cch_fecha_hora"].strftime("%Y-%m-%d %H:%M:%S"))+"\")'><i class='mdi mdi-forward'></i></button</div>"})
+                    Historico.append({"Fecha":H["cch_fecha_hora"].strftime("%Y-%m-%d %H:%M:%S"),"Usuario":str(Usuario),"Ubicacion":str(Ubicacion),"Carrier":Info_Actual["Carrier"],"Tipo":Tipo_Gen,"Estado":Estado,"Movimiento":str(H["cch_movimiento"]),"Archivos":Archivos,"Sello":Sello,'Move':Opciones_Mover})
                 else:
                     Historico.append({"Fecha":H["cch_fecha_hora"].strftime("%Y-%m-%d %H:%M:%S"),"Usuario":str(Usuario),"Ubicacion":str(Ubicacion),"Carrier":Info_Actual["Carrier"],"Tipo":Tipo_Gen,"Estado":Estado,"Movimiento":str(H["cch_movimiento"]),"Archivos":Archivos,"Sello":Sello,'Move':""})
+            Index += 1
         Resultado["Contenido"] += """
         <div id='Tabla_Historico' class='border border-dark bg-dark-subtle'></div>
         <script>

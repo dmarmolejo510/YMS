@@ -9,7 +9,7 @@ from Componentes import LibDM_2023
 Url = ""
 fernet = Fernet(LibDM_2023.Compartido().Dame_K2())
 Menu_Activo = "YMS"
-BaseDatos = "public"
+BaseDatos = LibDM_2023.Compartido().Dame_Base_Datos("YMS")
 Bandera_Docks = "YMS"
 def Inicio():
     fernet = Fernet(LibDM_2023.Compartido().Dame_K2())

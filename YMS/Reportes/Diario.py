@@ -7,7 +7,7 @@ import os
 from Componentes import LibDM_2023
 Url = ""
 fernet = Fernet(LibDM_2023.Compartido().Dame_K2())
-BD_Nombre = "public"
+BD_Nombre = LibDM_2023.Compartido().Dame_Base_Datos("YMS")
 Bandera_Dock = "YMS"
 def Inicio():
     if "K" in session.keys():

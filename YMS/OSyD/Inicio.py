@@ -12,7 +12,7 @@ from openpyxl.styles.borders import Border, Side
 from openpyxl.styles import Alignment
 from openpyxl.styles import Font
 from openpyxl.styles import PatternFill,colors
-BD_Nombre = "public"
+BD_Nombre = LibDM_2023.Compartido().Dame_Base_Datos("YMS")
 Bandera_Dock = "YMS"
 fernet = Fernet(LibDM_2023.Compartido().Dame_K2())
 

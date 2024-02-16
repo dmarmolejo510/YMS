@@ -7,7 +7,7 @@ import os
 from Componentes import LibDM_2023
 Url = ""
 fernet = Fernet(LibDM_2023.Compartido().Dame_K2())
-BD_Nombre = "public"
+BD_Nombre = LibDM_2023.Compartido().Dame_Base_Datos("YMS")
 Bandera_Dock = "YMS"
 def Inicio():
     if "K" in session.keys():
@@ -246,20 +246,20 @@ def Dock(Datos):
 
             function Mover_a_Dock(ID,Contenedor,Dock){
                 Mostrar_Ventana_Cargando(false);
-                $("#Vent_1").find(".modal-title").html("<i class='mdi mdi-history'></i> Mover ["+Contenedor+"] al Dock ["+Dock+"]");
-                $("#Vent_1").removeClass('modal-xl modal-lg modal-sm').addClass('modal-xl');
+                $("#Vent_2").find(".modal-title").html("<i class='mdi mdi-history'></i> Mover ["+Contenedor+"] al Dock ["+Dock+"]");
+                $("#Vent_2").removeClass('modal-xl modal-lg modal-sm');
                 var parametros = {"Fun":'"""+str(fernet.encrypt("Mover_a_Dock".encode()).decode("utf-8"))+"""',"ID":ID,"Dock":Dock};
                 $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
                     success:  function (response)
                     {
                         var Resultado = JSON.parse(response);
-                        $("#Vent_1").modal("show").find(".modal-body").html(Resultado["Contenido"]);
-                        $("#Vent_1").find(".modal-footer").find("button").attr('onclick',"$('#Vent_1').modal('hide'); delete table; ")
+                        $("#Vent_2").modal("show").find(".modal-body").html(Resultado["Contenido"]);
+                        $("#Vent_2").find(".modal-footer").find("button").attr('onclick',"$('#Vent_2').modal('hide'); delete table; ")
                         swal.close();
                     },
                     error: function (jqXHR, textStatus, errorThrown )
                     {
-                        $("#Vent_1").modal("show").find(".modal-body").html("<i class='mdi mdi-alert'></i> "+ textStatus);
+                        $("#Vent_2").modal("show").find(".modal-body").html("<i class='mdi mdi-alert'></i> "+ textStatus);
                         swal.close();
                     }
                 });
@@ -303,6 +303,7 @@ def Mover_a_Dock(Datos):
                                     win1.focus();
                                 }
                                 $("#Vent_1").modal("hide");
+                                $("#Vent_2").modal("hide");
                                 Mensaje(2);
                                 Llamar_Funcion(\""""+str(request.url)+"""\");
                             }
