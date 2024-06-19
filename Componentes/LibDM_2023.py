@@ -26,7 +26,7 @@ class DataBase:
         return;
     def Instruccion(self,Query):
         try:
-            conn = psycopg2.connect("postgres://portal_grdv_user:BaIupfqBcJ7MgbQbjMoKGBKTNM6lUmQN@dpg-cn3ehsf109ks73epklng-a/portal_grdv",database="portal_grdv", user="portal_grdv_user", password="BaIupfqBcJ7MgbQbjMoKGBKTNM6lUmQN")
+            conn = psycopg2.connect("postgres://portal_dz0m_user:E8HYp5RbPqW4afRL9o8xauoiPME5LlbN@dpg-cpplpnuehbks73c52cq0-a/portal_dz0m",database="portal_dz0m", user="portal_dz0m_user", password="E8HYp5RbPqW4afRL9o8xauoiPME5LlbN")
             cursor1=conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
             cursor1.execute(Query)
             conn.commit()
@@ -81,7 +81,7 @@ class DataBase:
         try:
             global ID_User
             ArrRes = []
-            conn = psycopg2.connect("postgres://portal_grdv_user:BaIupfqBcJ7MgbQbjMoKGBKTNM6lUmQN@dpg-cn3ehsf109ks73epklng-a/portal_grdv",database="portal_grdv", user="portal_grdv_user", password="BaIupfqBcJ7MgbQbjMoKGBKTNM6lUmQN")
+            conn = psycopg2.connect("postgres://portal_dz0m_user:E8HYp5RbPqW4afRL9o8xauoiPME5LlbN@dpg-cpplpnuehbks73c52cq0-a/portal_dz0m",database="portal_dz0m", user="portal_dz0m_user", password="E8HYp5RbPqW4afRL9o8xauoiPME5LlbN")
             cursor1=conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
             cursor1.execute(Query)
             ArrRes = cursor1.fetchall()
@@ -166,7 +166,7 @@ class DataBase:
             return "Error : [ " + str(sys.exc_info()) + "]"
     def Dame_Nombre_IDEmpleado(self,idEmpleado):
         Res = "-"
-        for Emp in self.Get_Dato("ELECT \"Nombre\" FROM public.cuser where cusrid = '"+str(idEmpleado)+"'"):
+        for Emp in self.Get_Dato("SELECT \"Nombre\" FROM public.cuser where cusrid = '"+str(idEmpleado)+"'"):
             Res = str(Emp["Nombre"])
         return (Res)
     def Dame_Nombre_IDUsuario(self,IDUsuario):
