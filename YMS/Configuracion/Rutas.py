@@ -133,7 +133,7 @@ def Inicio_OLD():
 
 
 
-def Inicio(Datos):
+def Inicio():
     DB = LibDM_2023.DataBase()
     Cur = "content-type: text/html;charset=ISO-8859-1\n\n "
     Resultado = {"Contenido":"","Estado":0}
