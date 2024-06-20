@@ -4,3 +4,4 @@ psycopg2
 cryptography
 qrcode
 openpyxl
+mysqlclient==2.0.3
