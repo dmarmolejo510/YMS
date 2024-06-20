@@ -2054,7 +2054,7 @@ class Menu:
                                 "Reporte":{"Icono":"mdi mdi-projector-screen","Link":"/YMS/OutBound/Report","P":"Yard","Fun":"Inicio","ID":1501}
                             }
                         },
-                        "OS&D":{"Icono":"mdi mdi-alert","Link":"/YMS/OSyD","Fun":"Inicio","ID":1508},
+                        #"OS&D":{"Icono":"mdi mdi-alert","Link":"/YMS/OSyD","Fun":"Inicio","ID":1508},
                         "Reports":{
                             "Icono":"mdi mdi-book",
                             "Items":{
