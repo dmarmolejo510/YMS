@@ -2067,10 +2067,10 @@ class Menu:
                         "Configuration":{
                             "Icono":"mdi mdi-cog",
                             "Items":{
-                                "Suppliers Master":{"Icono":"mdi mdi-card-bulleted","Link":"/YMS/Conf/Suppliers","P":"Yard","Fun":"Inicio","ID":1505},
+                                #"Suppliers Master":{"Icono":"mdi mdi-card-bulleted","Link":"/YMS/Conf/Suppliers","P":"Yard","Fun":"Inicio","ID":1505},
                                 "Route Master":{"Icono":"mdi mdi-swap-vertical-variant","Link":"/YMS/Conf/Routes","P":"Yard","Fun":"Inicio","ID":1506},
                                 "Docks Master":{"Icono":"mdi mdi-sign-caution","Link":"/YMS/Conf/Docks","P":"Yard","Fun":"Inicio","ID":1507},
-                                "Destinatio Master":{"Icono":"mdi mdi-card-bulleted","Link":"/YMS/Conf/Destination","P":"Yard","Fun":"Inicio","ID":1507},
+                                #"Destinatio Master":{"Icono":"mdi mdi-card-bulleted","Link":"/YMS/Conf/Destination","P":"Yard","Fun":"Inicio","ID":1507},
                                 "Carrier Master":{"Icono":"mdi mdi-card-bulleted","Link":"/YMS/Conf/Carrier","P":"Yard","Fun":"Inicio","ID":1507}
                             }
                         },
