@@ -259,7 +259,7 @@ def Inicio():
                         else:
                             Concentrado["MilkRuns"][Niveles["MilkRun"][R]["UNION"]]["CUTTIME_OUT"] = ""
 
-        Resultado["Contenido"] += "<div class='container'><div class='h2 fw-lighter mt-1 mb-1 text-center border-bottom'><i class='mdi mdi-card-bulleted'></i> Route Master</div>"
+        Cur += "<div class='container'><div class='h2 fw-lighter mt-1 mb-1 text-center border-bottom'><i class='mdi mdi-card-bulleted'></i> Route Master</div>"
         Informacion = []
         for Tipo in Concentrado.keys():
             aux = {"Tipo":str(Tipo),"_children":[]}
@@ -401,7 +401,7 @@ def Inicio():
         DUNS_DB = {} 
         for Prov in DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".cproveedores WHERE crilcpr_activo = '1' ORDER BY crilcpr_codigo"):
             DUNS_DB[str(Prov["crilcpr_codigo"])] = str(Prov["crilcpr_codigo"])+" - "+str(Prov["crilcpr_nombre"])
-        Resultado["Contenido"] += """
+        Cur += """
         <div id='Tabla_Conf' class='border border-dark bg-dark-subtle'></div>
         <script>
             var table = new Tabulator("#Tabla_Conf", {
@@ -616,8 +616,8 @@ def Inicio():
         </script>
         """
     except:
-         Resultado["Contenido"] = str(sys.exc_info())
-    Cur += json.dumps(Resultado)
+         Cur = str(sys.exc_info())
+    #Cur += json.dumps(Resultado)
     return Cur
 def Guardar_Cambios(Datos):
     DB = LibDM_2023.DataBase()
