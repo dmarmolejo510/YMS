@@ -128,7 +128,7 @@ def Inicio():
 
 
 
-def Inicio():
+def Inicio_old():
     DB = LibDM_2023.DataBase()
     Cur = ""
     Resultado = {"Contenido":"","Estado":0}
