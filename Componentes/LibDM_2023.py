@@ -189,8 +189,8 @@ class Compartido:
                 });
             }
             $(window).on('beforeunload', function(){
-                alert("ok");
-            });
+
+                        });
             $(window).on('resize', function(){
                 $("body").css('padding-top',$("#Menu_Top").height());
                 $("#Menu_Left").css('top',$("#Menu_Top").height());
