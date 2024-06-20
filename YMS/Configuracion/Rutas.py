@@ -135,7 +135,7 @@ def Inicio_OLD():
 
 def Inicio():
     DB = LibDM_2023.DataBase()
-    Cur = "content-type: text/html;charset=ISO-8859-1\n\n "
+    Cur = ""
     Resultado = {"Contenido":"","Estado":0}
     try:
         Rutas = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".crutas WHERE cr_tipo != 'Empty'")
@@ -618,10 +618,10 @@ def Inicio():
     except:
          Resultado["Contenido"] = str(sys.exc_info())
     Cur += json.dumps(Resultado)
-    print(Cur)
+    return Cur
 def Guardar_Cambios(Datos):
     DB = LibDM_2023.DataBase()
-    Cur = "content-type: text/html;charset=ISO-8859-1\n\n "
+    Cur = ""
     Resultado = {"Contenido":"","Estado":0}
     try:
         Info_Datos = json.loads(str(Datos["Info"]))
@@ -763,11 +763,11 @@ def Guardar_Cambios(Datos):
     except:
         Resultado["Contenido"] = str(sys.exc_info())
     Cur += json.dumps(Resultado)
-    print(Cur)
+    return Cur
 def Agregar_Nuevo(Datos):
     DB = LibDM_2023.DataBase()
     Compartido_2023 = LibDM_2023.Compartido()
-    Cur = "content-type: text/html;charset=ISO-8859-1\n\n "
+    Cur = ""
     Resultado = {"Contenido":"","Estado":0}
     try:
         Formulario = {"Col":"12", "Campos": [],"Clase": "Agregar_Nuevo" }
@@ -814,10 +814,10 @@ def Agregar_Nuevo(Datos):
     except:
         Resultado["Contenido"] = str(sys.exc_info())
     Cur += json.dumps(Resultado)
-    print(Cur)
+    return Cur
 def Agregar_Nuevo_Guardar(Datos):
     DB = LibDM_2023.DataBase()
-    Cur = "content-type: text/html;charset=ISO-8859-1\n\n "
+    Cur = ""
     Resultado = {"Contenido":"","Estado":0}
     try:
         Info_Datos = json.loads(str(Datos["Info"]))
@@ -927,11 +927,11 @@ def Agregar_Nuevo_Guardar(Datos):
     except:
         Resultado["Contenido"] = str(sys.exc_info())
     Cur += json.dumps(Resultado)
-    print(Cur)
+    return Cur
 def Eliminar_Ruta(Datos):
     DB = LibDM_2023.DataBase()
     Compartido_2023 = LibDM_2023.Compartido()
-    Cur = "content-type: text/html;charset=ISO-8859-1\n\n "
+    Cur = ""
     Resultado = {"Contenido":"","Estado":0}
     try:
         Resultado["Contenido"] += str(Datos)
@@ -978,7 +978,7 @@ def Eliminar_Ruta(Datos):
     except:
         Resultado["Contenido"] = str(sys.exc_info())
     Cur += json.dumps(Resultado)
-    print(Cur)
+    return Cur
 
 
 
