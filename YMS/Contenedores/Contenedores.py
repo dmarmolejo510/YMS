@@ -1309,7 +1309,8 @@ def Modificar_A(Datos):
                                     }
                                     $("#Vent_1").modal("hide");
                                     Mensaje(2);
-                                    Llamar_Funcion(\""""+str(request.url)+"""\");
+                                    location.reload();
+                                    //Llamar_Funcion(\""""+str(request.url)+"""\");
                                 }
                                 else
                                     Mensaje(0,Resultado["Contenido"]);
@@ -1346,7 +1347,8 @@ def Modificar_A(Datos):
                                     }
                                     $("#Vent_1").modal("hide");
                                     Mensaje(2);
-                                    Llamar_Funcion(\""""+str(request.url)+"""\");
+                                    location.reload();
+                                    //Llamar_Funcion(\""""+str(request.url)+"""\");
                                 }
                                 else
                                     Mensaje(0,Resultado["Contenido"]);
