@@ -13,7 +13,7 @@ from http import cookies
 from cryptography.fernet import Fernet
 sys.dont_write_bytecode = True
 
-class BaseDatos:
+class DataBase:
     ip = "mysql-3jox"
     #ip = "localhost"
     Us = "unversal"
