@@ -359,7 +359,7 @@ def Regresar(Datos):
     Resultado = {"Contenido":"","Estado":0}
     try:
         Historico = []
-        Usuarios = DB.Get_Dato("SELECT cusrid,\"Nombre\" FROM public.cuser")
+        Usuarios = DB.Get_Dato("SELECT cusrid,\"Nombre\" FROM universal_yms.cuser")
 
         Dock = []
         DOCK_DISPONIBLES = DB.Get_Dato("""

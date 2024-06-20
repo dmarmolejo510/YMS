@@ -1648,7 +1648,7 @@ def Ver_Historico(Datos):
     Resultado = {"Contenido":"","Estado":0}
     try:
         Historico = []
-        Usuarios = DB.Get_Dato("SELECT cusrid,\"Nombre\" FROM public.cuser")
+        Usuarios = DB.Get_Dato("SELECT cusrid,\"Nombre\" FROM universal_yms.cuser")
         for H in DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas_moviemiento WHERE cch_master = '"+str(Datos["ID"])+"' ORDER BY cch_fecha_hora"):
             Info_Actual = json.loads(str(H["cch_informacion_actual"]))
             Usr_Aqui = None

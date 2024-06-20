@@ -169,7 +169,7 @@ def Entrar(Datos):
     DB = LibDM_2023.DataBase()
     Resultado = {"Estado":0, "Contenido":""}
     try:
-        Res = DB.Get_Dato("SELECT * FROM public.cuser WHERE UPPER(cususuario) = '"+str(Datos["Usuario"]).upper()+"' or UPPER(cuscorreo) = '"+str(Datos["Usuario"]).upper()+"' AND cpss_2 = '"+str(hashlib.md5(str(Datos["Pass"]).encode('utf-8')).hexdigest())+"'")
+        Res = DB.Get_Dato("SELECT * FROM universal_yms.cuser WHERE UPPER(cususuario) = '"+str(Datos["Usuario"]).upper()+"' or UPPER(cuscorreo) = '"+str(Datos["Usuario"]).upper()+"' AND cpss_2 = '"+str(hashlib.md5(str(Datos["Pass"]).encode('utf-8')).hexdigest())+"'")
         if len(Res) > 0:
             Resultado["Estado"] = 1
             session["IDu"] = str(Res[0]["cusrid"])

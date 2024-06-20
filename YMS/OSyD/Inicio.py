@@ -915,7 +915,7 @@ def Completar_Ruteo(Datos):
     try:
 
 
-        Info_Gen = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".cosyd inner join "+str(BD_Nombre)+".cosyd_historico on  public.cosyd.cosyd_id = public.cosyd_historico.cosyd_master WHERE  cosyd_id = '"+str(Datos["ID"])+"' ")[0]
+        Info_Gen = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".cosyd inner join "+str(BD_Nombre)+".cosyd_historico on  universal_yms.cosyd.cosyd_id = universal_yms.cosyd_historico.cosyd_master WHERE  cosyd_id = '"+str(Datos["ID"])+"' ")[0]
 
         Formulario_2 = {"Col":"", "Campos": [],"Clase": "Formulario_2" }
         Formulario_2["Campos"].append({"tipo":"texto","campo":"Usuario","titulo":"Usuario","editable":False,"Requerido":1,"min":1,"max":50,"valor":DB.Dame_Nombre_IDUsuario(Info_Gen["cosyd_usuario"]),"Col":12})
@@ -1142,7 +1142,7 @@ def Modificar_Ruteo(Datos):
     try:
         Formulario = {"Col":"", "Campos": [],"Clase": "Formato" }
 
-        Info_Gen = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".cosyd inner join "+str(BD_Nombre)+".cosyd_historico on public.cosyd.cosyd_id = public.cosyd_historico.cosyd_master  WHERE  cosyd_id = '"+str(Datos["ID"])+"' ")[0]
+        Info_Gen = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".cosyd inner join "+str(BD_Nombre)+".cosyd_historico on universal_yms.cosyd.cosyd_id = universal_yms.cosyd_historico.cosyd_master  WHERE  cosyd_id = '"+str(Datos["ID"])+"' ")[0]
 
         Formulario["Campos"].append({"tipo":"texto","campo":"Ruta","titulo":"Route","editable":False,"Requerido":1,"min":1,"max":20,"valor":Info_Gen["cosyd_ruta"],"Col":6})
         Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha de Rura","titulo":"Arrival date of the route","Requerido":1,"Col":6,"valor":Info_Gen["cosyd_ruta_fecha_hora"],"editable":False})

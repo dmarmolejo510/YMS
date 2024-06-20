@@ -79,171 +79,6 @@ class BaseDatos:
         except :
             return "Error : [ " + str(sys.exc_info()) + "]"
         
-# class DataBase:
-#     ip_PPS = "192.168.83.50"
-#     Us_PPS = "root"
-#     Ps_PPS = "verycool"
-#     Base_PPS = "produccion"
-
-#     ip = "10.4.7.219"
-#     Us = "root"
-#     Ps = "verycool"
-#     Base = "portal"
-#     def __init__(self):
-#         return;
-#     def Instruccion(self,Query):
-#         try:
-#             conn = psycopg2.connect("postgres://portal_dz0m_user:E8HYp5RbPqW4afRL9o8xauoiPME5LlbN@dpg-cpplpnuehbks73c52cq0-a/portal_dz0m",database="portal_dz0m", user="portal_dz0m_user", password="E8HYp5RbPqW4afRL9o8xauoiPME5LlbN")
-#             cursor1=conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
-#             cursor1.execute(Query)
-#             conn.commit()
-#             conn.close()
-#             # db = MySQLdb.connect(self.ip,self.Us,self.Ps,self.Base, charset='utf8')
-#             # cursor = db.cursor()
-#             # Quety2 = "SET SQL_SAFE_UPDATES = 0;"
-#             # cursor.execute(Quety2)
-#             # Quety2 = Query
-#             # cursor.execute(Quety2)
-#             # db.commit()
-#             # db.close()
-#             return ""
-#         except :
-#             return "Error : [ " + str(sys.exc_info()) + "]"
-#     def Instruccion_BITS(self,Query,Bits1,Bits2,Bits3):
-#         try:
-#             # db = MySQLdb.connect(self.ip,self.Us,self.Ps,self.Base, charset='utf8')
-#             # cursor = db.cursor()
-#             # Quety2 = "SET SQL_SAFE_UPDATES = 0;";
-#             # cursor.execute(Quety2)
-#             # Quety2 = Query
-#             # if Bits1 is None:
-#             #     cursor.execute(Quety2)
-#             # else:
-#             #     if Bits2 is None:
-#             #         cursor.execute(Quety2,(Bits1,))
-#             #     else:
-#             #         if Bits3 is None:
-#             #             cursor.execute(Quety2,(Bits1,Bits2,))
-#             #         else:
-#             #             cursor.execute(Quety2,(Bits1,Bits2,Bits3,))
-#             # db.commit()
-#             # db.close()
-#             return ""
-#         except :
-#             return "Error : [ " + str(sys.exc_info()) + "]"
-#     def Instruccion_2(self,Query):
-#         try:
-#             # db = MySQLdb.connect(self.ip,self.Us,self.Ps,self.Base, charset='utf8')
-#             # cursor = db.cursor()
-#             # Query = "SET SQL_SAFE_UPDATES = 0;"+Query
-#             # for Q in Query.split(";"):
-#             #     if Q.strip() != "":
-#             #         cursor.execute(Q)
-#             # db.commit()
-#             # db.close()
-#             return ""
-#         except :
-#             return "Error : [ " + str(sys.exc_info()) + "]"
-#     def Get_Dato(self,Query):
-#         try:
-#             global ID_User
-#             ArrRes = []
-#             conn = psycopg2.connect("postgres://portal_dz0m_user:E8HYp5RbPqW4afRL9o8xauoiPME5LlbN@dpg-cpplpnuehbks73c52cq0-a/portal_dz0m",database="portal_dz0m", user="portal_dz0m_user", password="E8HYp5RbPqW4afRL9o8xauoiPME5LlbN")
-#             cursor1=conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
-#             cursor1.execute(Query)
-#             ArrRes = cursor1.fetchall()
-#             for A in ArrRes:
-#                 for key,value in A.items():
-#                     if str(key) != "Foto" and str(key) != "cArtFoto" and str(key) != "cVisIdentificacion" and str(key) != "cVisIDoctoMSS" :
-#                         if type(A[key]) is bytes:
-#                             try:
-#                                 #A[key] =  A[key].decode("utf-8")
-#                                 A[key] =  A[key].decode("unicode_escape")
-#                             except :
-#                                 A[key] =  A[key]
-#             conn.close()
-
-#             # db = MySQLdb.connect(self.ip,self.Us,self.Ps,self.Base, charset='utf8')
-#             # cursor = db.cursor(MySQLdb.cursors.DictCursor)
-#             # Quety2 = Query
-#             # #Quety2 = "#---\n\r/*Usuario:"+str(self.Dame_Nombre(ID_User))+"*/" + str(Quety2);
-#             # cursor.execute(Quety2)
-#             # ArrRes = cursor.fetchall()
-#             # for A in ArrRes:
-#             #     for key,value in A.items():
-#             #         if str(key) != "Foto" and str(key) != "cArtFoto" and str(key) != "cVisIdentificacion" and str(key) != "cVisIDoctoMSS" :
-#             #             if type(A[key]) is bytes:
-#             #                 try:
-#             #                     #A[key] =  A[key].decode("utf-8")
-#             #                     A[key] =  A[key].decode("unicode_escape")
-#             #                 except :
-#             #                     A[key] =  A[key]
-#             # db.close()
-#             return ArrRes
-#         except :
-#             return "Error : [ " + str(sys.exc_info()) + "]"
-#     def Get_Dato_Crudo(self,Query):
-#         try:
-#             global ID_User
-#             ArrRes = []
-#             # db = MySQLdb.connect(self.ip,self.Us,self.Ps,self.Base, charset='utf8')
-#             # cursor = db.cursor(MySQLdb.cursors.DictCursor)
-#             # Quety2 = Query
-#             # #Quety2 = "#---\n\r/*Usuario:"+str(self.Dame_Nombre(ID_User))+"*/" + str(Quety2);
-#             # cursor.execute(Quety2)
-#             # ArrRes = cursor.fetchall()
-#             # db.close()
-#             return ArrRes
-#         except :
-#             return "Error : [ " + str(sys.exc_info()) + "]"
-#     def Get_Dato_70(self,Query):
-#         try:
-#             global ID_User
-#             ArrRes = []
-#             # db = MySQLdb.connect(self.ip_PPS,self.Us_PPS,self.Ps_PPS,self.Base_PPS, charset='utf8')
-#             # cursor = db.cursor(MySQLdb.cursors.DictCursor)
-#             # Quety2 = Query
-#             # #Quety2 = "#---\n\r/*Usuario:"+str(self.Dame_Nombre(ID_User))+"*/" + str(Quety2);
-#             # cursor.execute(Quety2)
-#             # ArrRes = cursor.fetchall()
-#             # for A in ArrRes:
-#             #     for key,value in A.items():
-#             #         if str(key) != "Foto" and str(key) != "cArtFoto":
-#             #             if type(A[key]) is bytes:
-#             #                 try:
-#             #                     A[key] =  A[key].decode("utf-8")
-#             #                 except :
-#             #                     A[key] =  A[key]
-#             # db.close()
-#             return ArrRes
-#         except :
-#             return "Error : [ " + str(sys.exc_info()) + "]"
-#     def Instruccion_70(self,Query):
-#         try:
-#             # db = MySQLdb.connect(self.ip_PPS,self.Us_PPS,self.Ps_PPS,self.Base_PPS, charset='utf8')
-#             # cursor = db.cursor()
-#             # Quety2 = "SET SQL_SAFE_UPDATES = 0;";
-#             # cursor.execute(Quety2)
-#             # Quety2 = Query
-#             # cursor.execute(Quety2)
-#             # db.commit()
-#             # db.close()
-#             return ""
-#         except :
-#             return "Error : [ " + str(sys.exc_info()) + "]"
-#     def Dame_Nombre_IDEmpleado(self,idEmpleado):
-#         Res = "-"
-#         for Emp in self.Get_Dato("SELECT \"Nombre\" FROM public.cuser where cusrid = '"+str(idEmpleado)+"'"):
-#             Res = str(Emp["Nombre"])
-#         return (Res)
-#     def Dame_Nombre_IDUsuario(self,IDUsuario):
-#         Res = "-"
-#         for Emp in self.Get_Dato("SELECT \"Nombre\" FROM public.cuser where cusrid = '"+str(IDUsuario)+"'"):
-#             Res = str(Emp["Nombre"])
-#         return (Res)
-#     def Dame_Hora(self):
-#         return datetime.now();
-#         #return datetime.now() - timedelta(hours=1);
 class Compartido:
     def __init__(self):
         return;
@@ -2056,7 +1891,7 @@ class Compartido:
         return "Kz2P2Oih49uGkKV4LHrpIr-65WHgy8yFuaBvQ75boLE="
     def Dame_Base_Datos(self,Negocio):
         if Negocio == "YMS":
-            return "public"
+            return "universal_yms"
 class Encriptar:
     def __init__(self):
         return;
@@ -2113,7 +1948,7 @@ class Menu:
     def Get_Menu(self,Raiz,ID_User=None):
         DB = DataBase()
         Permisos = []
-        Info_User = DB.Get_Dato("select * FROM public.cuser USR where USR.cusrid = '"+str(ID_User)+"'")
+        Info_User = DB.Get_Dato("select * FROM universal_yms.cuser USR where USR.cusrid = '"+str(ID_User)+"'")
         # if len(Info_User) > 0:
         #     Permisos = Info_User[0]["cpermisos_temp_portal2"].split(",")
         Menu = {}
@@ -2269,7 +2104,7 @@ class Menu:
         return Menu
     def Menu(self,Activo,Raiz,ID_User):
         DB = DataBase()
-        Info_User = DB.Get_Dato("select * FROM public.cuser USR where USR.cusrid = '"+str(ID_User)+"'")[0]
+        Info_User = DB.Get_Dato("select * FROM universal_yms.cuser USR where USR.cusrid = '"+str(ID_User)+"'")[0]
         #Info_User = DB.Get_Dato("select EMP.IDEmpleado,EMP.Nombre,PER.cpu_permisos  FROM portal.cuser USR inner join linc.empleados EMP on USR.cusidempleado = EMP.IDEmpleado inner join portal.cpermisos_usuario PER on PER.cpu_id = USR.cgrupo_permisos where USR.cusrid = '"+str(ID_User)+"'")[0]
         Menu = self.Get_Menu(Raiz,str(ID_User))
         Res = ""
