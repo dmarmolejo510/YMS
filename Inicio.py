@@ -66,11 +66,11 @@ def Entrar(Datos):
     Resultado = {"Estado":0, "Contenido":""}
     try:
         Res = DB.Get_Dato("SELECT * FROM universal_yms.cuser WHERE (UPPER(cususuario) = '"+str(Datos["Usr"]).upper()+"' or UPPER(cuscorreo) = '"+str(Datos["Usr"]).upper()+"') AND cpss_2 = '"+str(hashlib.md5(str(Datos["Pass"]).encode('utf-8')).hexdigest())+"'")
-        if len(Res) > 0:
-            Resultado["Estado"] = 1
-            session["IDu"] = str(Res[0]["cusrid"])
-            session["K"] = str(Fernet.generate_key().decode())
-        #Resultado["Contenido"] = str(Datos)
+        # if len(Res) > 0:
+        #     Resultado["Estado"] = 1
+        #     session["IDu"] = str(Res[0]["cusrid"])
+        #     session["K"] = str(Fernet.generate_key().decode())
+        Resultado["Contenido"] = str(Res)
     except:
         Resultado["Contenido"] = str(sys.exc_info())
     Cur += json.dumps(Resultado)
