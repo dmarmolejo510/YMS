@@ -16,7 +16,7 @@ sys.dont_write_bytecode = True
 class DataBase:
     ip = "mysql-3jox"
     #ip = "localhost"
-    Us = "unversal"
+    Us = "universal"
     Ps = "universal"
     Base = "universal_yms"
     def __init__(self):
