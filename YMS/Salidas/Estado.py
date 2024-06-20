@@ -127,9 +127,16 @@ def Inicio():
             
             Cut_Time = datetime.strptime(str(Info_Ahora["Fecha_Salida"])+" 23:00:00","%Y-%m-%d %H:%M:%S")
 
-            if DB.Dame_Hora() > Cut_Time:
+            # if DB.Dame_Hora() > Cut_Time:
+            #     Contenido += "<td class='align-middle text-center' style='background:#d70000;color:#ffffff;'>"+str(Cut_Time.strftime("%m-%d %H:%M"))+"</td>"
+            # elif DB.Dame_Hora() > Cut_Time - timedelta(hours=5):
+            #     Contenido += "<td class='align-middle text-center' style='background:#ffd255;color:#000000;'>"+str(Cut_Time.strftime("%m-%d %H:%M"))+"</td>"
+            # else:
+            #     Contenido += "<td class='align-middle text-center' style='background:#8dff55;color:#000000;'>"+str(Cut_Time.strftime("%m-%d %H:%M"))+"</td>"
+            
+            if datetime.now() > Cut_Time:
                 Contenido += "<td class='align-middle text-center' style='background:#d70000;color:#ffffff;'>"+str(Cut_Time.strftime("%m-%d %H:%M"))+"</td>"
-            elif DB.Dame_Hora() > Cut_Time - timedelta(hours=5):
+            elif datetime.now() > Cut_Time - timedelta(hours=5):
                 Contenido += "<td class='align-middle text-center' style='background:#ffd255;color:#000000;'>"+str(Cut_Time.strftime("%m-%d %H:%M"))+"</td>"
             else:
                 Contenido += "<td class='align-middle text-center' style='background:#8dff55;color:#000000;'>"+str(Cut_Time.strftime("%m-%d %H:%M"))+"</td>"
