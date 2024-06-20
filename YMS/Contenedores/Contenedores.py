@@ -746,9 +746,9 @@ def Modificar(Datos):
         De_Donde = Caja["cc_ubicacion"]
         Formulario = {"Col":"12", "Campos": [],"Clase": "Asignar" }
         Formulario["Campos"].append({"tipo":"texto","campo":"Container","titulo":"Container","Requerido":1,"min":1,"max":150,"valor":str(Caja["cc_contenedor"])})
-        Formulario["Campos"].append({"tipo":"seleccion","campo":"Carrier","titulo":"Carrier","Requerido":1,"Tipo_Opciones":"Query","Opciones":"SELECT cca_nombre as Valor, cca_nombre as Texto FROM "+str(BD_Nombre)+".ccarrier WHERE cca_activo = '1'","valor":str(Info_Actual["Carrier"]),"Col":12})
+        Formulario["Campos"].append({"tipo":"seleccion","campo":"Carrier","titulo":"Carrier","Requerido":1,"Tipo_Opciones":"Query","Opciones":"SELECT cca_nombre as valor, cca_nombre as texto FROM "+str(BD_Nombre)+".ccarrier WHERE cca_activo = '1'","valor":str(Info_Actual["Carrier"]),"Col":12})
         Formulario["Campos"].append({"tipo":"seleccion","id":"Donde_Nuevo","campo":"Donde","titulo":"Location","Requerido":1,"Tipo_Opciones":"Opciones","Opciones":["Patio","Dock"],"valor":str(De_Donde),"Col":12})
-        Formulario["Campos"].append({"tipo":"seleccion","id":"Tipo_Nuevo","campo":"Tipo","titulo":"Type","Requerido":1,"Tipo_Opciones":"Query","Opciones":"SELECT cr_tipo as Valor,cr_tipo as Texto FROM "+str(BD_Nombre)+".crutas","valor":"","Col":12})
+        Formulario["Campos"].append({"tipo":"seleccion","id":"Tipo_Nuevo","campo":"Tipo","titulo":"Type","Requerido":1,"Tipo_Opciones":"Query","Opciones":"SELECT cr_tipo as valor,cr_tipo as texto FROM "+str(BD_Nombre)+".crutas","valor":"","Col":12})
         
         if Caja["cc_tipo_actual"] is None:
             Resultado["Contenido"] += """
