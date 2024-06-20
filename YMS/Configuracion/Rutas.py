@@ -537,8 +537,8 @@ def Inicio():
                 preConfirm: () => {
                 
                     Mostrar_Ventana_Cargando(false);
-                    var parametros = {"Fun":"Guardar_Cambios","Ruta_Nombre":Ruta_Nombre,"Tipo":Tipo,"Info":JSON.stringify(Info)};
-                    $.ajax({data:  parametros,url:\""""+str(Dir_Raiz)+"""\",type:  "post",
+                    var parametros = {"Fun":'"""+str(fernet.encrypt("Guardar_Cambios".encode()).decode("utf-8"))+"""',"Ruta_Nombre":Ruta_Nombre,"Tipo":Tipo,"Info":JSON.stringify(Info)};
+                    $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
                         success:  function (response)
                         {
                             var Resultado = JSON.parse(response);
@@ -565,8 +565,8 @@ def Inicio():
                 Mostrar_Ventana_Cargando(false);
                 $("#Vent_1").find(".modal-title").html("<i class='mdi mdi-plus'></i>" + Tipo );
                 $("#Vent_1").removeClass('modal-xl modal-lg modal-sm');
-                var parametros = {"Fun":"Agregar_Nuevo","Tipo":Tipo};
-                $.ajax({data:  parametros,url:\""""+str(Dir_Raiz)+"""\",type:  "post",
+                var parametros = {"Fun":'"""+str(fernet.encrypt("Agregar_Nuevo".encode()).decode("utf-8"))+"""',"Tipo":Tipo};
+                $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
                     success:  function (response)
                     {
                         var Resultado = JSON.parse(response);
@@ -590,15 +590,15 @@ def Inicio():
                 preConfirm: () => {
                 
                     Mostrar_Ventana_Cargando(false);
-                    var parametros = {"Fun":"Eliminar_Ruta","Ruta_Nombre":Ruta_Nombre,"Tipo":Tipo};
-                    $.ajax({data:  parametros,url:\""""+str(Dir_Raiz)+"""\",type:  "post",
+                    var parametros = {"Fun":'"""+str(fernet.encrypt("Eliminar_Ruta".encode()).decode("utf-8"))+"""',"Ruta_Nombre":Ruta_Nombre,"Tipo":Tipo};
+                    $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
                         success:  function (response)
                         {
                             var Resultado = JSON.parse(response);
                             if(Resultado["Estado"] == 1)
                             {
                                 Mensaje(2);
-                                Llamar_Funcion(\""""+str(Dir_Raiz)+"""\");
+                                Llamar_Funcion(\""""+str(request.url)+"""\");
                             }
                             else
                                 Mensaje(0,Resultado["Contenido"]);
@@ -787,8 +787,8 @@ def Agregar_Nuevo(Datos):
                 if(Info != null)
                 {
                     Mostrar_Ventana_Cargando(false);
-                    var parametros = {"Fun":"Agregar_Nuevo_Guardar","Info":JSON.stringify(Info),"Tipo":Tipo};
-                    $.ajax({data:  parametros,url:\""""+str(Dir_Raiz)+"""\",type:  "post",
+                    var parametros = {"Fun":'"""+str(fernet.encrypt("Agregar_Nuevo_Guardar".encode()).decode("utf-8"))+"""',"Info":JSON.stringify(Info),"Tipo":Tipo};
+                    $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
                         success:  function (response)
                         {
                             var Resultado = JSON.parse(response);
@@ -796,7 +796,7 @@ def Agregar_Nuevo(Datos):
                             {
                                 $("#Vent_1").modal("hide");
                                 Mensaje(2);
-                                Llamar_Funcion(\""""+str(Dir_Raiz)+"""\");
+                                Llamar_Funcion(\""""+str(request.url)+"""\");
                             }
                             else
                                 Mensaje(0,Resultado["Contenido"]);
