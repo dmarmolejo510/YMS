@@ -17,122 +17,13 @@ def Inicio():
         fernet = Fernet(session["K"])
     Cur = ""
     try:
+        DB = LibDM_2023.DataBase()
+        Activo = "YMS"
+        Compartido = LibDM_2023.Compartido()
+        Menu = LibDM_2023.Menu().Menu(Activo,request.url_root,session["IDu"])
+        Titulo = LibDM_2023.Menu().Get_Titulo(Activo)
         Contenido = ""
-        Rutas = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".crutas WHERE cr_tipo != 'Empty'")
-        Patio = []
-        for Ruta in Rutas:
-            Opciones = "<div class='text-center'><div class='btn-group' role='group' aria-label='Basic mixed styles example'>"
-            Opciones += "</div></div>"
-            Patio.append({"Tipo":str(Ruta["cr_tipo"]),"Opciones":Opciones})
 
-
-        Contenido += "<div class='container'><div class='h2 fw-lighter mt-1 mb-1 text-center border-bottom'><i class='mdi mdi-card-bulleted'></i> Route Master</div>"
-        for Ruta in Rutas:
-            Contenido += """
-            <div class='w-100 border border-dark bg-body mb-2 p-3'>
-                <div class='fs-1 text-center'>"""+str(Ruta["cr_tipo"])+""" <a class='link-primary' onclick='Agregar_Nivel("N1",\""""+str(Ruta["cr_tipo"])+"""\")' style='cursor:pointer'><i class='mdi mdi-plus'></i></a></div>
-            """
-            if Ruta["cr_niveles"] is not None and str(Ruta["cr_niveles"]) != "":
-                Contenido += "<div class='row'>"
-                Niveles = json.loads(Ruta["cr_niveles"]) 
-                for N1 in Niveles.keys():
-                    Tiene = False
-                    Contenido += "<div class='col p-1'><div class='border border-dark bg-body-tertiary'>"
-                    Contenido += "<div class='text-center fs-2'>"+str(N1)+" <a class='link-warning' style='cursor:pointer' onclick='Agregar_Nivel(\"N2\",\""+str(Ruta["cr_tipo"])+"/"+str(N1)+"\")' ><i class='mdi mdi-pencil'></i></a> <a class='link-danger' style='cursor:pointer' onclick='Eliminar_Nivel(\"N2\",\""+str(Ruta["cr_tipo"])+"/"+str(N1)+"\")'><i class='mdi mdi-trash-can'></i></a></div>"
-                    try:
-                        Keys = Niveles[N1].keys()
-                        Contenido += "<div class='row p-3'>"
-                        for N2 in Keys:
-                            Contenido += "<div class='col p-1'><div class='border border-dark bg-dark-subtle'>"
-                            Contenido += "<div class='text-center fs-3'>"+str(N2)+"</div>"
-                            try:
-                                Docks = Niveles[N1][N2]["DOCKS"]
-                                Contenido += "<div class='row p-3'>"
-                                for N3 in Docks:
-                                    Contenido += "<div class='col p-1'><div class='border border-dark bg-warning'>"
-                                    Contenido += "<div class='text-center fs-4'>"+str(N3)+"</div>"
-                                    Contenido += "</div></div>"
-                                Contenido += "</div>"
-                            except:
-                                pass
-
-                            Contenido += "</div></div>"
-                        Contenido += "</div>"
-                    except:
-                        pass
-                    Contenido += "</div></div>"
-                Contenido += "</div>"
-            Contenido += """
-            </div>
-            """
-        Contenido += "</div>"
-        Contenido += """
-        <script>
-            function Agregar_Nivel(Nivel,Direccion){
-                Mostrar_Ventana_Cargando(false);
-                $("#Vent_1").find(".modal-title").html("<i class='mdi mdi-plus'></i>" + Direccion );
-                $("#Vent_1").removeClass('modal-xl modal-lg modal-sm');
-                var parametros = {"Fun":'"""+str(fernet.encrypt("Agregar_Nivel".encode()).decode("utf-8"))+"""',"Nivel":Nivel,"Direccion":Direccion};
-                $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
-                    success:  function (response)
-                    {
-                        var Resultado = JSON.parse(response);
-                        $("#Vent_1").modal("show").find(".modal-body").html(Resultado["Contenido"]);
-                        $("#Vent_1").find(".modal-footer").find("button").attr('onclick',"$('#Vent_1').modal('hide'); delete table; ")
-                        swal.close();
-                    },
-                    error: function (jqXHR, textStatus, errorThrown )
-                    {
-                        $("#Vent_1").modal("show").find(".modal-body").html("<i class='mdi mdi-alert'></i> "+ textStatus);
-                        swal.close();
-                    }
-                });
-            }
-            function Eliminar_Nivel(Nivel,Direccion){
-                Swal.fire({
-                title: 'Are you sure delete ['+Direccion+']?',
-                buttonsStyling: false,showCancelButton: true,confirmButtonText: "<i class='mdi mdi-check'></i> Yes",cancelButtonText: "<i class='mdi mdi-close'></i> No",showLoaderOnConfirm: true,
-                customClass: {confirmButton: 'btn btn-success ms-1 me-1',cancelButton: 'btn btn-danger ms-1 me-1'},
-                preConfirm: () => {
-                
-                    Mostrar_Ventana_Cargando(false);
-                    var parametros = {"Fun":'"""+str(fernet.encrypt("Eliminar_Nivel".encode()).decode("utf-8"))+"""',"Nivel":Nivel,"Direccion":Direccion};
-                    $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
-                        success:  function (response)
-                        {
-                            var Resultado = JSON.parse(response);
-                            if(Resultado["Estado"] == 1)
-                            {
-                                Mensaje(2);
-                                Llamar_Funcion(\""""+str(request.url)+"""\");
-                            }
-                            else
-                                Mensaje(0,Resultado["Contenido"]);
-                                
-                        },
-                        error: function (jqXHR, textStatus, errorThrown )
-                        {
-                            Mensaje(0,textStatus);
-                        }
-                    });
-                    
-                }
-                })
-            }
-        </script>
-        """
-        Cur += render_template("general.html",Contenido=Contenido,Componentes=Compartido.Complementos(None),Menu=Menu,Titulo=Titulo)
-    except:
-        Cur += str(sys.exc_info())
-    return Cur
-
-
-
-def Inicio_old():
-    DB = LibDM_2023.DataBase()
-    Cur = ""
-    Resultado = {"Contenido":"","Estado":0}
-    try:
         Rutas = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".crutas WHERE cr_tipo != 'Empty'")
 
         Concentrado = {"Nacional":{},"Internacional":{},"MilkRuns":{}}
@@ -254,7 +145,7 @@ def Inicio_old():
                         else:
                             Concentrado["MilkRuns"][Niveles["MilkRun"][R]["UNION"]]["CUTTIME_OUT"] = ""
 
-        Cur += "<div class='container'><div class='h2 fw-lighter mt-1 mb-1 text-center border-bottom'><i class='mdi mdi-card-bulleted'></i> Route Master</div>"
+        Contenido += "<div class='container'><div class='h2 fw-lighter mt-1 mb-1 text-center border-bottom'><i class='mdi mdi-card-bulleted'></i> Route Master</div>"
         Informacion = []
         for Tipo in Concentrado.keys():
             aux = {"Tipo":str(Tipo),"_children":[]}
@@ -396,7 +287,7 @@ def Inicio_old():
         DUNS_DB = {} 
         for Prov in DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".cproveedores WHERE crilcpr_activo = '1' ORDER BY crilcpr_codigo"):
             DUNS_DB[str(Prov["crilcpr_codigo"])] = str(Prov["crilcpr_codigo"])+" - "+str(Prov["crilcpr_nombre"])
-        Cur += """
+        Contenido += """
         <div id='Tabla_Conf' class='border border-dark bg-dark-subtle'></div>
         <script>
             var table = new Tabulator("#Tabla_Conf", {
@@ -532,8 +423,8 @@ def Inicio_old():
                 preConfirm: () => {
                 
                     Mostrar_Ventana_Cargando(false);
-                    var parametros = {"Fun":'"""+str(fernet.encrypt("Guardar_Cambios".encode()).decode("utf-8"))+"""',"Ruta_Nombre":Ruta_Nombre,"Tipo":Tipo,"Info":JSON.stringify(Info)};
-                    $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
+                    var parametros = {"Fun":"Guardar_Cambios","Ruta_Nombre":Ruta_Nombre,"Tipo":Tipo,"Info":JSON.stringify(Info)};
+                    $.ajax({data:  parametros,url:\""""+str(Dir_Raiz)+"""\",type:  "post",
                         success:  function (response)
                         {
                             var Resultado = JSON.parse(response);
@@ -560,8 +451,8 @@ def Inicio_old():
                 Mostrar_Ventana_Cargando(false);
                 $("#Vent_1").find(".modal-title").html("<i class='mdi mdi-plus'></i>" + Tipo );
                 $("#Vent_1").removeClass('modal-xl modal-lg modal-sm');
-                var parametros = {"Fun":'"""+str(fernet.encrypt("Agregar_Nuevo".encode()).decode("utf-8"))+"""',"Tipo":Tipo};
-                $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
+                var parametros = {"Fun":"Agregar_Nuevo","Tipo":Tipo};
+                $.ajax({data:  parametros,url:\""""+str(Dir_Raiz)+"""\",type:  "post",
                     success:  function (response)
                     {
                         var Resultado = JSON.parse(response);
@@ -585,15 +476,15 @@ def Inicio_old():
                 preConfirm: () => {
                 
                     Mostrar_Ventana_Cargando(false);
-                    var parametros = {"Fun":'"""+str(fernet.encrypt("Eliminar_Ruta".encode()).decode("utf-8"))+"""',"Ruta_Nombre":Ruta_Nombre,"Tipo":Tipo};
-                    $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
+                    var parametros = {"Fun":"Eliminar_Ruta","Ruta_Nombre":Ruta_Nombre,"Tipo":Tipo};
+                    $.ajax({data:  parametros,url:\""""+str(Dir_Raiz)+"""\",type:  "post",
                         success:  function (response)
                         {
                             var Resultado = JSON.parse(response);
                             if(Resultado["Estado"] == 1)
                             {
                                 Mensaje(2);
-                                Llamar_Funcion(\""""+str(request.url)+"""\");
+                                Llamar_Funcion(\""""+str(Dir_Raiz)+"""\");
                             }
                             else
                                 Mensaje(0,Resultado["Contenido"]);
@@ -610,13 +501,119 @@ def Inicio_old():
             }
         </script>
         """
+
+        # Rutas = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".crutas WHERE cr_tipo != 'Empty'")
+        # Patio = []
+        # for Ruta in Rutas:
+        #     Opciones = "<div class='text-center'><div class='btn-group' role='group' aria-label='Basic mixed styles example'>"
+        #     Opciones += "</div></div>"
+        #     Patio.append({"Tipo":str(Ruta["cr_tipo"]),"Opciones":Opciones})
+
+
+        # Contenido += "<div class='container'><div class='h2 fw-lighter mt-1 mb-1 text-center border-bottom'><i class='mdi mdi-card-bulleted'></i> Route Master</div>"
+        # for Ruta in Rutas:
+        #     Contenido += """
+        #     <div class='w-100 border border-dark bg-body mb-2 p-3'>
+        #         <div class='fs-1 text-center'>"""+str(Ruta["cr_tipo"])+""" <a class='link-primary' onclick='Agregar_Nivel("N1",\""""+str(Ruta["cr_tipo"])+"""\")' style='cursor:pointer'><i class='mdi mdi-plus'></i></a></div>
+        #     """
+        #     if Ruta["cr_niveles"] is not None and str(Ruta["cr_niveles"]) != "":
+        #         Contenido += "<div class='row'>"
+        #         Niveles = json.loads(Ruta["cr_niveles"]) 
+        #         for N1 in Niveles.keys():
+        #             Tiene = False
+        #             Contenido += "<div class='col p-1'><div class='border border-dark bg-body-tertiary'>"
+        #             Contenido += "<div class='text-center fs-2'>"+str(N1)+" <a class='link-warning' style='cursor:pointer' onclick='Agregar_Nivel(\"N2\",\""+str(Ruta["cr_tipo"])+"/"+str(N1)+"\")' ><i class='mdi mdi-pencil'></i></a> <a class='link-danger' style='cursor:pointer' onclick='Eliminar_Nivel(\"N2\",\""+str(Ruta["cr_tipo"])+"/"+str(N1)+"\")'><i class='mdi mdi-trash-can'></i></a></div>"
+        #             try:
+        #                 Keys = Niveles[N1].keys()
+        #                 Contenido += "<div class='row p-3'>"
+        #                 for N2 in Keys:
+        #                     Contenido += "<div class='col p-1'><div class='border border-dark bg-dark-subtle'>"
+        #                     Contenido += "<div class='text-center fs-3'>"+str(N2)+"</div>"
+        #                     try:
+        #                         Docks = Niveles[N1][N2]["DOCKS"]
+        #                         Contenido += "<div class='row p-3'>"
+        #                         for N3 in Docks:
+        #                             Contenido += "<div class='col p-1'><div class='border border-dark bg-warning'>"
+        #                             Contenido += "<div class='text-center fs-4'>"+str(N3)+"</div>"
+        #                             Contenido += "</div></div>"
+        #                         Contenido += "</div>"
+        #                     except:
+        #                         pass
+
+        #                     Contenido += "</div></div>"
+        #                 Contenido += "</div>"
+        #             except:
+        #                 pass
+        #             Contenido += "</div></div>"
+        #         Contenido += "</div>"
+        #     Contenido += """
+        #     </div>
+        #     """
+        # Contenido += "</div>"
+        # Contenido += """
+        # <script>
+        #     function Agregar_Nivel(Nivel,Direccion){
+        #         Mostrar_Ventana_Cargando(false);
+        #         $("#Vent_1").find(".modal-title").html("<i class='mdi mdi-plus'></i>" + Direccion );
+        #         $("#Vent_1").removeClass('modal-xl modal-lg modal-sm');
+        #         var parametros = {"Fun":'"""+str(fernet.encrypt("Agregar_Nivel".encode()).decode("utf-8"))+"""',"Nivel":Nivel,"Direccion":Direccion};
+        #         $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
+        #             success:  function (response)
+        #             {
+        #                 var Resultado = JSON.parse(response);
+        #                 $("#Vent_1").modal("show").find(".modal-body").html(Resultado["Contenido"]);
+        #                 $("#Vent_1").find(".modal-footer").find("button").attr('onclick',"$('#Vent_1').modal('hide'); delete table; ")
+        #                 swal.close();
+        #             },
+        #             error: function (jqXHR, textStatus, errorThrown )
+        #             {
+        #                 $("#Vent_1").modal("show").find(".modal-body").html("<i class='mdi mdi-alert'></i> "+ textStatus);
+        #                 swal.close();
+        #             }
+        #         });
+        #     }
+        #     function Eliminar_Nivel(Nivel,Direccion){
+        #         Swal.fire({
+        #         title: 'Are you sure delete ['+Direccion+']?',
+        #         buttonsStyling: false,showCancelButton: true,confirmButtonText: "<i class='mdi mdi-check'></i> Yes",cancelButtonText: "<i class='mdi mdi-close'></i> No",showLoaderOnConfirm: true,
+        #         customClass: {confirmButton: 'btn btn-success ms-1 me-1',cancelButton: 'btn btn-danger ms-1 me-1'},
+        #         preConfirm: () => {
+                
+        #             Mostrar_Ventana_Cargando(false);
+        #             var parametros = {"Fun":'"""+str(fernet.encrypt("Eliminar_Nivel".encode()).decode("utf-8"))+"""',"Nivel":Nivel,"Direccion":Direccion};
+        #             $.ajax({data:  parametros,url:\""""+str(request.url)+"""\",type:  "post",
+        #                 success:  function (response)
+        #                 {
+        #                     var Resultado = JSON.parse(response);
+        #                     if(Resultado["Estado"] == 1)
+        #                     {
+        #                         Mensaje(2);
+        #                         Llamar_Funcion(\""""+str(request.url)+"""\");
+        #                     }
+        #                     else
+        #                         Mensaje(0,Resultado["Contenido"]);
+                                
+        #                 },
+        #                 error: function (jqXHR, textStatus, errorThrown )
+        #                 {
+        #                     Mensaje(0,textStatus);
+        #                 }
+        #             });
+                    
+        #         }
+        #         })
+        #     }
+        # </script>
+        # """
+        Cur += render_template("general.html",Contenido=Contenido,Componentes=Compartido.Complementos(None),Menu=Menu,Titulo=Titulo)
     except:
-         Cur = str(sys.exc_info())
-    #Cur += json.dumps(Resultado)
+        Cur += str(sys.exc_info())
     return Cur
+
+
 def Guardar_Cambios(Datos):
     DB = LibDM_2023.DataBase()
-    Cur = ""
+    Cur = "content-type: text/html;charset=ISO-8859-1\n\n "
     Resultado = {"Contenido":"","Estado":0}
     try:
         Info_Datos = json.loads(str(Datos["Info"]))
@@ -758,11 +755,11 @@ def Guardar_Cambios(Datos):
     except:
         Resultado["Contenido"] = str(sys.exc_info())
     Cur += json.dumps(Resultado)
-    return Cur
+    print(Cur)
 def Agregar_Nuevo(Datos):
     DB = LibDM_2023.DataBase()
     Compartido_2023 = LibDM_2023.Compartido()
-    Cur = ""
+    Cur = "content-type: text/html;charset=ISO-8859-1\n\n "
     Resultado = {"Contenido":"","Estado":0}
     try:
         Formulario = {"Col":"12", "Campos": [],"Clase": "Agregar_Nuevo" }
@@ -809,10 +806,10 @@ def Agregar_Nuevo(Datos):
     except:
         Resultado["Contenido"] = str(sys.exc_info())
     Cur += json.dumps(Resultado)
-    return Cur
+    print(Cur)
 def Agregar_Nuevo_Guardar(Datos):
     DB = LibDM_2023.DataBase()
-    Cur = ""
+    Cur = "content-type: text/html;charset=ISO-8859-1\n\n "
     Resultado = {"Contenido":"","Estado":0}
     try:
         Info_Datos = json.loads(str(Datos["Info"]))
@@ -922,11 +919,11 @@ def Agregar_Nuevo_Guardar(Datos):
     except:
         Resultado["Contenido"] = str(sys.exc_info())
     Cur += json.dumps(Resultado)
-    return Cur
+    print(Cur)
 def Eliminar_Ruta(Datos):
     DB = LibDM_2023.DataBase()
     Compartido_2023 = LibDM_2023.Compartido()
-    Cur = ""
+    Cur = "content-type: text/html;charset=ISO-8859-1\n\n "
     Resultado = {"Contenido":"","Estado":0}
     try:
         Resultado["Contenido"] += str(Datos)
@@ -973,7 +970,8 @@ def Eliminar_Ruta(Datos):
     except:
         Resultado["Contenido"] = str(sys.exc_info())
     Cur += json.dumps(Resultado)
-    return Cur
+    print(Cur)
+
 
 
 
