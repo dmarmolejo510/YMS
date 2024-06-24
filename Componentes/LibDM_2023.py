@@ -182,12 +182,6 @@ class Compartido:
                 """
         Compl += """
         <script>
-            function Enviar_Alerta_Slack(channel,text){
-                $.ajax({                   
-                    data: {"token": 'xoxb-6219782511137-6220238287665-nvHc8vQnTudY0NuyJN7BMkXz',"channel": channel,"text": text},                      
-                    dataType: 'text',type: 'POST',url: "https://slack.com/api/chat.postMessage",error: function(xhr,status,error){},success: function(data) {}
-                });
-            }
             $(window).on('beforeunload', function(){
 
                         });
