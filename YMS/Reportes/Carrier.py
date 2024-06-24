@@ -6,7 +6,7 @@ import json
 import os
 from Componentes import LibDM_2023
 Url = ""
-BD_Nombre = "public"
+BD_Nombre = LibDM_2023.Compartido().Dame_Base_Datos("YMS")
 Bandera_Dock = "YMS"
 fernet = Fernet(LibDM_2023.Compartido().Dame_K2())
 def Inicio():
@@ -21,7 +21,7 @@ def Inicio():
         Contenido = ""
         Contenido += "<div class='h2 fw-lighter mt-1 mb-1 text-center border-bottom'><i class='mdi mdi mdi-book'></i> Carrier</div>"
         Formulario = {"Col":"12", "Campos": [],"Clase": "Buscar" }
-        Formulario["Campos"].append({"tipo":"seleccion","campo":"Carrier","titulo":"Carrier","Requerido":1,"Tipo_Opciones":"Query","Opciones":"SELECT cca_nombre as Valor, cca_nombre as Texto FROM "+str(BD_Nombre)+".ccarrier","valor":"","Col":6})
+        Formulario["Campos"].append({"tipo":"seleccion","campo":"Carrier","titulo":"Carrier","Requerido":1,"Tipo_Opciones":"Query","Opciones":"SELECT cca_nombre as valor, cca_nombre as texto FROM "+str(BD_Nombre)+".ccarrier","valor":"","Col":6})
         Formulario["Campos"].append({"tipo":"fecha-rango","campo":"Fecha de Rura","titulo":"Date range","Requerido":0,"Col":6,"valor":"","editable":True})
         
         Contenido += "<div class='container'>"
