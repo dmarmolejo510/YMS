@@ -22,7 +22,7 @@ def Inicio():
         Formulario = {"Col":"12", "Campos": [],"Clase": "Buscar" }
         Formulario["Campos"].append({"tipo":"texto","campo":"Container","titulo":"Container","Requerido":1,"min":1,"max":150,"valor":"","Col":4})
         Formulario["Campos"].append({"tipo":"fecha","campo":"Fecha de Rura","titulo":"Arrival Date","Requerido":0,"Col":4,"valor":"","editable":True})
-        Formulario["Campos"].append({"tipo":"seleccion","campo":"Carrier","titulo":"Carrier","Requerido":0,"Tipo_Opciones":"Query","Opciones":"SELECT cca_nombre as Valor, cca_nombre as Texto FROM "+str(BD_Nombre)+".ccarrier ","valor":"","Col":4})
+        Formulario["Campos"].append({"tipo":"seleccion","campo":"Carrier","titulo":"Carrier","Requerido":0,"Tipo_Opciones":"Query","Opciones":"SELECT cca_nombre as valor, cca_nombre as texto FROM "+str(BD_Nombre)+".ccarrier ","valor":"","Col":4})
         Contenido += "<div class='container'>"
         Contenido += str(Compartido.Formulario(Formulario))
         Contenido += """
