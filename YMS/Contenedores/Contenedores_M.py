@@ -497,25 +497,25 @@ def Regresa_Guardar(Datos):
     Error = ""
     try:
         Info_Historico = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas_moviemiento WHERE cch_master = '"+str(Datos["ID"])+"' AND to_char(cch_fecha_hora, 'YYYY-MM-DD HH24:MI:SS') = '"+str(Datos["Fecha"])+"'")[0]
-        Dock = "null"
-        if Info_Historico["cch_dock"] is not None:
-            Dock = "'"+str(Info_Historico["cch_dock"])+"'"
-        Tipo = "null"
-        if Info_Historico["cch_tipo_actual"] is not None:
-            Tipo = "'"+str(Info_Historico["cch_tipo_actual"])+"'"
+        # Dock = "null"
+        # if Info_Historico["cch_dock"] is not None:
+        #     Dock = "'"+str(Info_Historico["cch_dock"])+"'"
+        # Tipo = "null"
+        # if Info_Historico["cch_tipo_actual"] is not None:
+        #     Tipo = "'"+str(Info_Historico["cch_tipo_actual"])+"'"
         
-        Negocio = "null"
-        if Info_Historico["cch_negocio"] is not None:
-            Negocio = "'"+str(Info_Historico["cch_negocio"])+"'"
+        # Negocio = "null"
+        # if Info_Historico["cch_negocio"] is not None:
+        #     Negocio = "'"+str(Info_Historico["cch_negocio"])+"'"
 
-        Zona = "null"
-        if Info_Historico["cch_zona"] is not None:
-            Zona = "'"+str(Info_Historico["cch_zona"])+"'"
+        # Zona = "null"
+        # if Info_Historico["cch_zona"] is not None:
+        #     Zona = "'"+str(Info_Historico["cch_zona"])+"'"
 
-        if "Comentario" not in Datos.keys():
-            Datos["Comentario"] = ""
+        # if "Comentario" not in Datos.keys():
+        #     Datos["Comentario"] = ""
         
-        Info_Aqui = json.loads(str(Info_Historico["cch_informacion_actual"]))
+        # Info_Aqui = json.loads(str(Info_Historico["cch_informacion_actual"]))
         
         #for Instrucciones_Canceladas in DB.Get_Dato("SELECT * FROM ccajas_moviemiento where cch_fecha_hora  >= '2024-02-10 18:00:00'"):
         # Error += DB.Instruccion("UPDATE "+str(BD_Nombre)+".ccajas_moviemiento SET cch_movimiento = concat(cch_movimiento,' | CANCELED STEP') WHERE cch_fecha_hora > '"+str(Datos["Fecha"])+"' AND cch_master = '"+str(Datos["ID"])+"' AND cch_movimiento not like '%CANCELED STEP%'")
