@@ -497,9 +497,9 @@ def Regresa_Guardar(Datos):
     Error = ""
     try:
         Info_Historico = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas_moviemiento WHERE cch_master = '"+str(Datos["ID"])+"' AND to_char(cch_fecha_hora, 'YYYY-MM-DD HH24:MI:SS') = '"+str(Datos["Fecha"])+"'")[0]
-        # Dock = "null"
-        # if Info_Historico["cch_dock"] is not None:
-        #     Dock = "'"+str(Info_Historico["cch_dock"])+"'"
+        Dock = "null"
+        if Info_Historico["cch_dock"] is not None:
+            Dock = "'"+str(Info_Historico["cch_dock"])+"'"
         # Tipo = "null"
         # if Info_Historico["cch_tipo_actual"] is not None:
         #     Tipo = "'"+str(Info_Historico["cch_tipo_actual"])+"'"
