@@ -496,42 +496,42 @@ def Regresa_Guardar(Datos):
     Resultado = {"Contenido":"","Estado":0}
     Error = ""
     try:
-        Info_Historico = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas_moviemiento WHERE cch_master = '"+str(Datos["ID"])+"' AND to_char(cch_fecha_hora, 'YYYY-MM-DD HH24:MI:SS') = '"+str(Datos["Fecha"])+"'")[0]
+        Info_Historico = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas_moviemiento WHERE cch_master = '"+str(Datos["ID"])+"' AND cch_fecha_hora = '"+str(Datos["Fecha"])+"'")[0]
         Dock = "null"
         if Info_Historico["cch_dock"] is not None:
             Dock = "'"+str(Info_Historico["cch_dock"])+"'"
-        # Tipo = "null"
-        # if Info_Historico["cch_tipo_actual"] is not None:
-        #     Tipo = "'"+str(Info_Historico["cch_tipo_actual"])+"'"
+        Tipo = "null"
+        if Info_Historico["cch_tipo_actual"] is not None:
+            Tipo = "'"+str(Info_Historico["cch_tipo_actual"])+"'"
         
-        # Negocio = "null"
-        # if Info_Historico["cch_negocio"] is not None:
-        #     Negocio = "'"+str(Info_Historico["cch_negocio"])+"'"
+        Negocio = "null"
+        if Info_Historico["cch_negocio"] is not None:
+            Negocio = "'"+str(Info_Historico["cch_negocio"])+"'"
 
-        # Zona = "null"
-        # if Info_Historico["cch_zona"] is not None:
-        #     Zona = "'"+str(Info_Historico["cch_zona"])+"'"
+        Zona = "null"
+        if Info_Historico["cch_zona"] is not None:
+            Zona = "'"+str(Info_Historico["cch_zona"])+"'"
 
-        # if "Comentario" not in Datos.keys():
-        #     Datos["Comentario"] = ""
+        if "Comentario" not in Datos.keys():
+            Datos["Comentario"] = ""
         
-        # Info_Aqui = json.loads(str(Info_Historico["cch_informacion_actual"]))
+        Info_Aqui = json.loads(str(Info_Historico["cch_informacion_actual"]))
         
-        #for Instrucciones_Canceladas in DB.Get_Dato("SELECT * FROM ccajas_moviemiento where cch_fecha_hora  >= '2024-02-10 18:00:00'"):
-        # Error += DB.Instruccion("UPDATE "+str(BD_Nombre)+".ccajas_moviemiento SET cch_movimiento = concat(cch_movimiento,' | CANCELED STEP') WHERE cch_fecha_hora > '"+str(Datos["Fecha"])+"' AND cch_master = '"+str(Datos["ID"])+"' AND cch_movimiento not like '%CANCELED STEP%'")
-        # Error += DB.Instruccion("UPDATE "+str(BD_Nombre)+".ccajas SET cc_ubicacion = '"+str(Info_Historico["cch_ubicacion"])+"',cc_informacion_actual = '"+str(Info_Historico["cch_informacion_actual"])+"',cc_tipo_actual = "+str(Tipo)+", cc_dock= "+str(Dock)+", cc_negocio = "+str(Negocio)+", cc_zona ="+str(Zona)+",  cc_ultimo_mov = NOW(),cc_bloquear = '"+str(Info_Historico["cch_bloquear"])+"'  WHERE cc_id = '"+str(Datos["ID"])+"' ")
-        # if Error == "":
-        #     Info_Ahora = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas WHERE cc_id = '"+str(Datos["ID"])+"'")[0]
-        #     Info_Ahora["cc_dock"] = 'null' if Info_Ahora["cc_dock"] is None else "'"+str(Info_Ahora["cc_dock"])+"'"
-        #     Info_Ahora["cc_tipo_actual"] = 'null' if Info_Ahora["cc_tipo_actual"] is None else "'"+str(Info_Ahora["cc_tipo_actual"])+"'"
-        #     Info_Ahora["cc_zona"] = 'null' if Info_Ahora["cc_zona"] is None else "'"+str(Info_Ahora["cc_zona"])+"'"
-        #     Info_Ahora["cc_negocio"] = 'null' if Info_Ahora["cc_negocio"] is None else "'"+str(Info_Ahora["cc_negocio"])+"'"
-        #     Error = DB.Instruccion(""" 
-        #     INSERT INTO """+str(BD_Nombre)+""".ccajas_moviemiento
-        #     (cch_master,cch_fecha_hora,cch_contenedor,cch_ubicacion,cch_informacion_actual,cch_dock,cch_tipo_actual,cch_zona,cch_negocio,cch_usuario,cch_movimiento,cch_comentario,cch_bloquear)
-        #     VALUES
-        #     ('"""+str(Info_Ahora["cc_id"])+"""',NOW(),'"""+str(Info_Ahora["cc_contenedor"])+"""','"""+str(Info_Ahora["cc_ubicacion"])+"""','"""+str(Info_Ahora["cc_informacion_actual"])+"""',"""+str(Info_Ahora["cc_dock"])+""","""+str(Info_Ahora["cc_tipo_actual"])+""","""+str(Info_Ahora["cc_zona"])+""","""+str(Info_Ahora["cc_negocio"])+""",'"""+str(Datos["ID_User"])+"""','REGRESO A ["""+str(Datos["Fecha"])+"""]','"""+str(Datos["Comentario"])+"""','"""+str(Info_Ahora["cc_bloquear"])+"""')
-        #     """)
+        for Instrucciones_Canceladas in DB.Get_Dato("SELECT * FROM ccajas_moviemiento where cch_fecha_hora  >= '2024-02-10 18:00:00'"):
+        Error += DB.Instruccion("UPDATE "+str(BD_Nombre)+".ccajas_moviemiento SET cch_movimiento = concat(cch_movimiento,' | CANCELED STEP') WHERE cch_fecha_hora > '"+str(Datos["Fecha"])+"' AND cch_master = '"+str(Datos["ID"])+"' AND cch_movimiento not like '%CANCELED STEP%'")
+        Error += DB.Instruccion("UPDATE "+str(BD_Nombre)+".ccajas SET cc_ubicacion = '"+str(Info_Historico["cch_ubicacion"])+"',cc_informacion_actual = '"+str(Info_Historico["cch_informacion_actual"])+"',cc_tipo_actual = "+str(Tipo)+", cc_dock= "+str(Dock)+", cc_negocio = "+str(Negocio)+", cc_zona ="+str(Zona)+",  cc_ultimo_mov = NOW(),cc_bloquear = '"+str(Info_Historico["cch_bloquear"])+"'  WHERE cc_id = '"+str(Datos["ID"])+"' ")
+        if Error == "":
+            Info_Ahora = DB.Get_Dato("SELECT * FROM "+str(BD_Nombre)+".ccajas WHERE cc_id = '"+str(Datos["ID"])+"'")[0]
+            Info_Ahora["cc_dock"] = 'null' if Info_Ahora["cc_dock"] is None else "'"+str(Info_Ahora["cc_dock"])+"'"
+            Info_Ahora["cc_tipo_actual"] = 'null' if Info_Ahora["cc_tipo_actual"] is None else "'"+str(Info_Ahora["cc_tipo_actual"])+"'"
+            Info_Ahora["cc_zona"] = 'null' if Info_Ahora["cc_zona"] is None else "'"+str(Info_Ahora["cc_zona"])+"'"
+            Info_Ahora["cc_negocio"] = 'null' if Info_Ahora["cc_negocio"] is None else "'"+str(Info_Ahora["cc_negocio"])+"'"
+            Error = DB.Instruccion(""" 
+            INSERT INTO """+str(BD_Nombre)+""".ccajas_moviemiento
+            (cch_master,cch_fecha_hora,cch_contenedor,cch_ubicacion,cch_informacion_actual,cch_dock,cch_tipo_actual,cch_zona,cch_negocio,cch_usuario,cch_movimiento,cch_comentario,cch_bloquear)
+            VALUES
+            ('"""+str(Info_Ahora["cc_id"])+"""',NOW(),'"""+str(Info_Ahora["cc_contenedor"])+"""','"""+str(Info_Ahora["cc_ubicacion"])+"""','"""+str(Info_Ahora["cc_informacion_actual"])+"""',"""+str(Info_Ahora["cc_dock"])+""","""+str(Info_Ahora["cc_tipo_actual"])+""","""+str(Info_Ahora["cc_zona"])+""","""+str(Info_Ahora["cc_negocio"])+""",'"""+str(Datos["ID_User"])+"""','REGRESO A ["""+str(Datos["Fecha"])+"""]','"""+str(Datos["Comentario"])+"""','"""+str(Info_Ahora["cc_bloquear"])+"""')
+            """)
         if Error == "":
             Resultado["Estado"] = 1
         else:
