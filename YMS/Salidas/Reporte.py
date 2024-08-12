@@ -122,7 +122,7 @@ def Cargar_Fecha(Datos):
                 if "Fecha_Salida" in str(M["cch_informacion_actual"]):
                     Definir_Ruta = M["cch_fecha_hora"].strftime("%m-%d %H:%M")
 
-            Info_T["DEFINIR RUTA"] = str(Definir_Ruta)
+            Info_T["DEFINIR_RUTA"] = str(Definir_Ruta)
 
             Libera_Operaciones = ""
             for M in Movimientos_Aqui:
@@ -152,14 +152,14 @@ def Cargar_Fecha(Datos):
                 layout:"fitColumns",
                 data:"""+str(Historico)+""",
                 columns:[
-                    {field:"Date","title":"Fecha de Salida"},
-                    {field:"Route","title":"Ruta"},
-                    {field:"Container","title":"Caja"},
+                    {field:"Fecha","title":"Date"},
+                    {field:"Ruta","title":"Route"},
+                    {field:"Caja","title":"Container"},
                     {field:"Carrier","title":"Carrier"},
-                    {field:"Arrival","title":"Entrada"},
-                    {field:"Outbound Selected","title":"Define Ruta"},
-                    {field:"Material Loaded","title":"Material Cargado"},
-                    {field:"Departure","title":"Salida"}
+                    {field:"Entrada","title":"Arrival"},
+                    {field:"DEFINIR_RUTA","title":"Outbound Selected"},
+                    {field:"OPERACIONES","title":"Material Loaded"},
+                    {field:"SALIO","title":"Departure"}
                 ]
             });
             Tabla_Historico.on("tableBuilt", function(){ 
