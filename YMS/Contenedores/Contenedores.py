@@ -672,7 +672,7 @@ def Tipo_Nuevo_2(Datos):
                 <div id='Foto_Lista_Salir'></div>
                 <script>
                     $(document).ready(function() {
-                        $('#checkbox_1').change(function() {
+                        $('#checkbox_0').change(function() {
                             if(this.checked) {
                                 Mostrar_Ventana_Cargando(false);
                                 var parametros = {"Fun":'"""+str(fernet.encrypt("Foto_Lista_Salir".encode()).decode("utf-8"))+"""'};
